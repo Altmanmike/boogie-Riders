@@ -7,6 +7,12 @@
 			{% endblock %}
 		</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ absolute_url('assets/apple-touch-icon.png') }}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ absolute_url('assets/favicon-32x32.png') }}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ absolute_url('assets/favicon-16x16.png') }}">
+		<link rel="icon" type="image/ico"  href="{{ absolute_url('assets/favicon.ico') }}">
+		<link rel="manifest" href="/public/assets/site.webmanifest">
+
 		{% block stylesheets %}
 			<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css"/>
 			<link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css"/>
@@ -19,6 +25,6 @@
 		{% endblock %}
 	</head>
 	<body>
-		{% block body %}{% endblock %}		
+		{% block body %}{% endblock %}
 	</body>
 </html>

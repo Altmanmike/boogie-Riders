@@ -29,13 +29,16 @@ const Navbar = () => {
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                     >
                         <li>
-                            <a>Homepage</a>
+                            <a href="/">Home</a>
                         </li>
                         <li>
-                            <a>Portfolio</a>
+                            <a href="/spot">Spot infos</a>
                         </li>
                         <li>
-                            <a>About</a>
+                            <a href="/links">Links</a>
+                        </li>
+                        <li>
+                            <a href="/about">About</a>
                         </li>
                     </ul>
                 </div>
@@ -62,16 +65,22 @@ const Navbar = () => {
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                     >
                         <li>
-                            <a className="justify-between">
+                            <a href="/login">Login</a>
+                        </li>
+                        <li>
+                            <a href="/profile" className="justify-between">
                                 Profile
                                 <span className="badge">New</span>
                             </a>
                         </li>
                         <li>
-                            <a>Settings</a>
+                            <a href="/settings">Settings</a>
                         </li>
                         <li>
-                            <a>Logout</a>
+                            <a href="/register">Register</a>
+                        </li>
+                        <li>
+                            <a href="/logout">Logout</a>
                         </li>
                     </ul>
                 </div>

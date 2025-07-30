@@ -21,7 +21,7 @@
         "webpack-notifier": "^1.15.0"
     },
     "license": "UNLICENSED",
-    "private": true,  
+    "private": true,
     "scripts": {
         "dev-server": "encore dev-server",
         "dev": "encore dev",
@@ -29,6 +29,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@heroicons/react": "^2.2.0",
         "autoprefixer": "^10.4.14",
         "css-loader": "^6.8.1",
         "html-webpack-plugin": "^5.5.3",

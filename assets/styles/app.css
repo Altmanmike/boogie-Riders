@@ -1,6 +1,21 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* NAVBAR and FOOTER */
 .logoHeader {
     width:200px;
+}
+
+/* MESSENGER */
+.fixedMessenger {
+    position: fixed;
+    width: 420px;
+    right: 25px;
+    bottom: -5px;
+    z-index: 8;
+}
+
+/* FOOTER */
+.footer {
+    position: absolute;
 }

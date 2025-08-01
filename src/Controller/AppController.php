@@ -47,6 +47,14 @@ final class AppController extends AbstractController
             'react_component' => 'Profile',
         ]);
     }
+
+    #[Route('/user', name: 'user')]
+    public function user(): Response
+    {
+        return $this->render('index.html.twig', [
+            'react_component' => 'User',
+        ]);
+    }
     
     #[Route('/register', name: 'register')]
     public function register(): Response

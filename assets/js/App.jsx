@@ -3,6 +3,7 @@ import About from "./pages/About";
 import Links from "./pages/Links";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import User from "./pages/User";
 import Register from "./pages/Register";
 import Settings from "./pages/Settings";
 import Spot from "./pages/Spot";
@@ -13,6 +14,7 @@ const components = {
     Links,
     Login,
     Profile,
+    User,
     Register,
     Settings,
     Spot,

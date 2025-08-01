@@ -68,10 +68,16 @@ const Navbar = () => {
                             <a href="/login">Login</a>
                         </li>
                         <li>
+                            <a href="/user">See profile</a>
+                        </li>
+                        <li>
                             <a href="/profile" className="justify-between">
-                                Profile
+                                Update profile
                                 <span className="badge">New</span>
                             </a>
+                        </li>
+                        <li>
+                            <a href="/dashboard">Dashboard</a>
                         </li>
                         <li>
                             <a href="/settings">Settings</a>

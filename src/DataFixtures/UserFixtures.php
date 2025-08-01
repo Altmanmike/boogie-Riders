@@ -5,11 +5,14 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
+    public function __construct(private UserPasswordHasherInterface $passwordEncoder) {}
+    
     public function load(ObjectManager $manager): void
-    {
+    {     
         $admin = new User();
         $admin->setEmail("adm@admin.com");
         $admin->setRoles(['ROLE_ADMIN']);
@@ -17,10 +20,13 @@ class UserFixtures extends Fixture
         $admin->setFirstname("admin");
         $admin->setUsername("adm");
         $admin->setPassword("admin");
+        $admin->setPassword($this->passwordEncoder->hashPassword($admin, "admin"));
         $admin->setBoards(['Sniper','Science']);
         $admin->setFins(['Viper','Option']);
         $admin->setStyle('prone/dropknee 70/30');
         $admin->setFacebook("https://facebook.com/adminmoreyboogie");
+        $admin->setCreatedAt(new \DatetimeImmutable());
+        $admin->setUpdatedAt(new \DatetimeImmutable());
         
         $manager->persist($admin);
 
@@ -30,10 +36,12 @@ class UserFixtures extends Fixture
         $user->setLastname("Sparrow");
         $user->setFirstname("Jack");
         $user->setUsername("jck");
-        $user->setPassword("yT_hjJ9");
+        $user->setPassword($this->passwordEncoder->hashPassword($user, "yT_hjJ9"));
         $user->setBoards(['NMD']);
         $user->setFins(['Churchill']);
         $user->setStyle('prone/dropknee 100/0');
+        $user->setCreatedAt(new \DatetimeImmutable());
+        $user->setUpdatedAt(new \DatetimeImmutable());
         
         $manager->persist($user);
 
@@ -42,12 +50,14 @@ class UserFixtures extends Fixture
         $user->setRoles(['ROLE_USER']);
         $user->setLastname("TheKid");
         $user->setFirstname("Billy");
-        $user->setUsername("btk");
-        $user->setPassword("gH7-875p");
+        $user->setUsername("btk");        
+        $user->setPassword($this->passwordEncoder->hashPassword($user, "gH7-875p"));
         $user->setBoards(['Empire']);
         $user->setFins(['Churchill']);
         $user->setStyle('prone/dropknee 60/40');
         $user->setYoutube("https://youtube.com/btkbodyboard");
+        $user->setCreatedAt(new \DatetimeImmutable());
+        $user->setUpdatedAt(new \DatetimeImmutable());
         
         $manager->persist($user);
         
@@ -57,10 +67,12 @@ class UserFixtures extends Fixture
         $user->setLastname("Doe");
         $user->setFirstname("John");
         $user->setUsername("jiji");
-        $user->setPassword("wXc-Rt712gj56");
+        $user->setPassword($this->passwordEncoder->hashPassword($user, "wXc-Rt712gj56"));
         $user->setBoards(['Pride']);
         $user->setFins(['Hydro']);
         $user->setStyle('prone/dropknee 80/20');
+        $user->setCreatedAt(new \DatetimeImmutable());
+        $user->setUpdatedAt(new \DatetimeImmutable());
         
         $manager->persist($user);
         

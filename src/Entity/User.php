@@ -42,6 +42,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $username = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $about = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cover = null;
+
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private ?array $boards = null;
 
@@ -66,9 +75,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $youtube = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $about = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
@@ -84,6 +90,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $postalCode = null;
 
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    public function __construct()
+    {
+        $this->roles = ['ROLE_USER'];
+        $this->createdAt = new \DateTimeImmutable();  
+        $this->updatedAt = new \DateTimeImmutable();       
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -200,7 +219,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    
+    public function getAbout(): ?string
+    {
+        return $this->about;
+    }
 
+    public function setAbout(?string $about): static
+    {
+        $this->about = $about;
+
+        return $this;
+    }
+    
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(?string $cover): static
+    {
+        $this->cover = $cover;
+
+        return $this;
+    }
+    
     public function getBoards(): ?array
     {
         return $this->boards;
@@ -297,18 +352,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAbout(): ?string
-    {
-        return $this->about;
-    }
-
-    public function setAbout(?string $about): static
-    {
-        $this->about = $about;
-
-        return $this;
-    }
-
     public function getCountry(): ?string
     {
         return $this->country;
@@ -368,4 +411,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }    
 }

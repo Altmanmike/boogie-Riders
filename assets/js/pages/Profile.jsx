@@ -5,29 +5,29 @@ import Footer from "../components/Footer";
 import Messenger from "../components/Messenger";
 import { useState } from "react";
 
-const Profile = () => {    
+const Profile = () => {
     const [username, setUsername] = useState("");
     const [about, setAbout] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [country, setCountry] = useState("United States");
+    const [country, setCountry] = useState("");
     const [streetAddress, setStreetAddress] = useState("");
     const [city, setCity] = useState("");
     const [region, setRegion] = useState("");
     const [postalCode, setPostalCode] = useState("");
-    const [board, setBoard] = useState("");
-    const [fins, setFins] = useState("");
+    const [board, setBoard] = useState([]);
+    const [fins, setFins] = useState([]);
     const [club, setClub] = useState("");
-    const [tricks, setTricks] = useState("");
+    const [tricks, setTricks] = useState([]);
     const [style, setStyle] = useState("");
-    const [spots, setSpots] = useState("");
-    const [facebook, setFacebook] = useState("");
-    const [instagram, setInstagram] = useState("");
-    const [youtube, setYoutube] = useState("");
+    const [spots, setSpots] = useState([]);
+    const [facebook, setFacebook] = useState("https://www.facebook.com/");
+    const [instagram, setInstagram] = useState("https://www.instagram.com/");
+    const [youtube, setYoutube] = useState("https://www.youtube.com/@");
 
     const handleSubmit = (e) => {
-        e.preventDefault();        
+        e.preventDefault();
         const formData = {
             username,
             about,
@@ -49,7 +49,15 @@ const Profile = () => {
             instagram,
             youtube,
         };
-        console.log("Formulaire soumis :", formData);
+        //console.log("Formulaire soumis :", formData);
+    };
+
+    // Fonction générique pour gérer les changements des selects multiples
+    const handleMultiSelectChange = (e, setterFunction) => {
+        const selectedOptions = Array.from(e.target.options)
+            .filter((option) => option.selected)
+            .map((option) => option.value);
+        setterFunction(selectedOptions);
     };
 
     return (
@@ -67,20 +75,18 @@ const Profile = () => {
 
                             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                 <div className="sm:col-span-4">
-                                    <label
-                                        htmlFor="username"
-                                        className="label input validator"
-                                    >
+                                    <label htmlFor="username" className="label">
                                         Username
                                         <div className="">
                                             <div className="flex items-center">
                                                 <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
-                                                    boogie-riders.com/
+                                                    (pseudo) &nbsp;
                                                 </div>
                                                 <input
                                                     id="username"
                                                     name="username"
                                                     type="text"
+                                                    required
                                                     placeholder="Bobby"
                                                     value={username}
                                                     onChange={(e) =>
@@ -88,9 +94,10 @@ const Profile = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                                                    required
-                                                    pattern="^[a-zA-Z0-9_]{3,16}$"
+                                                    className="input validator block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                                    pattern="[A-Za-z][A-Za-z0-9\-_]*"
+                                                    minLength="3"
+                                                    maxLength="16"
                                                     title="Username must be 3-16 alphanumeric characters or underscores."
                                                 />
                                             </div>
@@ -119,7 +126,7 @@ const Profile = () => {
                                                 setAbout(e.target.value)
                                             }
                                             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            defaultValue={""}
+                                            title="Write a few sentences about yourself."
                                         />
                                     </div>
                                     <p className="mt-3 text-sm/6">
@@ -200,38 +207,38 @@ const Profile = () => {
                                 <div className="sm:col-span-3">
                                     <label
                                         htmlFor="first-name"
-                                        className="label input validator text-sm/6 font-medium"
+                                        className="label text-sm/6 font-medium"
                                     >
                                         First name
-                                        <div className="">
-                                            <input
-                                                id="first-name"
-                                                name="first-name"
-                                                type="text"
-                                                placeholder="Your first name"
-                                                autoComplete="given-name"
-                                                value={firstName}
-                                                onChange={(e) =>
-                                                    setFirstName(e.target.value)
-                                                }
-                                                className="text-base text-gray-900 placeholder:text-gray-400 sm:text-sm/6"
-                                                required
-                                                pattern="^[a-zA-Zà-ÿÀ-Ÿ\s'-]{2,}$"
-                                                title="First name must be at least 2 characters and contain only letters, spaces, hyphens, or apostrophes."
-                                            />
-                                        </div>
+                                        <input
+                                            id="first-name"
+                                            name="first-name"
+                                            type="text"
+                                            required
+                                            placeholder="Your first name"
+                                            autoComplete="given-name"
+                                            value={firstName}
+                                            onChange={(e) =>
+                                                setFirstName(e.target.value)
+                                            }
+                                            className="input validator text-base text-gray-900 placeholder:text-gray-400 sm:text-sm/6"
+                                            pattern="[A-Za-z][a-zA-Zà-ÿÀ-Ÿ\s'\-]*"
+                                            minLength="2"
+                                            maxLength="25"
+                                            title="First name must be at least 2 characters and contain only letters, spaces, hyphens, or apostrophes."
+                                        />
                                     </label>
                                     <div className="validator-hint hidden">
-                                        First name must be at least 2 characters
-                                        and contain only letters, spaces,
-                                        hyphens, or apostrophes.
+                                        First name between 2 & 25 characters and
+                                        contain only letters, spaces, hyphens,
+                                        or apostrophes.
                                     </div>
                                 </div>
 
                                 <div className="sm:col-span-3">
                                     <label
                                         htmlFor="last-name"
-                                        className="label input validator text-sm/6 font-medium"
+                                        className="label text-sm/6 font-medium"
                                     >
                                         Last name
                                         <div className="">
@@ -239,23 +246,25 @@ const Profile = () => {
                                                 id="last-name"
                                                 name="last-name"
                                                 type="text"
+                                                required
                                                 placeholder="Your family name"
                                                 autoComplete="family-name"
                                                 value={lastName}
                                                 onChange={(e) =>
                                                     setLastName(e.target.value)
                                                 }
-                                                className="text-base text-gray-900 placeholder:text-gray-400 sm:text-sm/6"
-                                                required
-                                                pattern="^[a-zA-Zà-ÿÀ-Ÿ\s'-]{2,}$"
+                                                className="input validator text-base text-gray-900 placeholder:text-gray-400 sm:text-sm/6"
+                                                pattern="[A-Za-z][a-zA-Zà-ÿÀ-Ÿ\s'\-]*"
+                                                minLength="2"
+                                                maxLength="25"
                                                 title="Last name must be at least 2 characters and contain only letters, spaces, hyphens, or apostrophes."
                                             />
                                         </div>
                                     </label>
                                     <div className="validator-hint hidden">
-                                        Last name must be at least 2 characters
-                                        and contain only letters, spaces,
-                                        hyphens, or apostrophes.
+                                        Last name between 2 & 25 characters and
+                                        contain only letters, spaces, hyphens,
+                                        or apostrophes.
                                     </div>
                                 </div>
 
@@ -266,18 +275,55 @@ const Profile = () => {
                                     >
                                         Board
                                     </label>
-                                    <div className="mt-2">
-                                        <input
+                                    <div className="mt-2 grid grid-cols-1">
+                                        <select
                                             id="board"
                                             name="board"
-                                            type="text"
-                                            placeholder="My board"
+                                            multiple
                                             value={board}
                                             onChange={(e) =>
-                                                setBoard(e.target.value)
+                                                handleMultiSelectChange(
+                                                    e,
+                                                    setBoard
+                                                )
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        />
+                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 h-32"
+                                            title="Select your board brands"
+                                        >
+                                            <option value="Pride">Pride</option>
+                                            <option value="Science">
+                                                Science
+                                            </option>
+                                            <option value="Sniper">
+                                                Sniper
+                                            </option>
+                                            <option value="NMD">NMD</option>
+                                            <option value="Hubboards">
+                                                Hubboards
+                                            </option>
+                                            <option value="MOREY">MOREY</option>
+                                            <option value="GT">GT</option>
+                                            <option value="No6.">No6.</option>
+                                            <option value="QCD">QCD</option>
+                                            <option value="VS">VS</option>
+                                            <option value="Manta">Manta</option>
+                                            <option value="Wave">Wave</option>
+                                            <option value="Tribe">Tribe</option>
+                                            <option value="Found">Found</option>
+                                            <option value="Funkshen">
+                                                Funkshen
+                                            </option>
+                                            <option value="Custom X">
+                                                Custom X
+                                            </option>
+                                            <option value="BZ">BZ</option>
+                                            <option value="662">662</option>
+                                            <option value="BZ">BZ</option>
+                                            <option value="Empire">
+                                                Empire
+                                            </option>
+                                            <option value="Toobs">Toobs</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -288,18 +334,58 @@ const Profile = () => {
                                     >
                                         Fins
                                     </label>
-                                    <div className="mt-2">
-                                        <input
+                                    <div className="mt-2 grid grid-cols-1">
+                                        <select
                                             id="fins"
                                             name="fins"
-                                            type="text"
-                                            placeholder="My fins"
+                                            multiple
                                             value={fins}
                                             onChange={(e) =>
-                                                setFins(e.target.value)
+                                                handleMultiSelectChange(
+                                                    e,
+                                                    setFins
+                                                )
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        />
+                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 h-32"
+                                            title="Select your fin brands"
+                                        >
+                                            <option value="Gyroll">
+                                                Gyroll
+                                            </option>
+                                            <option value="Limited Edition">
+                                                Limited Edition
+                                            </option>
+                                            <option value="Viper Vector">
+                                                Viper Vector
+                                            </option>
+                                            <option value="MS Viper">
+                                                MS Viper
+                                            </option>
+                                            <option value="Churchill Makapuu">
+                                                Churchill Makapuu
+                                            </option>
+                                            <option value="Ally">Ally</option>
+                                            <option value="ERS4">ERS4</option>
+
+                                            <option value="POD">POD</option>
+                                            <option value="Air Hubb">
+                                                Air Hubb
+                                            </option>
+                                            <option value="NMD">NMD</option>
+                                            <option value="Yucca">Yucca</option>
+                                            <option value="Hydro">Hydro</option>
+                                            <option value="GT Fins">
+                                                GT Fins
+                                            </option>
+                                            <option value="Da Fins">
+                                                Da Fins
+                                            </option>
+                                            <option value="H2Odyssey">
+                                                H2Odyssey
+                                            </option>
+                                            <option value="DMC">DMC</option>
+                                            <option value="Tribe">Tribe</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -321,6 +407,7 @@ const Profile = () => {
                                                 setClub(e.target.value)
                                             }
                                             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Insert your club name"
                                         />
                                     </div>
                                 </div>
@@ -332,18 +419,62 @@ const Profile = () => {
                                     >
                                         Tricks
                                     </label>
-                                    <div className="mt-2">
-                                        <input
+                                    <div className="mt-2 grid grid-cols-1">
+                                        <select
                                             id="tricks"
                                             name="tricks"
-                                            type="text"
-                                            placeholder="Best tricks"
                                             value={tricks}
                                             onChange={(e) =>
-                                                setTricks(e.target.value)
+                                                handleMultiSelectChange(
+                                                    e,
+                                                    setTricks
+                                                )
                                             }
+                                            multiple
                                             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        />
+                                            title="Select your best tricks"
+                                        >
+                                            <option value="ARS">ARS</option>
+                                            <option value="Back Flip">
+                                                Back Flip
+                                            </option>
+                                            <option value="El Rollo">
+                                                El Rollo
+                                            </option>
+                                            <option value="El Rollo DK">
+                                                El Rollo DK
+                                            </option>
+                                            <option value="Aerial DK">
+                                                Aerial DK
+                                            </option>
+                                            <option value="Invert Air">
+                                                Invert Air
+                                            </option>
+                                            <option value="360° Spin Air">
+                                                360° Spin Air
+                                            </option>
+                                            <option value="Reverse Spin Air">
+                                                Reverse Spin Air
+                                            </option>
+                                            <option value="360° Spin">
+                                                360° Spin
+                                            </option>
+                                            <option value="Reverse Spin">
+                                                Reverse Spin
+                                            </option>
+                                            <option value="Cut Back">
+                                                Cut Back
+                                            </option>
+                                            <option value="360° DK">
+                                                360° DK
+                                            </option>
+                                            <option value="Reverse DK">
+                                                Reverse DK
+                                            </option>
+                                            <option value="Cut Back DK">
+                                                Cut Back DK
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -354,8 +485,8 @@ const Profile = () => {
                                     >
                                         Style
                                     </label>
-                                    <div className="mt-2">
-                                        <input
+                                    <div className="mt-2 grid grid-cols-1">
+                                        <select
                                             id="style"
                                             name="style"
                                             type="text"
@@ -365,7 +496,24 @@ const Profile = () => {
                                                 setStyle(e.target.value)
                                             }
                                             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        />
+                                            title="Select your style"
+                                        >
+                                            <option>
+                                                Prone/DropKnee 100/0
+                                            </option>
+                                            <option>
+                                                Prone/DropKnee 75/25
+                                            </option>
+                                            <option>
+                                                Prone/DropKnee 50/50
+                                            </option>
+                                            <option>
+                                                Prone/DropKnee 25/75
+                                            </option>
+                                            <option>
+                                                Prone/DropKnee 0/100
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -376,18 +524,49 @@ const Profile = () => {
                                     >
                                         Spots
                                     </label>
-                                    <div className="mt-2">
-                                        <input
+                                    <div className="mt-2 grid grid-cols-1">
+                                        <select
                                             id="spots"
                                             name="spots"
-                                            type="text"
-                                            placeholder="Best spots"
+                                            multiple
                                             value={spots}
                                             onChange={(e) =>
-                                                setSpots(e.target.value)
+                                                handleMultiSelectChange(
+                                                    e,
+                                                    setSpots
+                                                )
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        />
+                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 h-32"
+                                            title="Select your favorite spots"
+                                        >
+                                            <option value="Pipeline">
+                                                Pipeline
+                                            </option>
+                                            <option value="Teahupo'o">
+                                                Teahupo'o
+                                            </option>
+                                            <option value="Nazare">
+                                                Nazare
+                                            </option>
+                                            <option value="The Wedge">
+                                                The Wedge
+                                            </option>
+                                            <option value="The Box">
+                                                The Box
+                                            </option>
+                                            <option value="El Fronton">
+                                                El Fronton
+                                            </option>
+                                            <option value="Mundaka">
+                                                Mundaka
+                                            </option>
+                                            <option value="Puerto Escondido">
+                                                Puerto Escondido
+                                            </option>
+                                            <option value="Shark Island">
+                                                Shark Island
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -402,14 +581,20 @@ const Profile = () => {
                                         <input
                                             id="facebook"
                                             name="facebook"
-                                            type="text"
+                                            type="url"
+                                            required
                                             placeholder="https://www.facebook.com/xxx"
                                             value={facebook}
                                             onChange={(e) =>
                                                 setFacebook(e.target.value)
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            pattern="^(https?://)?(www\.)?[a-zA-Z0-9\-]+?\.[a-zA-Z]{2,4}\/[a-zA-Z0-9]{3,20}$"
+                                            className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Must be valid URL"
                                         />
+                                        <p className="validator-hint">
+                                            Must be valid URL
+                                        </p>
                                     </div>
                                 </div>
 
@@ -424,14 +609,20 @@ const Profile = () => {
                                         <input
                                             id="instagram"
                                             name="instagram"
-                                            type="text"
+                                            type="url"
+                                            required
                                             placeholder="https://www.instagram.com/xxx"
                                             value={instagram}
                                             onChange={(e) =>
                                                 setInstagram(e.target.value)
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            pattern="^(https?://)?(www\.)?[a-zA-Z0-9\-]+?\.[a-zA-Z]{2,4}\/[a-zA-Z0-9]{3,20}$"
+                                            className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Must be valid URL"
                                         />
+                                        <p className="validator-hint">
+                                            Must be valid URL
+                                        </p>
                                     </div>
                                 </div>
 
@@ -446,21 +637,27 @@ const Profile = () => {
                                         <input
                                             id="youtube"
                                             name="youtube"
-                                            type="text"
+                                            type="url"
+                                            required
                                             placeholder="https://www.youtube.com/xxx"
                                             value={youtube}
                                             onChange={(e) =>
                                                 setYoutube(e.target.value)
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-400 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            pattern="^(https?://)?(www\.)?[a-zA-Z0-9\-]+?\.[a-zA-Z]{2,4}\/[a-zA-Z0-9]{3,20}$"
+                                            className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Must be valid URL"
                                         />
+                                        <p className="validator-hint">
+                                            Must be valid URL
+                                        </p>
                                     </div>
                                 </div>
 
                                 <div className="sm:col-span-4">
                                     <label
                                         htmlFor="email"
-                                        className="label input validator text-sm/6 font-medium"
+                                        className="label text-sm/6 font-medium"
                                     >
                                         Email address
                                         <div className="">
@@ -468,15 +665,14 @@ const Profile = () => {
                                                 id="email"
                                                 name="email"
                                                 type="email"
+                                                required
                                                 autoComplete="email"
                                                 placeholder="mail@site.com"
                                                 value={email}
                                                 onChange={(e) =>
                                                     setEmail(e.target.value)
                                                 }
-                                                className="text-base text-gray-900 placeholder:text-gray-400 sm:text-sm/6"
-                                                required
-                                                pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+                                                className="input validator text-base text-gray-900 placeholder:text-gray-400 sm:text-sm/6"
                                                 title="Please enter a valid email address."
                                             />
                                         </div>
@@ -502,7 +698,8 @@ const Profile = () => {
                                             onChange={(e) =>
                                                 setCountry(e.target.value)
                                             }
-                                            className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 text-gray-400"
+                                            className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Select your country"
                                         >
                                             <option>Portugal</option>
                                             <option>Australia</option>
@@ -540,8 +737,16 @@ const Profile = () => {
                                             onChange={(e) =>
                                                 setStreetAddress(e.target.value)
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            pattern="[a-zA-Z0-9\s\-]*"
+                                            minLength="6"
+                                            maxLength="50"
+                                            className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Must be at least 6 letters with digits"
                                         />
+                                        <div className="validator-hint hidden">
+                                            Must be at least 6 letters with
+                                            digits.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -563,8 +768,16 @@ const Profile = () => {
                                             onChange={(e) =>
                                                 setCity(e.target.value)
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            pattern="[a-zA-Z\s\-]*"
+                                            minLength="2"
+                                            maxLength="30"
+                                            className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Must be at least 2 letters"
                                         />
+                                        <div className="validator-hint hidden">
+                                            Must be at least 2 letters and no
+                                            numbers.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -586,8 +799,16 @@ const Profile = () => {
                                             onChange={(e) =>
                                                 setRegion(e.target.value)
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            pattern="[a-zA-Z\s\-]*"
+                                            minLength="3"
+                                            maxLength="25"
+                                            className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Must be at least 3 letters"
                                         />
+                                        <div className="validator-hint hidden">
+                                            Must be at least 3 letters and no
+                                            numbers.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -609,8 +830,16 @@ const Profile = () => {
                                             onChange={(e) =>
                                                 setPostalCode(e.target.value)
                                             }
-                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            pattern="(?=.*[0-9])[a-zA-Z0-9\s\-]*"
+                                            minLength="3"
+                                            maxLength="15"
+                                            className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Must be at least 3 letters with digits"
                                         />
+                                        <div className="validator-hint hidden">
+                                            Must be at least 3 letters with
+                                            digits.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -618,14 +847,15 @@ const Profile = () => {
                     </div>
 
                     <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">
-                        <button
-                            type="button"
-                            className="text-sm/6 font-semibold text-gray-900"
+                        <a
+                            href="/"
+                            className="btn text-sm/6 font-semibold text-gray-900"
                         >
                             Cancel
-                        </button>
+                        </a>
                         <button
                             type="submit"
+                            onSubmit={handleSubmit}
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             Save

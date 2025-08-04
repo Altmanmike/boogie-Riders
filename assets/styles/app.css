@@ -18,4 +18,5 @@
 /* FOOTER */
 .footer {
     position: absolute;
+    z-index: 500;
 }

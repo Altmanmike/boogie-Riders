@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!
+{% endblock %}
+
+{% block body %}
+
+	<div class="container mx-auto my-20 w-100 min-h-screen">
+		<div class="card w-full max-w-sm bg-base-200 hover:bg-slate-100 shadow">
+
+			<div class="card-body">
+
+				<h2 class="card-title">Connexion</h2>
+
+
+				<form method="post">
+
+					{% if error %}
+						<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+					{% endif %}
+
+
+					<div class="form-control mt-2">
+
+						<label for="inputEmail" class="label">Email</label>
+						<input type="email" class="input input-bordered" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus/>
+					</div>
+
+					<div class="form-control mt-2">
+						<label for="inputPassword" class="label">Password</label>
+						<input type="password" name="password" id="inputPassword" class="input input-bordered" autocomplete="current-password" required/>
+					</div>
+
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+					<button class="btn btn-primary mt-4" type="submit">
+						Login
+					</button>
+				</form>
+				<p class="text-sm mt-2">
+					Not registered ?{" "}
+					<a href="/register" class="link link-primary">
+						Create account
+					</a>
+				</p>
+
+			</div>
+		</div>
+
+	</div>
+
+
+	{% if app.user %}
+		<div class="mb-3">
+			You are connected as
+			{{ app.user.userIdentifier }},
+			<a href="{{ path('logout') }}">Logout</a>
+		</div>
+	{% endif %}
+
+{% endblock %}
+

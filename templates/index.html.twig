@@ -5,10 +5,11 @@
 
 {% block body %}
 
-	<div id="root"></div>	
+<div id="root"></div>
 
 	<script>
-		window.REACT_COMPONENT_NAME = "{{ react_component|default('Home') }}";
+		window.REACT_COMPONENT_NAME = "{{ react_component | default('Home') }}";
+		window.APP_USER_DATA = "{{ isAdmin | json_encode | raw | default(null)}}";
 	</script>
 
 {% endblock %}

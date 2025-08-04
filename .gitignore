@@ -1,6 +1,6 @@
-
 ###> symfony/framework-bundle ###
 /.env
+/.env.dev
 /.env.local
 /.env.local.php
 /.env.*.local
@@ -21,12 +21,6 @@ yarn.lock
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
-
-###> symfony/asset-mapper ###
-/public/assets/
-/assets/vendor/
-###< symfony/asset-mapper ###
-
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 /phpunit.xml

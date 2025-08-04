@@ -1,11 +1,8 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Messenger from "../components/Messenger";
 
-const User = ({ user = {} }) => {    
+const User = ({ User = {} }) => {    
     const {
-        username = "BobbyBoogie",
+        pseudo = "BobbyBoogie",
         about = "Passionate bodyboarder always chasing the next barrel. Love to explore new spots and connect with fellow riders.",
         firstName = "Bobby",
         lastName = "Brown",
@@ -23,14 +20,13 @@ const User = ({ user = {} }) => {
         spots = "Snapper Rocks, Burleigh Heads",
         facebook = "https://www.facebook.com/bobby.b",
         instagram = "https://www.instagram.com/bobby_boogie",
-        youtube = "https://www.youtube.com/bobbyboogierides",        
+        youtube = "https://www.youtube.com/bobbyboogierides",
         coverPhoto = "https://www.sports.gouv.fr/sites/default/files/2022-08/bodyboard-ffsurf-wecreative-jpg-490.jpg",
         avatarPhoto = "https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp",
-    } = user;
+    } = User;
 
     return (
         <>
-            <Navbar />
             <div className="container mx-auto m-10 w-6xl rounded-lg bg-base-200 hover:bg-base-300 shadow-xl min-h-screen pb-8">
                 {coverPhoto ? (
                     <figure className="relative h-48 sm:h-64 overflow-hidden rounded-t-lg">
@@ -77,11 +73,11 @@ const User = ({ user = {} }) => {
                             <div>
                                 <label className="label">
                                     <span className="label-text font-medium text-lg">
-                                        Username
+                                        pseudo
                                     </span>
                                 </label>
                                 <p className="text-base-content text-lg p-2 rounded-md bg-base-300">
-                                    boogie-riders.com/{username}
+                                    boogie-riders.com/{pseudo}
                                 </p>
                             </div>
                             <div className="col-span-full">
@@ -304,8 +300,6 @@ const User = ({ user = {} }) => {
                     </div>
                 </div>
             </div>
-            <Messenger />
-            <Footer />
         </>
     );
 };

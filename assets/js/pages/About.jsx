@@ -1,11 +1,6 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Messenger from "../components/Messenger";
-
 const About = () => {
     return (
-        <>
-            <Navbar />
+        <>            
             <div className="container mx-auto h-full">
                 <div>
                     <h1 className="mt-20 text-3xl text-center font-bold normal-case underline decoration-current-500">
@@ -239,8 +234,6 @@ const About = () => {
                     </div>
                 </div>
             </div>
-            <Messenger />
-            <Footer />
         </>
     );
 };

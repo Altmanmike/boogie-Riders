@@ -1,4 +1,5 @@
-const Navbar = () => {
+const Navbar = ({ onlineUser }) => {
+    //console.log({onlineUser});
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
@@ -60,35 +61,50 @@ const Navbar = () => {
                             />
                         </div>
                     </div>
-                    <ul
-                        tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-                    >
-                        <li>
-                            <a href="/login">Login</a>
-                        </li>
-                        <li>
-                            <a href="/user">See profile</a>
-                        </li>
-                        <li>
-                            <a href="/profile" className="justify-between">
-                                Update profile
-                                <span className="badge">New</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/dashboard">Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="/settings">Settings</a>
-                        </li>
-                        <li>
-                            <a href="/register">Register</a>
-                        </li>
-                        <li>
-                            <a href="/logout">Logout</a>
-                        </li>
-                    </ul>
+
+                    {onlineUser != "null" && (
+                        <ul
+                            tabIndex={0}
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                        >
+                            <li>
+                                <a href="/user">See profile</a>
+                            </li>
+                            <li>
+                                <a href="/profile" className="justify-between">
+                                    Update profile
+                                    <span className="badge">New</span>
+                                </a>
+                            </li>
+                            {onlineUser.includes("ROLE_ADMIN") && (
+                                <li>
+                                    <a href="/admin">Admin Dashboard</a>
+                                </li>
+                            )}
+                            <li>
+                                <a href="/dashboard">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="/settings">Settings</a>
+                            </li>
+                            <li>
+                                <a href="/logout">Logout</a>
+                            </li>
+                        </ul>
+                    )}
+                    {onlineUser == "null" && (
+                        <ul
+                            tabIndex={0}
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                        >
+                            <li>
+                                <a href="/login">Login</a>
+                            </li>
+                            <li>
+                                <a href="/register">Register</a>
+                            </li>
+                        </ul>
+                    )}
                 </div>
                 <button className="btn btn-ghost btn-circle">
                     <div className="indicator">

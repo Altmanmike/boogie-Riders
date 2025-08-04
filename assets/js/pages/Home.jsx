@@ -1,11 +1,6 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Messenger from "../components/Messenger";
-
-const Home = () => {
+const Home = ({ onlineUser }) => {
     return (
         <>
-            <Navbar />
             <div className="container mx-auto h-[80vh]">
                 <div className="hero p-25 bg-base-200">
                     <div className="hero-content text-center">
@@ -19,14 +14,22 @@ const Home = () => {
                                 click and share our current sessions, albums
                                 photos and videos instantly!
                             </p>
-                            <div>
-                                <button className="btn btn-primary mr-2">
-                                    Login
-                                </button>
-                                <button className="btn btn-neutral">
-                                    Register
-                                </button>
-                            </div>
+                            {onlineUser == "null" && (
+                                <div>
+                                    <a
+                                        className="btn btn-primary mr-2"
+                                        href="/login"
+                                    >
+                                        Login
+                                    </a>
+                                    <a
+                                        className="btn btn-neutral"
+                                        href="/register"
+                                    >
+                                        Register
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -48,8 +51,6 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <Messenger />
-            <Footer />
         </>
     );
 };

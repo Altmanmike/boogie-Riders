@@ -1,11 +1,6 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Messenger from "../components/Messenger";
-
 const Register = () => {
     return (
         <>
-            <Navbar />
             <div className="container mx-auto my-10 w-100 h-[65vh]">
                 <div className="card w-full max-w-sm bg-base-200 hover:bg-slate-100 shadow">
                     <div className="card-body">
@@ -58,8 +53,6 @@ const Register = () => {
                     </div>
                 </div>
             </div>
-            <Messenger />
-            <Footer />
         </>
     );
 };

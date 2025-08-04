@@ -1,12 +1,9 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Messenger from "../components/Messenger";
 import { useState } from "react";
 
 const Profile = () => {
-    const [username, setUsername] = useState("");
+    const [pseudo, setPseudo] = useState("");
     const [about, setAbout] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -29,7 +26,7 @@ const Profile = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = {
-            username,
+            pseudo,
             about,
             firstName,
             lastName,
@@ -62,7 +59,6 @@ const Profile = () => {
 
     return (
         <>
-            <Navbar />
             <div className="container mx-auto m-10 w-2xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl min-h-screen">
                 <form className="mt-20 mx-10" onSubmit={handleSubmit}>
                     <div className="pt-10 space-y-12">
@@ -75,22 +71,22 @@ const Profile = () => {
 
                             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                 <div className="sm:col-span-4">
-                                    <label htmlFor="username" className="label">
-                                        Username
+                                    <label htmlFor="pseudo" className="label">
+                                        Pseudo
                                         <div className="">
                                             <div className="flex items-center">
                                                 <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
                                                     (pseudo) &nbsp;
                                                 </div>
                                                 <input
-                                                    id="username"
-                                                    name="username"
+                                                    id="pseudo"
+                                                    name="pseudo"
                                                     type="text"
                                                     required
                                                     placeholder="Bobby"
-                                                    value={username}
+                                                    value={pseudo}
                                                     onChange={(e) =>
-                                                        setUsername(
+                                                        setPseudo(
                                                             e.target.value
                                                         )
                                                     }
@@ -98,13 +94,13 @@ const Profile = () => {
                                                     pattern="[A-Za-z][A-Za-z0-9\-_]*"
                                                     minLength="3"
                                                     maxLength="16"
-                                                    title="Username must be 3-16 alphanumeric characters or underscores."
+                                                    title="pseudo must be 3-16 alphanumeric characters or underscores."
                                                 />
                                             </div>
                                         </div>
                                     </label>
                                     <div className="validator-hint hidden">
-                                        Username must be 3-16 alphanumeric
+                                        pseudo must be 3-16 alphanumeric
                                         characters or underscores.
                                     </div>
                                 </div>
@@ -863,8 +859,6 @@ const Profile = () => {
                     </div>
                 </form>
             </div>
-            <Messenger />
-            <Footer />
         </>
     );
 };

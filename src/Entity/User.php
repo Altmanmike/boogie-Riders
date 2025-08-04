@@ -7,7 +7,27 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 
+/**
+ * Secured resource.
+ */
+#[ApiResource(
+    operations: [
+        new Get(security: "is_granted('ROLE_ADMIN')", securityMessage: 'Nécessite une authentification par token et d\'être admin'),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')", securityMessage: 'Nécessite une authentification par token et d\'être admin'),
+        new Post(security: "is_granted('ROLE_ADMIN')", securityMessage: 'Nécessite une authentification par token et d\'être admin'),
+        new Put(security: "is_granted('ROLE_ADMIN')", securityMessage: 'Nécessite une authentification par token et d\'être admin'),
+        new Patch(security: "is_granted('ROLE_ADMIN')", securityMessage: 'Nécessite une authentification par token et d\'être admin'),
+        new Delete(security: "is_granted('ROLE_ADMIN')", securityMessage: 'Nécessite une authentification par token et d\'être admin')
+    ]
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -33,14 +53,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $username = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pseudo = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $about = null;
@@ -208,14 +228,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getPseudo(): ?string
     {
-        return $this->username;
+        return $this->pseudo;
     }
 
-    public function setUsername(string $username): static
+    public function setPseudo(string $pseudo): static
     {
-        $this->username = $username;
+        $this->pseudo = $pseudo;
 
         return $this;
     }

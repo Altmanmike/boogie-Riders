@@ -25,6 +25,7 @@ class UserFixtures extends Fixture
         $admin->setFins(["Viper","Option"]);
         $admin->setStyle("prone/dropknee 70/30");
         $admin->setFacebook("https://facebook.com/adminmoreyboogie");
+        $admin->setIsVerified(false);
         $admin->setCreatedAt(new \DatetimeImmutable());
         $admin->setUpdatedAt(new \DatetimeImmutable());
         
@@ -40,6 +41,7 @@ class UserFixtures extends Fixture
         $user->setBoards(["NMD"]);
         $user->setFins(["Churchill"]);
         $user->setStyle("prone/dropknee 100/0");
+        $user->setIsVerified(true);
         $user->setCreatedAt(new \DatetimeImmutable());
         $user->setUpdatedAt(new \DatetimeImmutable());
         
@@ -56,6 +58,7 @@ class UserFixtures extends Fixture
         $user->setFins(["Churchill"]);
         $user->setStyle("prone/dropknee 60/40");
         $user->setYoutube("https://youtube.com/btkbodyboard");
+        $user->setIsVerified(true);
         $user->setCreatedAt(new \DatetimeImmutable());
         $user->setUpdatedAt(new \DatetimeImmutable());
         
@@ -71,6 +74,7 @@ class UserFixtures extends Fixture
         $user->setBoards(["Pride"]);
         $user->setFins(["Hydro"]);
         $user->setStyle("prone/dropknee 80/20");
+        $user->setIsVerified(true);
         $user->setCreatedAt(new \DatetimeImmutable());
         $user->setUpdatedAt(new \DatetimeImmutable());
         

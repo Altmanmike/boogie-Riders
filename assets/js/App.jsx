@@ -3,7 +3,6 @@ import About from "./pages/About";
 import Links from "./pages/Links";
 import Profile from "./pages/Profile";
 import User from "./pages/User";
-import Register from "./pages/Register";
 import Settings from "./pages/Settings";
 import Spot from "./pages/Spot";
 import Navbar from "./components/Navbar";
@@ -16,7 +15,6 @@ const components = {
     Links,    
     Profile,
     User,
-    Register,
     Settings,
     Spot,
 };

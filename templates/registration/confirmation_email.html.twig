@@ -1,0 +1,102 @@
+{% apply inline_css %}
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Register confirmation</title>
+		<style>			
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #f0f0f0; 
+				margin: 0;
+				padding: 0;
+				-webkit-text-size-adjust: 100%;
+				-ms-text-size-adjust: 100%;
+			}
+			.container {
+				max-width: 600px;
+				margin: 0 auto;
+				background-color: #ffffff; 
+				border-radius: 1rem; 
+				overflow: hidden;
+				box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
+			}
+			.content {
+				padding: 2rem;
+				text-align: center;
+			}
+			h1,
+			h2 {
+				color: #1f2937; 
+				font-weight: 600;
+			}
+			p {
+				color: #4b5563; 
+				line-height: 1.5;
+			}
+			.btn {
+				display: inline-block;
+				padding: 1.5rem;
+				margin-bottom: 2rem;
+				background-color: #3b82f6; 
+				color: #ffffff; 
+				text-decoration: none;
+				font-weight: 600;
+				border-radius: 0.5rem;
+				transition: background-color 0.2s ease-in-out;
+			}
+			.btn:hover {
+				background-color: #2563eb; 
+			}
+			.logo {
+				width: 100%;
+				max-width: 400px;
+				height: auto;
+                margin: 2rem;				
+			}
+			.image-promo {
+				width: 100%;
+				height: auto;
+				border-radius: 1rem;
+				margin-top: 2rem;
+			}
+		</style>
+	</head>
+	<body>
+		<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color: #f0f0f0;">
+			<tr>
+				<td align="center" style="padding: 2rem;">
+					<div class="container">
+						<div class="content">
+							<img src="https://dev-maltman.fr/images/br-logo.png" alt="logo" class="logo" style="width: 100%; max-width: 400px; height: auto; margin: 2rem">
+
+							<h1 style="font-size: 1.5rem; color: #1f2937; font-weight: 600;">Website registration there</h1>
+
+							<h2 style="font-size: 1.25rem; color: #1f2937; font-weight: 600;">Please confirm your email!</h2>
+
+							<p style="font-size: 1rem; color: #4b5563; line-height: 1.5;">
+								Please confirm your email address by clicking the following link:
+							</p>
+							<br>
+							<a href="{{ signedUrl|raw }}" class="btn" style="display: inline-block; padding: 1.5rem; margin-bottom: 2rem; background-color: #3b82f6; color: #ffffff; text-decoration: none; font-weight: 600; border-radius: 0.5rem;">
+								Confirm my Email
+							</a>
+							<br><br>
+							<p style="font-size: 0.875rem; color: #6b7280;">
+								This link will expire in
+								{{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+							</p>
+
+							<img src="https://www.sports.gouv.fr/sites/default/files/2022-08/bodyboard-ffsurf-wecreative-jpg-490.jpg" alt="trick" class="image-promo" style="width: 100%; height: auto; border-radius: 1rem; margin-top: 2rem;">
+
+							<p style="font-size: 1rem; color: #4b5563; line-height: 1.5;">
+								Have a nice day! Cya..
+							</p>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
+{% endapply %}

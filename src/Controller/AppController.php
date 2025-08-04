@@ -76,21 +76,7 @@ final class AppController extends AbstractController
             'react_component' => 'User',
             'isAdmin' => $isAdmin
         ]);
-    }
-    
-    #[Route('/register', name: 'register')]
-    public function register(): Response
-    {
-        $isAdmin = null;
-        if($this->getUser()) {
-            $isAdmin = $this->getUser()->getRoles();
-        }
-        
-        return $this->render('index.html.twig', [
-            'react_component' => 'Register',
-            'isAdmin' => $isAdmin
-        ]);
-    }
+    } 
     
     #[Route('/settings', name: 'settings')]
     public function settings(): Response

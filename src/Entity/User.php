@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -15,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use File;
 
 /**
  * Secured resource.
@@ -74,15 +77,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $cover = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $boards = null;
-
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $fins = null;
-
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $spots = null;
-
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private ?array $tricks = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -121,11 +115,109 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    /**
+     * @var Collection<int, Board>
+     */
+    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'user')]
+    private Collection $boards;
+
+    /**
+     * @var Collection<int, Fin>
+     */
+    #[ORM\OneToMany(targetEntity: Fin::class, mappedBy: 'user')]
+    private Collection $fins;
+
+    /**
+     * @var Collection<int, Leash>
+     */
+    #[ORM\OneToMany(targetEntity: Leash::class, mappedBy: 'user')]
+    private Collection $leashes;
+
+    /**
+     * @var Collection<int, Wetsuit>
+     */
+    #[ORM\OneToMany(targetEntity: Wetsuit::class, mappedBy: 'user')]
+    private Collection $wetsuits;
+
+    /**
+     * @var Collection<int, Accessory>
+     */
+    #[ORM\OneToMany(targetEntity: Accessory::class, mappedBy: 'user')]
+    private Collection $accessories;
+
+    /**
+     * @var Collection<int, Spot>
+     */
+    #[ORM\ManyToMany(targetEntity: Spot::class, mappedBy: 'users')]
+    private Collection $spots;
+
+    /**
+     * @var Collection<int, Session>
+     */
+    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'user')]
+    private Collection $sessions;
+
+    /**
+     * @var Collection<int, Article>
+     */
+    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'user')]
+    private Collection $articles;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user')]
+    private Collection $comments;
+
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'user')]
+    private Collection $likes;
+
+    /**
+     * @var Collection<int, Media>
+     */
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'user')]
+    private Collection $medias;
+
+    /**
+     * @var Collection<int, Chat>
+     */
+    #[ORM\ManyToMany(targetEntity: Chat::class, mappedBy: 'users')]
+    private Collection $chats;
+
+    /**
+     * @var Collection<int, Message>
+     */
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'user')]
+    private Collection $messages;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'user')]
+    private Collection $events;
+
     public function __construct()
     {
         $this->roles = ['ROLE_USER'];
         $this->createdAt = new \DateTimeImmutable();  
-        $this->updatedAt = new \DateTimeImmutable();       
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->boards = new ArrayCollection();
+        $this->fins = new ArrayCollection();
+        $this->leashes = new ArrayCollection();
+        $this->wetsuits = new ArrayCollection();
+        $this->accessories = new ArrayCollection();
+        $this->spots = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->medias = new ArrayCollection();
+        $this->chats = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+        $this->events = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -277,42 +369,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCover(?string $cover): static
     {
         $this->cover = $cover;
-
-        return $this;
-    }
-    
-    public function getBoards(): ?array
-    {
-        return $this->boards;
-    }
-
-    public function setBoards(?array $boards): static
-    {
-        $this->boards = $boards;
-
-        return $this;
-    }
-
-    public function getFins(): ?array
-    {
-        return $this->fins;
-    }
-
-    public function setFins(?array $fins): static
-    {
-        $this->fins = $fins;
-
-        return $this;
-    }
-
-    public function getSpots(): ?array
-    {
-        return $this->spots;
-    }
-
-    public function setSpots(?array $spots): static
-    {
-        $this->spots = $spots;
 
         return $this;
     }
@@ -469,6 +525,420 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Board>
+     */
+    public function getBoards(): Collection
+    {
+        return $this->boards;
+    }
+
+    public function addBoard(Board $board): static
+    {
+        if (!$this->boards->contains($board)) {
+            $this->boards->add($board);
+            $board->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoard(Board $board): static
+    {
+        if ($this->boards->removeElement($board)) {
+            // set the owning side to null (unless already changed)
+            if ($board->getUser() === $this) {
+                $board->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fin>
+     */
+    public function getFins(): Collection
+    {
+        return $this->fins;
+    }
+
+    public function addFin(Fin $fin): static
+    {
+        if (!$this->fins->contains($fin)) {
+            $this->fins->add($fin);
+            $fin->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFin(Fin $fin): static
+    {
+        if ($this->fins->removeElement($fin)) {
+            // set the owning side to null (unless already changed)
+            if ($fin->getUser() === $this) {
+                $fin->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Leash>
+     */
+    public function getLeashes(): Collection
+    {
+        return $this->leashes;
+    }
+
+    public function addLeash(Leash $leash): static
+    {
+        if (!$this->leashes->contains($leash)) {
+            $this->leashes->add($leash);
+            $leash->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLeash(Leash $leash): static
+    {
+        if ($this->leashes->removeElement($leash)) {
+            // set the owning side to null (unless already changed)
+            if ($leash->getUser() === $this) {
+                $leash->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Wetsuit>
+     */
+    public function getWetsuits(): Collection
+    {
+        return $this->wetsuits;
+    }
+
+    public function addWetsuit(Wetsuit $wetsuit): static
+    {
+        if (!$this->wetsuits->contains($wetsuit)) {
+            $this->wetsuits->add($wetsuit);
+            $wetsuit->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWetsuit(Wetsuit $wetsuit): static
+    {
+        if ($this->wetsuits->removeElement($wetsuit)) {
+            // set the owning side to null (unless already changed)
+            if ($wetsuit->getUser() === $this) {
+                $wetsuit->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Accessory>
+     */
+    public function getAccessories(): Collection
+    {
+        return $this->accessories;
+    }
+
+    public function addAccessory(Accessory $accessory): static
+    {
+        if (!$this->accessories->contains($accessory)) {
+            $this->accessories->add($accessory);
+            $accessory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessory(Accessory $accessory): static
+    {
+        if ($this->accessories->removeElement($accessory)) {
+            // set the owning side to null (unless already changed)
+            if ($accessory->getUser() === $this) {
+                $accessory->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Spot>
+     */
+    public function getSpots(): Collection
+    {
+        return $this->spots;
+    }
+
+    public function addSpot(Spot $spot): static
+    {
+        if (!$this->spots->contains($spot)) {
+            $this->spots->add($spot);
+            $spot->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSpot(Spot $spot): static
+    {
+        if ($this->spots->removeElement($spot)) {
+            $spot->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(Session $session): static
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions->add($session);
+            $session->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(Session $session): static
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getUser() === $this) {
+                $session->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): static
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getUser() === $this) {
+                $article->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getUser() === $this) {
+                $like->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedia(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function addMedia(Media $media): static
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+            $media->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Media $media): static
+    {
+        if ($this->medias->removeElement($media)) {
+            // set the owning side to null (unless already changed)
+            if ($media->getUser() === $this) {
+                $media->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chat>
+     */
+    public function getChats(): Collection
+    {
+        return $this->chats;
+    }
+
+    public function addChat(Chat $chat): static
+    {
+        if (!$this->chats->contains($chat)) {
+            $this->chats->add($chat);
+            $chat->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): static
+    {
+        if ($this->chats->removeElement($chat)) {
+            $chat->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getUser() === $this) {
+                $message->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): static
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getUser() === $this) {
+                $event->setUser(null);
+            }
+        }
 
         return $this;
     }    

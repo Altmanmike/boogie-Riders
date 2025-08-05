@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20250805133952 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE board (id INT AUTO_INCREMENT NOT NULL, brand VARCHAR(255) NOT NULL, model VARCHAR(255) DEFAULT NULL, size VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, colors LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', core VARCHAR(255) DEFAULT NULL, tail VARCHAR(255) DEFAULT NULL, stringer VARCHAR(255) DEFAULT NULL, mesh VARCHAR(255) DEFAULT NULL, slick VARCHAR(255) DEFAULT NULL, price INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE fin (id INT AUTO_INCREMENT NOT NULL, brand VARCHAR(255) NOT NULL, size VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, colors LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\', price INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+    }
+
+    public function down(Schema $schema): void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('DROP TABLE board');
+        $this->addSql('DROP TABLE fin');
+    }
+}

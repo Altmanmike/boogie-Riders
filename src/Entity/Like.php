@@ -26,11 +26,9 @@ class Like
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Session $session = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Article $article = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]

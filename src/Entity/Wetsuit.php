@@ -20,6 +20,9 @@ class Wetsuit
     private ?string $brand = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $model = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -34,8 +37,8 @@ class Wetsuit
     #[ORM\Column(length: 255)]
     private ?string $gender = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $thickness = [];
+    #[ORM\Column(length: 255)]
+    private ?string $thickness = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $price = null;
@@ -71,7 +74,19 @@ class Wetsuit
 
         return $this;
     }
+    
+    public function getModel(): ?string
+    {
+        return $this->model;
+    }
 
+    public function setModel(?string $model): static
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+    
     public function getType(): ?string
     {
         return $this->type;
@@ -132,12 +147,12 @@ class Wetsuit
         return $this;
     }
 
-    public function getThickness(): array
+    public function getThickness(): string
     {
         return $this->thickness;
     }
 
-    public function setThickness(array $thickness): static
+    public function setThickness(string $thickness): static
     {
         $this->thickness = $thickness;
 

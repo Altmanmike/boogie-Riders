@@ -83,7 +83,7 @@ class Chat
     public function addUser(User $user): static
     {
         if (!$this->users->contains($user)) {
-            $this->users->add($user);
+            $this->users->add($user);            
         }
 
         return $this;

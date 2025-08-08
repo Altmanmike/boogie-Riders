@@ -117,7 +117,7 @@ class Board
         return $this;
     }
 
-    public function getcColors(): array
+    public function getColors(): array
     {
         return $this->colors;
     }

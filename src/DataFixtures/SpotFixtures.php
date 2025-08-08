@@ -22,7 +22,8 @@ class SpotFixtures extends Fixture implements DependentFixtureInterface
             ->setBestConditions("")
             ->setDifficultyLevel(4)
             ->setCreatedAt(new \DatetimeImmutable())
-            ->setUpdatedAt(new \DatetimeImmutable());
+            ->setUpdatedAt(new \DatetimeImmutable())
+            ->addUser($this->getReference('user_0', User::class));            
         $this->addReference('spot_0', $spot);           
         $manager->persist($spot);
         
@@ -36,7 +37,8 @@ class SpotFixtures extends Fixture implements DependentFixtureInterface
             ->setBestConditions("")
             ->setDifficultyLevel(4)
             ->setCreatedAt(new \DatetimeImmutable())
-            ->setUpdatedAt(new \DatetimeImmutable());
+            ->setUpdatedAt(new \DatetimeImmutable())
+            ->addUser($this->getReference('user_1', User::class));
         $this->addReference('spot_1', $spot);
         $manager->persist($spot); 
         
@@ -50,7 +52,8 @@ class SpotFixtures extends Fixture implements DependentFixtureInterface
             ->setBestConditions("")
             ->setDifficultyLevel(4)
             ->setCreatedAt(new \DatetimeImmutable())
-            ->setUpdatedAt(new \DatetimeImmutable());
+            ->setUpdatedAt(new \DatetimeImmutable())
+            ->addUser($this->getReference('user_2', User::class));
         $this->addReference('spot_2', $spot);            
         $manager->persist($spot);
         

@@ -23,7 +23,9 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->setUrl("https://ibcworldtour.com/events/sintra-bodyboard-pro-fest-2025/")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));           
+            ->setUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_0', User::class))            
+            ->addUser($this->getReference('user_1', User::class));           
         $manager->persist($event);
         
         $event = new Event(); 
@@ -37,7 +39,9 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->setUrl("https://ibcworldtour.com/events/everyday-mehdya-rising-series-2025-in-morocco/")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));
+            ->setUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_1', User::class))            
+            ->addUser($this->getReference('user_2', User::class));
         $manager->persist($event); 
         
         $event = new Event(); 
@@ -51,7 +55,10 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->setUrl("https://ibcworldtour.com/events/2025/iquique-bodyboard-pro-2025/2025/register-now-ijunior-men-quique-bodyboard-pro-2025-rising-series-spots-open/")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));            
+            ->setUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_0', User::class))            
+            ->addUser($this->getReference('user_1', User::class))            
+            ->addUser($this->getReference('user_2', User::class));            
         $manager->persist($event);
         
         $manager->flush(); 

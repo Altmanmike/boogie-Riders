@@ -9,7 +9,7 @@
 
 	<script>
 		window.REACT_COMPONENT_NAME = "{{ react_component | default('Home') }}";
-		window.APP_USER_DATA = "{{ isAdmin | json_encode | raw | default(null)}}";
+		window.APP_USER_DATA = "{{ userRolesId | json_encode | raw | default(null)}}";		
 	</script>
 
 {% endblock %}

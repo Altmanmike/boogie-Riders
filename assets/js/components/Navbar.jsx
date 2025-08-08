@@ -82,9 +82,6 @@ const Navbar = ({ onlineUser }) => {
                                 </li>
                             )}
                             <li>
-                                <a href="/dashboard">Dashboard</a>
-                            </li>
-                            <li>
                                 <a href="/settings">Settings</a>
                             </li>
                             <li>

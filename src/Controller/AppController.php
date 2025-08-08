@@ -11,98 +11,119 @@ final class AppController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(): Response
     {
-        $isAdmin = null;
-        if($this->getUser()) {
-            $isAdmin = $this->getUser()->getRoles();            
+        $userRolesId = null;
+        if($this->getUser()) {            
+            $userRolesId = [
+                $this->getUser()->getId(),
+                $this->getUser()->getRoles()
+            ];            
         }
             
         return $this->render('index.html.twig', [
             'react_component' => 'Home',
-            'isAdmin' => $isAdmin
+            'userRolesId' => $userRolesId
         ]);
     }
 
     #[Route('/about', name: 'about')]
     public function about(): Response
     {
-        $isAdmin = null;
+        $userRolesId = null;
         if($this->getUser()) {
-            $isAdmin = $this->getUser()->getRoles();
+            $userRolesId = [
+                $this->getUser()->getId(),
+                $this->getUser()->getRoles()
+            ];
         }
         
         return $this->render('index.html.twig', [
             'react_component' => 'About',
-            'isAdmin' => $isAdmin 
+            'userRolesId' => $userRolesId 
         ]);
     }
 
     #[Route('/links', name: 'links')]
     public function links(): Response
     {
-        $isAdmin = null;
+        $userRolesId = null;
         if($this->getUser()) {
-            $isAdmin = $this->getUser()->getRoles();
+            $userRolesId = [
+                $this->getUser()->getId(),
+                $this->getUser()->getRoles()
+            ];
         }
         
         return $this->render('index.html.twig', [
             'react_component' => 'Links',
-            'isAdmin' => $isAdmin
+            'userRolesId' => $userRolesId
         ]);
     } 
     
     #[Route('/profile', name: 'profile')]
     public function profile(): Response
     {
-        $isAdmin = null;
+        $userRolesId = null;
         if($this->getUser()) {
-            $isAdmin = $this->getUser()->getRoles();
+            $userRolesId = [
+                $this->getUser()->getId(),
+                $this->getUser()->getRoles()
+            ];
         }
         
         return $this->render('index.html.twig', [
             'react_component' => 'Profile',
-            'isAdmin' => $isAdmin
+            'userRolesId' => $userRolesId
         ]);
     }
 
     #[Route('/user', name: 'user')]
     public function user(): Response
     {
-        $isAdmin = null;
-        if($this->getUser()) {            
-            $isAdmin = $this->getUser()->getRoles();                   
+        $userRolesId = null;
+        if($this->getUser()) {
+            $userRolesId = [
+                $this->getUser()->getId(),
+                $this->getUser()->getRoles()
+            ];                   
         }
         
         return $this->render('index.html.twig', [
             'react_component' => 'User',
-            'isAdmin' => $isAdmin
+            'userRolesId' => $userRolesId
         ]);
     } 
     
     #[Route('/settings', name: 'settings')]
     public function settings(): Response
     {
-        $isAdmin = null;
+        $userRolesId = null;
         if($this->getUser()) {
-            $isAdmin = $this->getUser()->getRoles();
+            $userRolesId = [
+                $this->getUser()->getId(),
+                $this->getUser()->getRoles()
+            ];
         }
         
         return $this->render('index.html.twig', [
             'react_component' => 'Settings',
-            'isAdmin' => $isAdmin
+            'userRolesId' => $userRolesId
         ]);
     }
     
     #[Route('/spot', name: 'spot')]
     public function spot(): Response
     {
-        $isAdmin = null;
+        $userRolesId = null;
         if($this->getUser()) {
-            $isAdmin = $this->getUser()->getRoles();
+            $userRolesId = [
+                $this->getUser()->getId(),
+                $this->getUser()->getRoles()
+            ];
         }
         
         return $this->render('index.html.twig', [
             'react_component' => 'Spot',
-            'isAdmin' => $isAdmin
+            'userRolesId' => $userRolesId
         ]);
     }
 }

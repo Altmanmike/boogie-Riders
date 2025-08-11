@@ -213,7 +213,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Event>
      */
-    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants')]
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'users')]
     private Collection $evts;
 
     public function __construct()

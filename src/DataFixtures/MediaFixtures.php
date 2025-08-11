@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Spot;
 use App\Entity\User;
 use App\Entity\Media;
 use App\Entity\Article;
@@ -32,7 +33,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_1', User::class))
-            ->setArticle($this->getReference('article_0', Article::class));        
+            ->setSpot($this->getReference('spot_0', Spot::class));        
         $this->addReference('media_1', $media);           
         $manager->persist($media);
 

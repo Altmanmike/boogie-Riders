@@ -205,10 +205,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $messages;
 
     /**
-     * @var Collection<int, Event>
+     * @var Collection<int, Message>
      */
     #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'user')]
     private Collection $events;
+    
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants')]
+    private Collection $evts;
 
     public function __construct()
     {
@@ -228,7 +234,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->medias = new ArrayCollection();
         $this->chats = new ArrayCollection();
         $this->messages = new ArrayCollection();
-        $this->events = new ArrayCollection();       
+        $this->events = new ArrayCollection();
+        $this->evts = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -944,10 +951,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeEvent(Event $event): static
     {
-        if ($this->events->removeElement($event)) {
+        if ($this->evts->removeElement($event)) {
             // set the owning side to null (unless already changed)
             if ($event->getUser() === $this) {
                 $event->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvts(): Collection
+    {
+        return $this->evts;
+    }
+
+    public function addEvt(Event $evt): static
+    {
+        if (!$this->evts->contains($evt)) {
+            $this->evts->add($evt);
+            $evt->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvt(Event $evt): static
+    {
+        if ($this->evts->removeElement($evt)) {
+            // set the owning side to null (unless already changed)
+            if ($evt->getUser() === $this) {
+                $evt->setUser(null);
             }
         }
 

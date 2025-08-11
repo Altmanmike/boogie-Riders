@@ -80,19 +80,20 @@ class Event
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'events')]
-    private Collection $users;
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'evts')]
+    private Collection $participants;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();  
         $this->updatedAt = new \DateTimeImmutable();
-        $this->users = new ArrayCollection();       
+        $this->participants = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -235,15 +236,15 @@ class Event
     /**
      * @return Collection<int, User>
      */
-    public function getUsers(): Collection
+    public function getParticipants(): Collection
     {
-        return $this->users;
+        return $this->participants;
     }
 
     public function addUser(User $user): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
+        if (!$this->participants->contains($user)) {
+            $this->participants->add($user);
         }
 
         return $this;
@@ -251,7 +252,7 @@ class Event
 
     public function removeUser(User $user): static
     {
-        $this->users->removeElement($user);
+        $this->participants->removeElement($user);
 
         return $this;
     }

@@ -82,6 +82,50 @@ const Navbar = ({ onlineUser }) => {
                                 </li>
                             )}
                             <li>
+                                <details close>
+                                    <summary>Gears</summary>
+                                    <ul className="menu-dropdown">
+                                        <li>
+                                            <a href="/board">Boards</a>
+                                        </li>
+                                        <li>
+                                            <a href="/fins">Fins</a>
+                                        </li>
+                                        <li>
+                                            <a href="/leash">Leashes</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wetsuit">Wetsuits</a>
+                                        </li>
+                                        <li>
+                                            <a href="/accessory">Accessories</a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details close>
+                                    <summary>Posts</summary>
+                                    <ul>
+                                        <li>
+                                            <a href="/articles">Articles</a>
+                                        </li>
+                                        <li>
+                                            <a href="/sessions">Sessions</a>
+                                        </li>
+                                        <li>
+                                            <a href="/events">Events</a>
+                                        </li>
+                                        <li>
+                                            <a href="/spots">Spots</a>
+                                        </li>
+                                        <li>
+                                            <a href="/medias">Medias</a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
                                 <a href="/settings">Settings</a>
                             </li>
                             <li>

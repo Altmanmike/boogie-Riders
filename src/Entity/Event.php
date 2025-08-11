@@ -87,13 +87,13 @@ class Event
      * @var Collection<int, User>
      */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'evts')]
-    private Collection $participants;
+    private Collection $users;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();  
         $this->updatedAt = new \DateTimeImmutable();
-        $this->participants = new ArrayCollection();       
+        $this->users = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -236,15 +236,15 @@ class Event
     /**
      * @return Collection<int, User>
      */
-    public function getParticipants(): Collection
+    public function getUsers(): Collection
     {
-        return $this->participants;
+        return $this->users;
     }
 
     public function addUser(User $user): static
     {
-        if (!$this->participants->contains($user)) {
-            $this->participants->add($user);
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
         }
 
         return $this;
@@ -252,7 +252,7 @@ class Event
 
     public function removeUser(User $user): static
     {
-        $this->participants->removeElement($user);
+        $this->users->removeElement($user);
 
         return $this;
     }

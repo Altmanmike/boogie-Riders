@@ -2,13 +2,44 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\AccessoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 
+/**
+ * Secured resource.
+ */
+#[ApiResource(
+    operations: [
+        new Get(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+        new GetCollection(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin'),
+        new Post(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin'),
+        new Put(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+        new Patch(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin')
+    ]
+)]
+#[ORM\Table(name: '`accessory`')]
 #[ORM\Entity(repositoryClass: AccessoryRepository::class)]
-#[ApiResource]
 class Accessory
 {
     #[ORM\Id]

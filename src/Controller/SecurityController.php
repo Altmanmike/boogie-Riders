@@ -15,6 +15,7 @@ class SecurityController extends AbstractController
         $dataUser = null;
         if ($this->getUser()) {
             $dataUser = $this->getUser();
+            $this->addFlash('success', 'Your are already connected');
             return $this->redirectToRoute('user', [
                 'dataUser' => $dataUser
             ]);
@@ -24,7 +25,9 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
+        
+        $this->addFlash('success', 'Your are connected!');
+        
         return $this->render('security/login.html.twig', [                        
             'last_username' => $lastUsername, 
             'error' => $error,
@@ -33,8 +36,9 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/logout', name: 'logout')]
-    public function logout(): void
-    {                
-        $this->redirectToRoute('login');
+    public function logout(): Response
+    {
+        $this->addFlash('success', 'Your are disconnected.');                
+        return $this->redirectToRoute('login');        
     }
 }

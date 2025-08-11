@@ -51,6 +51,7 @@ class RegistrationController extends AbstractController
             );
 
             // do anything else you need here, like send an email
+            $this->addFlash('success', 'Your are connected, please do email validation!');
 
             return $security->login($user, AppAuthenticator::class, 'main');
         }

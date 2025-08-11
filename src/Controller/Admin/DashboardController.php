@@ -30,7 +30,11 @@ class DashboardController extends AbstractDashboardController
 {
     #[Route('/admin', name: 'admin')]
     public function index(): Response
-    {
+    {        
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->redirectToRoute('user');
+        }
+        
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
 
         return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());

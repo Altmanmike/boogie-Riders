@@ -4,10 +4,19 @@ import Links from "./pages/Links";
 import Profile from "./pages/Profile";
 import User from "./pages/User";
 import Settings from "./pages/Settings";
-import Spot from "./pages/Spot";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Messenger from "./components/Messenger";
+import Accessory from "./gears/Accessory";
+import Board from "./gears/Board";
+import Fin from "./gears/Fin";
+import Leash from "./gears/Leash";
+import Wetsuit from "./gears/Wetsuit";
+import Article from "./posts/Article";
+import Event from "./posts/Event";
+import Media from "./posts/Media";
+import Session from "./posts/Session";
+import Spot from "./posts/Spot";
 
 const components = {
     Home,
@@ -16,6 +25,15 @@ const components = {
     Profile,
     User,
     Settings,
+    Accessory,
+    Board,
+    Fin,
+    Leash,
+    Wetsuit,
+    Article,
+    Event,
+    Media,
+    Session,
     Spot,
 };
 

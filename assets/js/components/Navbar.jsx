@@ -82,7 +82,7 @@ const Navbar = ({ onlineUser }) => {
                                 </li>
                             )}
                             <li>
-                                <details close>
+                                <details>
                                     <summary>Gears</summary>
                                     <ul className="menu-dropdown">
                                         <li>
@@ -104,7 +104,7 @@ const Navbar = ({ onlineUser }) => {
                                 </details>
                             </li>
                             <li>
-                                <details close>
+                                <details>
                                     <summary>Posts</summary>
                                     <ul>
                                         <li>

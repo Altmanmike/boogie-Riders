@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\QueryParameter;
 
 /**
  * Secured resource.
@@ -23,7 +24,8 @@ use ApiPlatform\Metadata\Delete;
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            parameters: ['user' => new QueryParameter]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin'),
@@ -48,7 +50,7 @@ class Media
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $file_path = null;
+    private ?string $filePath = null;
 
     #[ORM\Column(length: 255)]
     private ?string $type = null;
@@ -88,12 +90,12 @@ class Media
 
     public function getFilePath(): ?string
     {
-        return $this->file_path;
+        return $this->filePath;
     }
 
-    public function setFilePath(string $file_path): static
+    public function setFilePath(string $filePath): static
     {
-        $this->file_path = $file_path;
+        $this->filePath = $filePath;
 
         return $this;
     }

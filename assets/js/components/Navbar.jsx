@@ -89,7 +89,7 @@ const Navbar = ({ onlineUser }) => {
                                             <a href="/board">Boards</a>
                                         </li>
                                         <li>
-                                            <a href="/fins">Fins</a>
+                                            <a href="/fin">Fins</a>
                                         </li>
                                         <li>
                                             <a href="/leash">Leashes</a>
@@ -108,19 +108,19 @@ const Navbar = ({ onlineUser }) => {
                                     <summary>Posts</summary>
                                     <ul>
                                         <li>
-                                            <a href="/articles">Articles</a>
+                                            <a href="/article">Articles</a>
                                         </li>
                                         <li>
-                                            <a href="/sessions">Sessions</a>
+                                            <a href="/session">Sessions</a>
                                         </li>
                                         <li>
-                                            <a href="/events">Events</a>
+                                            <a href="/event">Events</a>
                                         </li>
                                         <li>
-                                            <a href="/spots">Spots</a>
+                                            <a href="/spot">Spots</a>
                                         </li>
                                         <li>
-                                            <a href="/medias">Medias</a>
+                                            <a href="/media">Medias</a>
                                         </li>
                                     </ul>
                                 </details>

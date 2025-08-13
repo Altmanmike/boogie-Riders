@@ -1,15 +1,16 @@
 const Footer = () => {
     return (
-        <footer className="footer footer-horizontal footer-center bg-primary text-primary-content p-10">
+        <footer className="footer footer-horizontal footer-center bg-primary text-primary-content pt-4 pb-1">
             <aside>
-                <img src="assets/logo.png" alt="logo" />
+                <img src="assets/logo.png" alt="logo" className="logo-footer" />
                 <p className="font-bold">
-                    Boogie Riders inc.
-                    <br />
                     Connecting bodyboarders since 2025
-                </p>
-                <p>
-                    Copyright © {new Date().getFullYear()} - All right reserved
+                    <br />
+                    <span className="font-normal mt-2">
+                        {" "}
+                        Copyright © {new Date().getFullYear()} - All right
+                        reserved
+                    </span>
                 </p>
             </aside>
         </footer>

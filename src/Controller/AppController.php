@@ -24,14 +24,31 @@ final class AppController extends AbstractController
             'userRolesId' => $userRolesId 
         ]);
     } 
+
+    #[Route('/user', name: 'user')]
+    public function user(): Response
+    {
+        $userRolesId = null;
+        if($this->getUser()) {
+            $userRolesId = [
+                $this->getUser()->getId(),
+                $this->getUser()->getRoles()
+            ];
+        }
+        
+        return $this->render('index.html.twig', [
+            'react_component' => 'User',
+            'userRolesId' => $userRolesId 
+        ]);
+    }
       
     private const COMPONENTS_LIST = [
-        'home', 'about', 'links', 'profile', 'user', 'settings', 'board', 'fin', 
+        'home', 'about', 'links', 'profile', 'user', 'settings', 'board', 'boardNew', 'fin', 
         'leash', 'wetsuit', 'accessory', 'article', 'session', 'event', 
         'spot', 'media',
     ];
     
-    #[Route('/{name}', name: 'app_dynamic_page', requirements: ['name' => 'home|about|links|profile|user|settings|board|fin|leash|wetsuit|accessory|article|session|event|spot|media'])]
+    #[Route('/{name}', name: 'app_dynamic_page', requirements: ['name' => 'home|about|links|profile|user|settings|board|boardNew|fin|leash|wetsuit|accessory|article|session|event|spot|media'])]
     public function dynamicPage(string $name): Response
     {
         $userRolesId = null;

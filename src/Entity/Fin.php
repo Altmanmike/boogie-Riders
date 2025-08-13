@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\QueryParameter;
 
 /**
  * Secured resource.
@@ -23,7 +24,8 @@ use ApiPlatform\Metadata\Delete;
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN')", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            parameters: ['user' => new QueryParameter]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin'),
@@ -60,7 +62,10 @@ class Fin
     private ?array $colors = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $price = null;
+    private ?float $price = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -130,18 +135,30 @@ class Fin
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(?int $price): static
+    public function setPrice(?float $price): static
     {
         $this->price = $price;
 
         return $this;
     }
+    
+    public function getPhoto(): ?string 
+    {
+        return $this->photo;
+    }
 
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+    
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -176,5 +193,5 @@ class Fin
         $this->user = $user;
 
         return $this;
-    }
+    }    
 }

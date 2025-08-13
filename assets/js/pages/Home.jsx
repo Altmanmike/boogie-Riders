@@ -1,7 +1,7 @@
 const Home = ({ onlineUser }) => {
     return (
         <>
-            <div className="container mx-auto h-[80vh]">
+            <div className="container mx-auto h-full mb-100">
                 <div className="hero p-25 bg-base-200">
                     <div className="hero-content text-center">
                         <div className="max-w-md">
@@ -35,7 +35,7 @@ const Home = ({ onlineUser }) => {
                 </div>
 
                 <div>
-                    <h1 className="mt-20 text-3xl text-center font-bold normal-case underline decoration-current-500">
+                    <h1 className="mt-10 text-3xl text-center font-bold normal-case underline decoration-current-500">
                         Easy steps!
                     </h1>
                     <div className="flex justify-center items-center h-40">

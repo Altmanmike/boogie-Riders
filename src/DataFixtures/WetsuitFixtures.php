@@ -22,6 +22,7 @@ class WetsuitFixtures extends Fixture implements DependentFixtureInterface
             ->setGender("man")
             ->setThickness("4/3")
             ->setPrice(319)
+            ->setPhoto("https://www.ogm-bodyboard-shop.com/4594-large_default/combinaison-gyroll-shield-43-zipperless-black-grey.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_0', User::class));            
@@ -36,6 +37,7 @@ class WetsuitFixtures extends Fixture implements DependentFixtureInterface
             ->setGender("man and woman")
             ->setThickness("2/2")
             ->setPrice(45)
+            ->setPhoto("https://www.ogm-bodyboard-shop.com/5204-large_default/top-neoprene-madness.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_1', User::class));
@@ -49,7 +51,8 @@ class WetsuitFixtures extends Fixture implements DependentFixtureInterface
             ->setColors(["White","Black"])
             ->setGender("man")
             ->setThickness("2/2")
-            ->setPrice(75)
+            ->setPrice(75.9)
+            ->setPhoto("https://www.ogm-bodyboard-shop.com/5063-large_default/combinaison-west-enforcer-s-shorty-22mm-back-zip.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_2', User::class));            

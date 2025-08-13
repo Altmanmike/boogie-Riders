@@ -59,7 +59,7 @@ const Profile = () => {
 
     return (
         <>
-            <div className="container mx-auto m-10 w-2xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl min-h-screen">
+            <div className="container mx-auto m-10 w-2xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl h-full mb-100">
                 <form className="mt-20 mx-10" onSubmit={handleSubmit}>
                     <div className="pt-10 space-y-12">
                         <div className="border-b border-gray-900/10 pb-12">

@@ -6,6 +6,11 @@
     width:200px;
 }
 
+/* BOARD */
+.photo-gear {
+    width:600px;
+}
+
 /* MESSENGER */
 .fixedMessenger {
     position: fixed;
@@ -17,6 +22,10 @@
 
 /* FOOTER */
 .footer {
-    position: absolute;
+    position: fixed;
+    bottom: 0;    
     z-index: 500;
+}
+.logo-footer {
+    width: 250px;    
 }

@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import Messenger from "./components/Messenger";
 import Accessory from "./gears/Accessory";
 import Board from "./gears/Board";
+import BoardNew from "./gears/BoardNew";
 import Fin from "./gears/Fin";
 import Leash from "./gears/Leash";
 import Wetsuit from "./gears/Wetsuit";
@@ -27,6 +28,7 @@ const components = {
     Settings,
     Accessory,
     Board,
+    BoardNew,
     Fin,
     Leash,
     Wetsuit,

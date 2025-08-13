@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\QueryParameter;
 
 /**
  * Secured resource.
@@ -23,7 +24,8 @@ use ApiPlatform\Metadata\Delete;
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            parameters: ['user' => new QueryParameter]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin'),
@@ -78,8 +80,14 @@ class Board
     private ?string $slick = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $price = null;
+    private ?float $price = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $photoFront = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $photoBack = null;
+    
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -220,18 +228,42 @@ class Board
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(?int $price): static
+    public function setPrice(?float $price): static
     {
         $this->price = $price;
 
         return $this;
     }
+    
+    public function getPhotoFront(): ?string
+    {
+        return $this->photoFront;
+    }
 
+    public function setPhotoFront(string $photoFront): static
+    {
+        $this->photoFront = $photoFront;
+
+        return $this;
+    }
+
+    public function getPhotoBack(): ?string
+    {
+        return $this->photoBack;
+    }
+
+    public function setPhotoBack(string $photoBack): static
+    {
+        $this->photoBack = $photoBack;
+
+        return $this;
+    }
+    
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;

@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\QueryParameter;
 
 /**
  * Secured resource.
@@ -25,7 +26,8 @@ use ApiPlatform\Metadata\Delete;
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            parameters: ['user' => new QueryParameter]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin'),
@@ -59,7 +61,7 @@ class Session
     private ?string $conditions = null;
 
     #[ORM\Column]
-    private ?int $personal_rating = null;
+    private ?int $personalRating = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -144,12 +146,12 @@ class Session
 
     public function getPersonalRating(): ?int
     {
-        return $this->personal_rating;
+        return $this->personalRating;
     }
 
-    public function setPersonalRating(int $personal_rating): static
+    public function setPersonalRating(int $personalRating): static
     {
-        $this->personal_rating = $personal_rating;
+        $this->personalRating = $personalRating;
 
         return $this;
     }

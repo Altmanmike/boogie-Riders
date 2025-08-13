@@ -27,7 +27,7 @@ const User = ({ User = {} }) => {
 
     return (
         <>
-            <div className="container mx-auto m-10 w-6xl rounded-lg bg-base-200 hover:bg-base-300 shadow-xl min-h-screen pb-8">
+            <div className="container mx-auto m-10 w-6xl rounded-lg bg-base-200 hover:bg-base-300 shadow-xl h-full mb-100 pb-8">
                 {coverPhoto ? (
                     <figure className="relative h-48 sm:h-64 overflow-hidden rounded-t-lg">
                         <img

@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\QueryParameter;
 
 /**
  * Secured resource.
@@ -25,7 +26,8 @@ use ApiPlatform\Metadata\Delete;
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            parameters: ['user' => new QueryParameter]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin'),
@@ -65,13 +67,13 @@ class Spot
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $wave_type = null;
+    private ?string $waveType = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $best_conditions = null;
+    private ?string $bestConditions = null;
 
     #[ORM\Column]
-    private ?int $difficulty_level = null;
+    private ?int $difficultyLevel = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -173,36 +175,36 @@ class Spot
 
     public function getWaveType(): ?string
     {
-        return $this->wave_type;
+        return $this->waveType;
     }
 
-    public function setWaveType(string $wave_type): static
+    public function setWaveType(string $waveType): static
     {
-        $this->wave_type = $wave_type;
+        $this->waveType = $waveType;
 
         return $this;
     }
 
     public function getBestConditions(): ?string
     {
-        return $this->best_conditions;
+        return $this->bestConditions;
     }
 
-    public function setBestConditions(string $best_conditions): static
+    public function setBestConditions(string $bestConditions): static
     {
-        $this->best_conditions = $best_conditions;
+        $this->bestConditions = $bestConditions;
 
         return $this;
     }
 
     public function getDifficultyLevel(): ?int
     {
-        return $this->difficulty_level;
+        return $this->difficultyLevel;
     }
 
-    public function setDifficultyLevel(int $difficulty_level): static
+    public function setDifficultyLevel(int $difficultyLevel): static
     {
-        $this->difficulty_level = $difficulty_level;
+        $this->difficultyLevel = $difficultyLevel;
 
         return $this;
     }

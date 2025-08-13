@@ -25,7 +25,9 @@ class BoardFixtures extends Fixture implements DependentFixtureInterface
             ->setStringer("1x Stringer")
             ->setMesh("Wavecushion Air 8lb PE Deck")
             ->setSlick("Surlyn Slick Skin")
-            ->setPrice(419)
+            ->setPrice(419.5)
+            ->setPhotoFront("https://www.ogm-bodyboard-shop.com/5109-large_default/bodyboard-science-mscx-the-warp.jpg")
+            ->setPhotoBack("https://www.ogm-bodyboard-shop.com/5105-large_default/bodyboard-science-mscx-the-warp.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_2', User::class));            
@@ -43,6 +45,8 @@ class BoardFixtures extends Fixture implements DependentFixtureInterface
             ->setMesh("NXLPE")
             ->setSlick("SURLYN")
             ->setPrice(329)
+            ->setPhotoFront("https://www.ogm-bodyboard-shop.com/5149-large_default/bodyboard-qcd-ultra-4x-concaves.jpg")
+            ->setPhotoBack("https://www.ogm-bodyboard-shop.com/5151-large_default/bodyboard-qcd-ultra-4x-concaves.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_0', User::class));
@@ -60,6 +64,8 @@ class BoardFixtures extends Fixture implements DependentFixtureInterface
             ->setMesh("MESH")
             ->setSlick("Surlyn Slick Skin")
             ->setPrice(379)
+            ->setPhotoFront("https://www.ogm-bodyboard-shop.com/5139-large_default/bodyboard-morey-mach-7-7-pierre-louis-costes.jpg")
+            ->setPhotoBack("https://www.ogm-bodyboard-shop.com/5219-large_default/bodyboard-morey-mach-7-7-pierre-louis-costes.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_1', User::class));           

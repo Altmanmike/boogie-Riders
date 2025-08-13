@@ -1,7 +1,7 @@
 const About = () => {
     return (
-        <>            
-            <div className="container mx-auto h-full">
+        <>
+            <div className="container mx-auto h-full mb-100">
                 <div>
                     <h1 className="mt-20 text-3xl text-center font-bold normal-case underline decoration-current-500">
                         History of the application

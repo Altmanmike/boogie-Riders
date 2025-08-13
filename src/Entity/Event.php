@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\QueryParameter;
 
 /**
  * Secured resource.
@@ -25,7 +26,8 @@ use ApiPlatform\Metadata\Delete;
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            parameters: ['user' => new QueryParameter]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin'),
@@ -56,10 +58,10 @@ class Event
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $date_start = null;
+    private ?\DateTimeImmutable $dateStart = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $date_end = null;
+    private ?\DateTimeImmutable $dateEnd = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $lat = null;
@@ -127,24 +129,24 @@ class Event
 
     public function getDateStart(): ?\DateTimeImmutable
     {
-        return $this->date_start;
+        return $this->dateStart;
     }
 
-    public function setDateStart(\DateTimeImmutable $date_start): static
+    public function setDateStart(\DateTimeImmutable $dateStart): static
     {
-        $this->date_start = $date_start;
+        $this->dateStart = $dateStart;
 
         return $this;
     }
 
     public function getDateEnd(): ?\DateTimeImmutable
     {
-        return $this->date_end;
+        return $this->dateEnd;
     }
 
-    public function setDateEnd(\DateTimeImmutable $date_end): static
+    public function setDateEnd(\DateTimeImmutable $dateEnd): static
     {
-        $this->date_end = $date_end;
+        $this->dateEnd = $dateEnd;
 
         return $this;
     }

@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\EventRepository;
+use App\Repository\ClubRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -42,9 +42,9 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
-#[ORM\Table(name: '`event`')]
-#[ORM\Entity(repositoryClass: EventRepository::class)]
-class Event
+#[ORM\Table(name: '`club`')]
+#[ORM\Entity(repositoryClass: ClubRepository::class)]
+class Club
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -53,18 +53,12 @@ class Event
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cover = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $dateStart = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $dateEnd = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $lat = null;
@@ -77,9 +71,12 @@ class Event
 
     #[ORM\Column(length: 255)]
     private ?string $url = null;
-    
-    #[ORM\Column]
-    private ?int $rewards = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $mail = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $phone = null;
     
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -87,23 +84,22 @@ class Event
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'events')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(mappedBy: 'clubCreated', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'evts')]
-    private Collection $users;    
-    
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'club')]
+    private Collection $members;    
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();  
         $this->updatedAt = new \DateTimeImmutable();
-        $this->users = new ArrayCollection();       
+        $this->members = new ArrayCollection();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -132,7 +128,7 @@ class Event
 
         return $this;
     }
-    
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -141,30 +137,6 @@ class Event
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getDateStart(): ?\DateTimeImmutable
-    {
-        return $this->dateStart;
-    }
-
-    public function setDateStart(\DateTimeImmutable $dateStart): static
-    {
-        $this->dateStart = $dateStart;
-
-        return $this;
-    }
-
-    public function getDateEnd(): ?\DateTimeImmutable
-    {
-        return $this->dateEnd;
-    }
-
-    public function setDateEnd(\DateTimeImmutable $dateEnd): static
-    {
-        $this->dateEnd = $dateEnd;
 
         return $this;
     }
@@ -216,19 +188,30 @@ class Event
 
         return $this;
     }
-
-    public function getRewards(): ?int
+    
+    public function getMail(): ?string
     {
-        return $this->rewards;
+        return $this->mail;
     }
 
-    public function setRewards(int $rewards): static
+    public function setMail(string $mail): static
     {
-        $this->rewards = $rewards;
+        $this->mail = $mail;
 
         return $this;
     }
-    
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }  
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -260,6 +243,16 @@ class Event
 
     public function setUser(?User $user): static
     {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setClubCreated(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getClubCreated() !== $this) {
+            $user->setClubCreated($this);
+        }
+
         $this->user = $user;
 
         return $this;
@@ -268,24 +261,30 @@ class Event
     /**
      * @return Collection<int, User>
      */
-    public function getUsers(): Collection
+    public function getMembers(): Collection
     {
-        return $this->users;
+        return $this->members;
     }
 
-    public function addUser(User $user): static
+    public function addMember(User $member): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
+        if (!$this->members->contains($member)) {
+            $this->members->add($member);
+            $member->setClub($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeMember(User $member): static
     {
-        $this->users->removeElement($user);
+        if ($this->members->removeElement($member)) {
+            // set the owning side to null (unless already changed)
+            if ($member->getClub() === $this) {
+                $member->setClub(null);
+            }
+        }
 
         return $this;
-    }    
+    }     
 }

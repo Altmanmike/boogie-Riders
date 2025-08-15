@@ -1,26 +1,26 @@
-const EventCardList = ({
+const ClubCardList = ({
     id,
     name,
     cover,
     description,
-    dateStart,
-    dateEnd,
     lat,
     lon,
     location,
     url,
-    rewards,
+    mail,
+    phone,
     createdAt,
     updatedAt,
     user,
 }) => {
+
     return (
         <>
             <div className="card bg-base-200 hover:bg-slate-100 shadow-xl w-96 shadow-sm">
                 <figure className="">
                     <img
                         src={cover}
-                        alt="event"
+                        alt="club"
                         className="w-full h-full object-cover"
                     />
                 </figure>
@@ -31,15 +31,19 @@ const EventCardList = ({
                     <p className="text-normal text-justify text-gray-600 mb-4">
                         {description.substring(0, 300)} [...]
                     </p>
-                    <div className="text-center mx-auto badge badge-primary text-lg font-bold text-white p-4 mt-3 mb-4 shadow-md">
-                        Total cash price: ${rewards} USD
+                    <div className="text-center mx-auto text-lg font-bold p-4 mb-4">
+                        Location: {location}
+                    </div>
+                    <div className="text-center mx-auto badge badge-primary text-lg font-bold text-white p-4 shadow-md mb-4">
+                        Mail <a href={`mailto:${mail}`}>{mail}</a>
+                    </div>
+                    <div className="text-center mx-auto badge badge-primary text-lg font-bold text-white p-4 shadow-md mb-5">
+                        Phone {phone}
                     </div>
                     <div className="card-actions justify-around items-center mt-auto">
-                        <span className="text-sm text-gray-500">Dates:</span>
+                        <span className="text-sm text-gray-500">URL:</span>
                         <button className="btn btn-outline btn-sm btn-primary transition-colors duration-200 text-xs">
-                            {dateStart.toString().substring(0, 10)}
-                            {" to "}
-                            {dateEnd.toString().substring(0, 10)}
+                            <a href={url} target="blank_" >{url}</a>                           
                         </button>
                     </div>
                 </div>
@@ -47,4 +51,4 @@ const EventCardList = ({
         </>
     );
 };
-export default EventCardList;
+export default ClubCardList;

@@ -13,27 +13,27 @@ const MediaCardList = ({
     return (
         <>
             <div className="card bg-base-200 hover:bg-slate-100 shadow-xl w-96 shadow-sm">
-                <figure className="px-10 pt-10">                    
-                    {type == "Image" ? (
+                {type == "Image" ? (
+                    <figure className="px-10 pt-10">
                         <img
                             src={filePath}
                             alt="media"
                             className="rounded-xl"
                         />
-                    ) : (
-                        <iframe
-                            src={filePath}
-                            title={id}
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                        ></iframe>
-                    )}
-                </figure>
+                    </figure>
+                ) : (
+                    <iframe
+                        src={filePath}
+                        title={id}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
+                )}
                 <div className="card-body">
                     <h2 className="card-title justify-center">Media N°{id}</h2>
                     <h3 className="card-title text-sm justify-center">
-                        Format type {type}
+                        Format type: {type}
                     </h3>
                     <p className="text-sm text-normal text-justify">
                         {description.substring(0, 300)} [...]

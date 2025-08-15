@@ -216,6 +216,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'users')]
     private Collection $evts;
 
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Club $clubCreated = null;
+
+    #[ORM\ManyToOne(inversedBy: 'members')]
+    private ?Club $club = null;
+
     public function __construct()
     {
         $this->roles = ['ROLE_USER'];
@@ -989,5 +995,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
-    }    
+    }
+
+    public function getClubCreated(): ?Club
+    {
+        return $this->clubCreated;
+    }
+
+    public function setClubCreated(?Club $clubCreated): static
+    {
+        $this->clubCreated = $clubCreated;
+
+        return $this;
+    }
+    
+    public function getClub(): ?Club
+    {
+        return $this->club;
+    }
+
+    public function setClub(?Club $club): static
+    {
+        $this->club = $club;
+
+        return $this;
+    }  
 }

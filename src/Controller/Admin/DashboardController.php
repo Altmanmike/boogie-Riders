@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Fin;
 use App\Entity\Chat;
+use App\Entity\Club;
 use App\Entity\Spot;
 use App\Entity\User;
 use App\Entity\Board;
@@ -64,6 +65,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Session', 'fas fa-clipboard-list', Session::class);
         yield MenuItem::linkToCrud('Spot', 'fas fa-map-marker-alt', Spot::class);
         yield MenuItem::linkToCrud('Event', 'fas fa-calendar-alt', Event::class);
+        yield MenuItem::linkToCrud('Club', 'fas fa-users', Club::class);
         yield MenuItem::section('OTHERS');
         yield MenuItem::linkToCrud('Chat', 'fas fa-comments', Chat::class);
         yield MenuItem::linkToCrud('Message', 'fas fa-envelope-open-text', Message::class);

@@ -53,6 +53,9 @@ class Spot
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cover = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $lat = null;
@@ -73,7 +76,7 @@ class Spot
     private ?string $bestConditions = null;
 
     #[ORM\Column]
-    private ?int $difficultyLevel = null;
+    private ?int $difficultyLevel = null;  
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -97,7 +100,7 @@ class Spot
      * @var Collection<int, Media>
      */
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'spot')]
-    private Collection $medias;
+    private Collection $medias;    
 
     public function __construct()
     {
@@ -125,6 +128,18 @@ class Spot
         return $this;
     }
 
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(?string $cover): static
+    {
+        $this->cover = $cover;
+
+        return $this;
+    }
+    
     public function getLat(): ?float
     {
         return $this->lat;
@@ -315,5 +330,5 @@ class Spot
         }
 
         return $this;
-    }
+    }    
 }

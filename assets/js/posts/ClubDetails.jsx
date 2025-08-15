@@ -1,34 +1,33 @@
 import { useState, useEffect } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
-const SessionDetails = ({
+const ClubDetails = ({
     id,
+    name,
     cover,
-    date,
     description,
-    duration,
-    conditions,
-    personalRating,
     lat,
     lon,
     location,
+    url,
+    mail,
+    phone,
     createdAt,
     updatedAt,
-    spot,
     user,
 }) => {
+    const [nm, setNm] = useState(name);
     const [cvr, setCvr] = useState(cover);
-    const [dt, setDt] = useState(date);
     const [desc, setDesc] = useState(description);
-    const [drtn, setDrtn] = useState(duration);
-    const [cndtns, setCndtns] = useState(conditions);
-    const [prsnlrtng, setPrsnlrtng] = useState(personalRating);
     const [lt, setLt] = useState(lat);
     const [ln, setLn] = useState(lon);
     const [lctn, setLctn] = useState(location);
+    const [rl, setRl] = useState(url);
+    const [ml, setMl] = useState(mail);
+    const [phn, setPhn] = useState(phone);
     const [crtdAt, setCrtdAt] = useState(createdAt);
     const [updtdAt, setUpdtdAt] = useState(updatedAt);
-    const [spt, setSpt] = useState(spot);
     const [usr, setUsr] = useState(user);
 
     const handleSubmit = (e) => {
@@ -40,57 +39,77 @@ const SessionDetails = ({
                 day: "numeric",
             })
         );
-        const formData = {
+        const formData = {            
+            name,
             cover,
-            date,
-            duration,
-            conditions,
-            personalRating,
+            description,
             lat,
             lon,
             location,
+            url,
+            mail,
+            phone,
             createdAt,
             updatedAt,
-            spot,
             user,
         };
         console.log("Formulaire event soumis :", formData);
     };
 
     useEffect(() => {
-                let map = null;         
-                const mapElement = document.getElementById("map");               
-                
-                if (mapElement) {                         
-                    map = L.map("map").setView([lat, lon], 10);           
-                    
-                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                        maxZoom: 19,                
-                        attribution:
-                            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                    }).addTo(map);
-                    
-                    L.marker([lat, lon])
-                        .addTo(map)
-                        .bindPopup(`<b>${name}</b><br>${location}`)
-                        .openPopup();            
-                }
-                
-                return () => {
-                    if (map) {
-                        map.remove();
-                    }
-                };
+        let map = null;
+        const mapElement = document.getElementById("map");
+
+        if (mapElement) {
+            map = L.map("map").setView([lat, lon], 17);
+
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution:
+                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
+
+            L.marker([lat, lon])
+                .addTo(map)
+                .bindPopup(`<b>${name}</b><br>${location}`)
+                .openPopup();
+        }
+
+        return () => {
+            if (map) {
+                map.remove();
+            }
+        };
     }, [lat, lon, name, location]);
-    
+
     return (
         <>
             <div className="container mx-auto m-10 w-2xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl h-full mb-100">
                 <form className="mt-20 mx-10" onSubmit={handleSubmit}>
                     <div className="border-b border-gray-900/10 pt-1 pb-12">
-                        <h2 className="card-title mt-10">Session profile</h2>
+                        <h2 className="card-title mt-10">Event profile</h2>
 
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="col-span-full">
+                                <label
+                                    htmlFor="nm"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Name
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="nm"
+                                        name="nm"
+                                        type="text"
+                                        placeholder="Event name"
+                                        value={nm}
+                                        onChange={(e) => setNm(e.target.value)}
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Insert the event name"
+                                    />
+                                </div>
+                            </div>
                             <div className="col-span-full">
                                 <label
                                     htmlFor="photo"
@@ -135,54 +154,6 @@ const SessionDetails = ({
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="sm:col-span-3">
-                                <label
-                                    htmlFor="dt"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Date
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="dt"
-                                        name="dt"
-                                        type="datetime-local"
-                                        placeholder="Session date"
-                                        value={dt}
-                                        onChange={(e) => setDt(e.target.value)}
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the session date"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="sm:col-span-3">
-                                <label
-                                    htmlFor="drtn"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Duration (in hours)
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="drtn"
-                                        name="drtn"
-                                        type="number"
-                                        placeholder="Session duration"
-                                        value={drtn}
-                                        onChange={(e) =>
-                                            setDrtn(e.target.value)
-                                        }
-                                        step="1"
-                                        min="1"
-                                        max="8"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the session duration"
-                                    />
-                                </div>
-                            </div>
-
                             <div className="col-span-full">
                                 <label
                                     htmlFor="desc"
@@ -200,66 +171,93 @@ const SessionDetails = ({
                                             setDesc(e.target.value)
                                         }
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Write few sentences about the session."
+                                        title="Write the main content of the article."
                                     />
                                 </div>
                                 <p className="mt-3 text-sm/6">
-                                    Write few sentences about the session.
+                                    Write the main content of the article.
                                 </p>
                             </div>
 
-                            <div className="col-span-full">
+                            <div className="sm:col-span-3">
                                 <label
-                                    htmlFor="cndtns"
-                                    className="label block text-sm/6 font-medium"
+                                    htmlFor="ml"
+                                    className="label text-sm/6 font-medium"
                                 >
-                                    Conditions
+                                    Email address
                                 </label>
-                                <div className="mt-2">
-                                    <textarea
-                                        id="cndtns"
-                                        name="cndtns"
-                                        rows={3}
-                                        value={cndtns}
-                                        placeholder="Ocean conditions during the session."
-                                        onChange={(e) =>
-                                            setCndtns(e.target.value)
-                                        }
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Write the ocean conditions during the session."
+                                <div className="">
+                                    <input
+                                        id="ml"
+                                        name="ml"
+                                        type="email"
+                                        required
+                                        autoComplete="email"
+                                        placeholder="mail@site.com"
+                                        value={ml}
+                                        onChange={(e) => setMl(e.target.value)}
+                                        className="input validator text-base text-gray-900 placeholder:text-gray-400 sm:text-sm/6"
+                                        title="Please enter a valid email address."
                                     />
+                                    <p className="validator-hint hidden">
+                                        Please enter a valid email address.
+                                    </p>
                                 </div>
-                                <p className="mt-3 text-sm/6">
-                                    Write the few sentences about the
-                                    conditions.
-                                </p>
+                            </div>
+
+                            <div className="sm:col-span-3">
+                                <label
+                                    htmlFor="phn"
+                                    className="label text-sm/6 font-medium"
+                                >
+                                    Phone
+                                </label>
+                                <div className="">
+                                    <input
+                                        id="phn"
+                                        name="phn"
+                                        type="tel"
+                                        placeholder="Club phone number"
+                                        value={phn}
+                                        onChange={(e) => setPhn(e.target.value)}
+                                        className="tabular-nums input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        pattern="[0-9]*"
+                                        minlength="5"
+                                        maxlength="15"
+                                        title="Insert the club phone number"
+                                    />
+                                    <p className="validator-hint hidden">
+                                        Must be valid digits
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="col-span-full">
                                 <label
-                                    htmlFor="prsnlrtng"
+                                    htmlFor="rl"
                                     className="label block text-sm/6 font-medium"
                                 >
-                                    Personal rating (Ex: 2/5)
+                                    Website URL
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                        id="prsnlrtng"
-                                        name="prsnlrtng"
-                                        type="number"
-                                        placeholder="Session personal rating"
-                                        value={prsnlrtng}
-                                        onChange={(e) =>
-                                            setPrsnlrtng(e.target.value)
-                                        }
-                                        step="1"
-                                        min="0"
-                                        max="5"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the session personal rating"
+                                        id="rl"
+                                        name="rl"
+                                        type="url"
+                                        required
+                                        placeholder="https://www.website.com/event"
+                                        value={rl}
+                                        onChange={(e) => setRl(e.target.value)}
+                                        pattern="^(https?://)?(www\.)?[a-zA-Z0-9\-]+?\.[a-zA-Z]{2,4}\/$"
+                                        className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Must be valid URL"
                                     />
+                                    <p className="validator-hint">
+                                        Must be valid URL
+                                    </p>
                                 </div>
                             </div>
+
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="lt"
@@ -286,7 +284,6 @@ const SessionDetails = ({
                                     </p>
                                 </div>
                             </div>
-
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="ln"
@@ -313,7 +310,6 @@ const SessionDetails = ({
                                     </p>
                                 </div>
                             </div>
-
                             <div className="col-span-full">
                                 <label
                                     htmlFor="lctn"
@@ -362,4 +358,4 @@ const SessionDetails = ({
         </>
     );
 };
-export default SessionDetails;
+export default ClubDetails;

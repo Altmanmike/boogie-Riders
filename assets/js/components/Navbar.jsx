@@ -122,6 +122,9 @@ const Navbar = ({ onlineUser }) => {
                                         <li>
                                             <a href="/media">Medias</a>
                                         </li>
+                                        <li>
+                                            <a href="/club">Club</a>
+                                        </li>
                                     </ul>
                                 </details>
                             </li>

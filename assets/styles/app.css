@@ -24,8 +24,15 @@
 .footer {
     position: fixed;
     bottom: 0;    
-    z-index: 500;
+    z-index:1200;
 }
 .logo-footer {
     width: 250px;    
+}
+
+/* LEAFLET */
+#map {    
+    width: 500px;
+    height: 350px;      
+    position: relative;    
 }

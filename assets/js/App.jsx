@@ -18,6 +18,7 @@ import Event from "./posts/Event";
 import Media from "./posts/Media";
 import Session from "./posts/Session";
 import Spot from "./posts/Spot";
+import Club from "./posts/Club";
 
 const components = {
     Home,
@@ -37,6 +38,7 @@ const components = {
     Media,
     Session,
     Spot,
+    Club,
 };
 
 const App = () => {

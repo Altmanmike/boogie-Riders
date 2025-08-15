@@ -18,7 +18,7 @@ const Board = () => {
                     model: "MSCX- The Warp",
                     size: '41.5"',
                     description:
-                        "The concept: A board that maintains maximum speed through turns.\r\n            Experience full-throttle speed during long arcing turns or rail-to-rail transitions. The outer and inner rails work together, or as we call it, the Dual Delta tail, combined with the Deep Quad Vent channel system to provide maximum hold and control. This new tail allows for the smoothest turn transitions.\r\n            Discover it now!",
+                        "The concept: A board that maintains maximum speed through turns.\r\nExperience full-throttle speed during long arcing turns or rail-to-rail transitions. The outer and inner rails work together, or as we call it, the Dual Delta tail, combined with the Deep Quad Vent channel system to provide maximum hold and control. This new tail allows for the smoothest turn transitions.\r\nDiscover it now!",
                     colors: ["Dark green", "Blue marine", "Black"],
                     core: "1.9PP Kinetic Polypro Core (PP)",
                     tail: "Dual Delta",

@@ -16,9 +16,9 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {    
         $media = new Media(); 
-        $media->setFilePath("../../public/build/img/test.jpg")
+        $media->setFilePath("https://ibcworldtour.com/wp-content/uploads/2024/09/armide-pierreA.jpg")
             ->setType("Image")
-            ->setDescription("Image test")        
+            ->setDescription("Two contenders for the world title")        
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_0', User::class))
@@ -27,18 +27,18 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($media);
         
         $media = new Media(); 
-        $media->setFilePath("../../public/build/img/test2.jpg")
+        $media->setFilePath("https://ibcworldtour.com/wp-content/uploads/2025/08/05.jpg")
             ->setType("Image")
-            ->setDescription("Image test2")        
+            ->setDescription("from Morocco again takes the win")        
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_1', User::class))
-            ->setSpot($this->getReference('spot_0', Spot::class));        
+            ->setSpot($this->getReference('spot_1', Spot::class));        
         $this->addReference('media_1', $media);           
         $manager->persist($media);
 
         $media = new Media(); 
-        $media->setFilePath("../../public/build/img/test3.jpg")
+        $media->setFilePath("https://ibcworldtour.com/wp-content/uploads/2024/09/armide-pierreA.jpg")
             ->setType("Image")
             ->setDescription("Image test3")        
             ->setCreatedAt(new \DatetimeImmutable())
@@ -57,6 +57,17 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
             ->setUser($this->getReference('user_0', User::class))
             ->setSession($this->getReference('session_0', Session::class));
         $this->addReference('media_3', $media);           
+        $manager->persist($media);
+
+        $media = new Media(); 
+        $media->setFilePath("https://youtu.be/lBxcXqRujog")
+            ->setType("Video")
+            ->setDescription("IBC 2025 trailer")        
+            ->setCreatedAt(new \DatetimeImmutable())
+            ->setUpdatedAt(new \DatetimeImmutable())
+            ->setUser($this->getReference('user_0', User::class))
+            ->setSession($this->getReference('session_0', Session::class));
+        $this->addReference('media_4', $media);           
         $manager->persist($media);
         
         $manager->flush(); 

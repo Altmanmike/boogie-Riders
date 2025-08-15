@@ -51,9 +51,15 @@ class Session
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cover = null;
+    
     #[ORM\Column]
     private ?\DateTimeImmutable $date = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+    
     #[ORM\Column(nullable: true)]
     private ?int $duration = null;
 
@@ -62,7 +68,16 @@ class Session
 
     #[ORM\Column]
     private ?int $personalRating = null;
+    
+    #[ORM\Column(nullable: true)]
+    private ?float $lat = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $lon = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $location = null;
+    
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -92,8 +107,8 @@ class Session
      * @var Collection<int, Media>
      */
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'session')]
-    private Collection $medias;
-
+    private Collection $medias;   
+        
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();  
@@ -107,7 +122,19 @@ class Session
     {
         return $this->id;
     }
+    
+    public function getCover(): ?string 
+    {
+        return $this->cover;
+    }
 
+    public function setCover(?string $cover): static
+    {
+        $this->cover = $cover;
+
+        return $this;
+    }
+    
     public function getDate(): ?\DateTimeImmutable
     {
         return $this->date;
@@ -119,7 +146,19 @@ class Session
 
         return $this;
     }
+    
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
 
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+     
     public function getDuration(): ?int
     {
         return $this->duration;
@@ -156,6 +195,42 @@ class Session
         return $this;
     }
 
+    public function getLat(): ?float
+    {
+        return $this->lat;
+    }
+
+    public function setLat(?float $lat): static
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLon(): ?float
+    {
+        return $this->lon;
+    }
+
+    public function setLon(?float $lon): static
+    {
+        $this->lon = $lon;
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): static
+    {
+        $this->location = $location;
+
+        return $this;
+    } 
+    
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -292,5 +367,5 @@ class Session
         }
 
         return $this;
-    }
+    }          
 }

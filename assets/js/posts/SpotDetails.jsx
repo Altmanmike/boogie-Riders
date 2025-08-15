@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 const SpotDetails = ({
     id,
     name,
+    cover,
     lat,
     lon,
     location,
@@ -16,6 +17,7 @@ const SpotDetails = ({
     updatedAt,
 }) => {
     const [nm, setNm] = useState(name);
+    const [cvr, setCvr] = useState(cover);
     const [lt, setLt] = useState(lat);
     const [ln, setLn] = useState(lon);
     const [lctn, setLctn] = useState(location);
@@ -37,6 +39,7 @@ const SpotDetails = ({
         );
         const formData = {
             name,
+            cover,
             lat,
             lon,
             location,
@@ -49,6 +52,32 @@ const SpotDetails = ({
         console.log("Formulaire spot soumis :", formData);
     };
 
+    useEffect(() => {
+            let map = null;         
+            const mapElement = document.getElementById("map");               
+            
+            if (mapElement) {                         
+                map = L.map("map").setView([lat, lon], 10);           
+                
+                L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    maxZoom: 19,                
+                    attribution:
+                        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                }).addTo(map);
+                
+                L.marker([lat, lon])
+                    .addTo(map)
+                    .bindPopup(`<b>${name}</b><br>${location}`)
+                    .openPopup();            
+            }
+            
+            return () => {
+                if (map) {
+                    map.remove();
+                }
+            };
+    }, [lat, lon, name, location]);
+    
     return (
         <>
             <div className="container mx-auto m-10 w-2xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl h-full mb-100">
@@ -78,6 +107,183 @@ const SpotDetails = ({
                                 </div>
                             </div>
 
+                            <div className="col-span-full">
+                                <label
+                                    htmlFor="photo"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Cover
+                                </label>
+                                <img
+                                    src={cvr}
+                                    alt="cover"
+                                    className="photo-post"
+                                />
+                                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div className="text-center">
+                                        <PhotoIcon
+                                            aria-hidden="true"
+                                            className="mx-auto size-12 text-gray-300"
+                                        />
+                                        <div className="mt-4 flex text-sm/6 text-gray-600">
+                                            <label
+                                                htmlFor="cvr"
+                                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500"
+                                            >
+                                                <span>Upload a file</span>
+                                                <input
+                                                    id="cvr"
+                                                    name="cvr"
+                                                    type="file"
+                                                    className="sr-only"
+                                                    onChange={(e) =>
+                                                        setCvr(e.target.value)
+                                                    }
+                                                />
+                                            </label>
+                                            <p className="pl-1">
+                                                or drag and drop
+                                            </p>
+                                        </div>
+                                        <p className="text-xs/5">
+                                            PNG, JPG, GIF up to 10MB
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-span-full">
+                                <label
+                                    htmlFor="desc"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Description
+                                </label>
+                                <div className="mt-2">
+                                    <textarea
+                                        id="desc"
+                                        name="desc"
+                                        rows={3}
+                                        value={desc}
+                                        onChange={(e) =>
+                                            setDesc(e.target.value)
+                                        }
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Write the main content of the article."
+                                    />
+                                </div>
+                                <p className="mt-3 text-sm/6">
+                                    Write the few sentences about the spot.
+                                </p>
+                            </div>
+
+                            <div className="sm:col-span-3">
+                                <label
+                                    htmlFor="wvTp"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Wave type
+                                </label>
+                                <div className="mt-2 grid grid-cols-1">
+                                    <select
+                                        id="wvTp"
+                                        name="wvTp"
+                                        type="text"
+                                        placeholder="Spot wave type"
+                                        value={wvTp}
+                                        onChange={(e) =>
+                                            setWvTp(e.target.value)
+                                        }
+                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Select the wave type"
+                                    >
+                                        <optgroup label="Background type">
+                                            <option value="Beach break">
+                                                Beach break
+                                            </option>
+                                            <option value="Reef break">
+                                                Reef break
+                                            </option>
+                                            <option value="Shallow reef">
+                                                Shallow reef
+                                            </option>
+                                            <option value="Point break">
+                                                Point break
+                                            </option>
+                                            <option value="Rivermouth">
+                                                Rivermouth
+                                            </option>
+                                            <option value="Jetty">Jetty</option>
+                                            <option value="Artificial reef">
+                                                Artificial reef
+                                            </option>
+                                        </optgroup>
+                                        <optgroup label="Wave direction">
+                                            <option value="Right">Right</option>
+                                            <option value="Left">Left</option>
+                                            <option value="A-frame">
+                                                A-frame
+                                            </option>
+                                            <option value="Closeout">
+                                                Closeout
+                                            </option>
+                                        </optgroup>
+                                    </select>
+                                    <ChevronDownIcon
+                                        aria-hidden="true"
+                                        className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-3">
+                                <label
+                                    htmlFor="dffcltLvl"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Difficulty level (Ex: 2/5)
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="dffcltLvl"
+                                        name="dffcltLvl"
+                                        type="number"
+                                        placeholder="Spot difficulty"
+                                        value={dffcltLvl}
+                                        onChange={(e) =>
+                                            setDffcltLvl(e.target.value)
+                                        }
+                                        step="1"
+                                        min="0"
+                                        max="5"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Insert the spot difficulty"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-span-full">
+                                <label
+                                    htmlFor="bstCndtns"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Best conditions
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="bstCndtns"
+                                        name="bstCndtns"
+                                        type="text"
+                                        placeholder="Best conditions"
+                                        value={bstCndtns}
+                                        onChange={(e) =>
+                                            setBstCndtns(e.target.value)
+                                        }
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Insert the spot best conditions"
+                                    />
+                                </div>
+                            </div>
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="lt"
@@ -156,100 +362,9 @@ const SpotDetails = ({
                             </div>
 
                             <div className="col-span-full">
-                                <label
-                                    htmlFor="desc"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Description
-                                </label>
-                                <div className="mt-2">
-                                    <textarea
-                                        id="desc"
-                                        name="desc"
-                                        rows={3}
-                                        value={desc}
-                                        onChange={(e) =>
-                                            setDesc(e.target.value)
-                                        }
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Write the main content of the article."
-                                    />
-                                </div>
-                                <p className="mt-3 text-sm/6">
-                                    Write the few sentences about the spot.
-                                </p>
+                                <div id="map" className="mx-auto"></div>
                             </div>
-
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="wvTp"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Wave type
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="wvTp"
-                                        name="wvTp"
-                                        type="text"
-                                        placeholder="Spot wave type"
-                                        value={wvTp}
-                                        onChange={(e) =>
-                                            setWvTp(e.target.value)
-                                        }
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the spot wave type"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="bstCndtns"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Best conditions
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="bstCndtns"
-                                        name="bstCndtns"
-                                        type="text"
-                                        placeholder="Best conditions"
-                                        value={bstCndtns}
-                                        onChange={(e) =>
-                                            setBstCndtns(e.target.value)
-                                        }
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the spot best conditions"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="dffcltLvl"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Difficulty level
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="dffcltLvl"
-                                        name="dffcltLvl"
-                                        type="integer"
-                                        placeholder="Spot difficulty"
-                                        value={dffcltLvl}
-                                        onChange={(e) =>
-                                            setDffcltLvl(e.target.value)
-                                        }
-                                        min="0"
-                                        max="5"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the spot difficulty"
-                                    />
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">

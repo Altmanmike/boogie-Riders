@@ -10,6 +10,11 @@ const ArticleDetails = ({
     createdAt,
     updatedAt,
     user,
+    comments,
+    likes,
+    medias,
+    visibility,
+    visibleToGroups,
 }) => {
     const [ttl, setTtl] = useState(title);
     const [cvr, setCvr] = useState(cover);
@@ -18,7 +23,12 @@ const ArticleDetails = ({
     const [crtdAt, setCrtdAt] = useState(createdAt);
     const [updtdAt, setUpdtdAt] = useState(updatedAt);
     const [usr, setUsr] = useState(user);
-
+    const [cmmnts, setCmmnts] = useState(comments);
+    const [lks, setLks] = useState(likes);
+    const [mds, setMds] = useState(medias);
+    const [vsblt, setVsblt] = useState(visibility);
+    const [vsbltTGrps, setVsblTGrps] = useState(visibleToGroups);
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         setUpdatedAt(
@@ -38,6 +48,13 @@ const ArticleDetails = ({
             user,
         };
         console.log("Formulaire article soumis :", formData);
+    };
+
+    const handleMultiSelectChange = (e, setterFunction) => {
+        const selectedOptions = Array.from(e.target.options)
+            .filter((option) => option.selected)
+            .map((option) => option.value);
+        setterFunction(selectedOptions);
     };
 
     return (
@@ -92,7 +109,6 @@ const ArticleDetails = ({
                                     </div>
                                 </div>
                             </div>
-
                             <div className="col-span-full">
                                 <label
                                     htmlFor="ttl"
@@ -113,7 +129,6 @@ const ArticleDetails = ({
                                     />
                                 </div>
                             </div>
-
                             <div className="col-span-full">
                                 <label
                                     htmlFor="cntent"
@@ -138,7 +153,6 @@ const ArticleDetails = ({
                                     Write the main content of the article.
                                 </p>
                             </div>
-
                             <div className="col-span-full">
                                 <label
                                     htmlFor="desc"
@@ -162,6 +176,83 @@ const ArticleDetails = ({
                                 <p className="mt-3 text-sm/6">
                                     Write a few sentences about this Fin.
                                 </p>
+                            </div>
+
+                            <div className="sm:col-span-3">
+                                <label
+                                    htmlFor="vsblt"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Visibility
+                                </label>
+                                <div className="mt-2 grid grid-cols-1">
+                                    <select
+                                        id="vsblt"
+                                        name="vsblt"
+                                        value={vsblt}
+                                        onChange={(e) =>
+                                            handleMultiSelectChange(e, setVsblt)
+                                        }
+                                        multiple
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Select the article visiblity"
+                                    >
+                                        <option value="Public">Public</option>
+                                        <option value="Friends">Friends</option>
+                                        <option value="Private">Private</option>
+                                        <option value="Group">Group</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {vsblt.includes("Group") && (
+                                <div className="sm:col-span-3">
+                                    <label
+                                        htmlFor="vsbltTGrps"
+                                        className="label block text-sm/6 font-medium"
+                                    >
+                                        Group(s) visibility
+                                    </label>
+                                    <div className="mt-2 grid grid-cols-1">
+                                        <select
+                                            id="vsbltTGrps"
+                                            name="vsbltTGrps"
+                                            value={vsbltTGrps}
+                                            onChange={(e) =>
+                                                handleMultiSelectChange(
+                                                    e,
+                                                    setVsbltTGrps
+                                                )
+                                            }
+                                            multiple
+                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Select the article group(s) visiblity"
+                                        >
+                                            {
+                                                // modifier visibleToGroups par GroupsUser.map en plus après (fetch axios Groups de l'user)
+                                                visibleToGroups.map((v) => (
+                                                    <option value={v.name}>
+                                                        {v.name}
+                                                    </option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="col-span-full">
+                                <label
+                                    htmlFor="photo"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Medias
+                                </label>
+                                <ul className="">
+                                    {mds.map((md) => (
+                                        <li key={md.id}>{md}</li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                     </div>

@@ -47,6 +47,8 @@ class MediaCrudController extends AbstractCrudController
             AssociationField::new('article'),
             AssociationField::new('session'),
             AssociationField::new('spot'),
+            CollectionField::new('visibility'),
+            CollectionField::new('visible_to_groups'), 
             DateField::new('created_at'),
             DateField::new('updated_at'),
         ];

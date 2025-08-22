@@ -25,7 +25,8 @@ class WetsuitFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/4594-large_default/combinaison-gyroll-shield-43-zipperless-black-grey.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));            
+            ->setUser($this->getReference('user_0', User::class))
+            ->setVisibility(["Friends"]);          
         $manager->persist($wetsuit);
         
         $wetsuit = new Wetsuit(); 
@@ -40,7 +41,8 @@ class WetsuitFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/5204-large_default/top-neoprene-madness.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_1', User::class));
+            ->setUser($this->getReference('user_1', User::class))
+            ->setVisibility(["Friends"]);
         $manager->persist($wetsuit); 
         
         $wetsuit = new Wetsuit(); 
@@ -55,7 +57,8 @@ class WetsuitFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/5063-large_default/combinaison-west-enforcer-s-shorty-22mm-back-zip.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_2', User::class));            
+            ->setUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Friends"]);            
         $manager->persist($wetsuit);
         
         $manager->flush(); 

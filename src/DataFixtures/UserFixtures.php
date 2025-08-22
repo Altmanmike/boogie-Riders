@@ -19,6 +19,7 @@ class UserFixtures extends Fixture
         $admin->setLastname("ADMIN");
         $admin->setFirstname("admin");
         $admin->setPseudo("BOB");
+        $admin->setPhoto("https://img.daisyui.com/images/profile/demo/2@94.webp");
         $admin->setPassword("admin");
         $admin->setPassword($this->passwordEncoder->hashPassword($admin, "admin"));
         $admin->setStyle("prone/dropknee 70/30");
@@ -36,6 +37,7 @@ class UserFixtures extends Fixture
         $user->setLastname("Sparrow");
         $user->setFirstname("Jack");
         $user->setPseudo("jck");
+        $admin->setPhoto("https://img.daisyui.com/images/profile/demo/2@94.webp");
         $user->setPassword($this->passwordEncoder->hashPassword($user, "yT_hjJ9"));
         $user->setStyle("prone/dropknee 100/0");
         $user->setIsVerified(true);
@@ -50,7 +52,8 @@ class UserFixtures extends Fixture
         $user->setRoles(["ROLE_USER"]);
         $user->setLastname("TheKid");
         $user->setFirstname("Billy");
-        $user->setPseudo("btk");        
+        $user->setPseudo("btk");    
+        $admin->setPhoto("https://img.daisyui.com/images/profile/demo/2@94.webp");    
         $user->setPassword($this->passwordEncoder->hashPassword($user, "gH7-875p"));
         $user->setStyle("prone/dropknee 60/40");
         $user->setYoutube("https://youtube.com/btkbodyboard");
@@ -67,6 +70,7 @@ class UserFixtures extends Fixture
         $user->setLastname("Doe");
         $user->setFirstname("John");
         $user->setPseudo("jiji");
+        $admin->setPhoto("https://img.daisyui.com/images/profile/demo/2@94.webp");
         $user->setPassword($this->passwordEncoder->hashPassword($user, "wXc-Rt712gj56"));
         $user->setStyle("prone/dropknee 80/20");
         $user->setIsVerified(true);

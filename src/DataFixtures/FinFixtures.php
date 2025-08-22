@@ -21,7 +21,8 @@ class FinFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/5310-large_default/palmes-gyroll-.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_1', User::class));           
+            ->setUser($this->getReference('user_1', User::class))
+            ->setVisibility(["Friends"]);          
         $manager->persist($fin);
         
         $fin = new Fin(); 
@@ -35,7 +36,8 @@ class FinFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/4690-large_default/palmes-ms-viper-blue-red.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));
+            ->setUser($this->getReference('user_0', User::class))
+            ->setVisibility(["Friends"]);
         $manager->persist($fin); 
         
         $fin = new Fin(); 
@@ -47,7 +49,8 @@ class FinFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/4914-large_default/palmes-pod-2.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_2', User::class));            
+            ->setUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Friends"]);           
         $manager->persist($fin);
         
         $manager->flush(); 

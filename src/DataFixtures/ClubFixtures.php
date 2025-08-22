@@ -27,7 +27,8 @@ class ClubFixtures extends Fixture implements DependentFixtureInterface
             ->setUser($this->getReference('user_0', User::class))            
             ->addMember($this->getReference('user_0', User::class))            
             ->addMember($this->getReference('user_1', User::class))
-            ->addMember($this->getReference('user_2', User::class));
+            ->addMember($this->getReference('user_2', User::class))
+            ->setVisibility(["Public"]);
         $this->addReference('club_0', $club);               
         $manager->persist($club);
         

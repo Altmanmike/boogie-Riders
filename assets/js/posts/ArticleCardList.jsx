@@ -7,6 +7,11 @@ const ArticleCardList = ({
     createdAt,
     updatedAt,
     user,
+    comments,
+    likes,
+    medias,
+    visibility,
+    visibleToGroups,
 }) => {
     return (
         <>

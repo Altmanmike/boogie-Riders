@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\MediaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Get;
@@ -13,6 +15,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Secured resource.
@@ -40,6 +44,7 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`media`')]
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
@@ -77,10 +82,29 @@ class Media
     #[ORM\ManyToOne(inversedBy: 'medias')]
     private ?Spot $spot = null;
 
+    /**
+     * @var list<string> visibility
+     */
+    #[ORM\Column]
+    private array $visibility = [];
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'medias')]
+    private Collection $visibleToGroups;
+
+    #[ORM\ManyToOne(inversedBy: 'medias')]
+    private ?Event $event = null;
+
+    #[ORM\ManyToOne(inversedBy: 'medias')]
+    private ?Club $club = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();  
-        $this->updatedAt = new \DateTimeImmutable();       
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->visibleToGroups = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -192,6 +216,73 @@ class Media
     public function setSpot(?Spot $spot): static
     {
         $this->spot = $spot;
+
+        return $this;
+    }
+
+    public function getVisibility(): array
+    {
+        $visibility = $this->visibility;
+        // guarantee default value Public
+        $visibility[] = 'Public';
+
+        return array_unique($visibility);
+    }
+
+    /**
+     * @param list<string> $visibility
+     */
+    public function setVisibility(array $visibility): static
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getVisibleToGroups(): Collection
+    {
+        return $this->visibleToGroups;
+    }
+
+    public function addVisibleToGroup(Group $visibleToGroup): static
+    {
+        if (!$this->visibleToGroups->contains($visibleToGroup)) {
+            $this->visibleToGroups->add($visibleToGroup);
+        }
+
+        return $this;
+    }
+
+    public function removeVisibleToGroup(Group $visibleToGroup): static
+    {
+        $this->visibleToGroups->removeElement($visibleToGroup);
+
+        return $this;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): static
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function getClub(): ?Club
+    {
+        return $this->club;
+    }
+
+    public function setClub(?Club $club): static
+    {
+        $this->club = $club;
 
         return $this;
     }

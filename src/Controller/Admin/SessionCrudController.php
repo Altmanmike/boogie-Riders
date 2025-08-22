@@ -46,6 +46,8 @@ class SessionCrudController extends AbstractCrudController
             IntegerField::new('personal_rating'),
             AssociationField::new('user'),
             AssociationField::new('spot'),
+            CollectionField::new('visibility'),
+            CollectionField::new('visible_to_groups'), 
             CollectionField::new('comments'),
             CollectionField::new('likes'),
             CollectionField::new('medias'),

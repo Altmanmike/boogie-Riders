@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Secured resource.
@@ -51,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column]    
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
@@ -69,18 +70,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Groups(['friendship:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
+    #[Groups(['friendship:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]    
     private ?string $pseudo = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $about = null;
 
+    #[Groups(['friendship:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
@@ -102,6 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $youtube = null;
 
+    #[Groups(['friendship:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
@@ -222,6 +227,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'members')]
     private ?Club $club = null;
 
+    /**
+     * @var Collection<int, Friendship>
+     */
+    #[ORM\OneToMany(targetEntity: Friendship::class, mappedBy: 'user')]
+    private Collection $friendships;
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'members')]
+    private Collection $groups;
+
+    /**
+     * @var Collection<int, Spot>
+     */
+    #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'user')]
+    private Collection $createdSpots;
+
     public function __construct()
     {
         $this->roles = ['ROLE_USER'];
@@ -241,7 +264,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->chats = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->events = new ArrayCollection();
-        $this->evts = new ArrayCollection();       
+        $this->evts = new ArrayCollection();
+        $this->friendships = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+        $this->createdSpots = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -1017,6 +1043,93 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setClub(?Club $club): static
     {
         $this->club = $club;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Friendship>
+     */
+    public function getFriendships(): Collection
+    {
+        return $this->friendships;
+    }
+
+    public function addFriendship(Friendship $friendship): static
+    {
+        if (!$this->friendships->contains($friendship)) {
+            $this->friendships->add($friendship);
+            $friendship->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFriendship(Friendship $friendship): static
+    {
+        if ($this->friendships->removeElement($friendship)) {
+            // set the owning side to null (unless already changed)
+            if ($friendship->getUser() === $this) {
+                $friendship->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(Group $group): static
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+            $group->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): static
+    {
+        if ($this->groups->removeElement($group)) {
+            $group->removeMember($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Spot>
+     */
+    public function getCreatedSpots(): Collection
+    {
+        return $this->createdSpots;
+    }
+
+    public function addCreatedSpot(Spot $createdSpot): static
+    {
+        if (!$this->createdSpots->contains($createdSpot)) {
+            $this->createdSpots->add($createdSpot);
+            $createdSpot->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedSpot(Spot $createdSpot): static
+    {
+        if ($this->createdSpots->removeElement($createdSpot)) {
+            // set the owning side to null (unless already changed)
+            if ($createdSpot->getUser() === $this) {
+                $createdSpot->setUser(null);
+            }
+        }
 
         return $this;
     }  

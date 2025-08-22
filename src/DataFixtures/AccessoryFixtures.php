@@ -22,7 +22,8 @@ class AccessoryFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/5308-large_default/gyroll-fins-socks-chaussons-neoprene.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));            
+            ->setUser($this->getReference('user_0', User::class))
+            ->setVisibility(["Friends"]);            
         $manager->persist($accessory);
         
         $accessory = new Accessory(); 
@@ -35,7 +36,8 @@ class AccessoryFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/5233-large_default/sweatshirt-science-fuse-hooded-.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_1', User::class));
+            ->setUser($this->getReference('user_1', User::class))
+            ->setVisibility(["Friends"]);
         $manager->persist($accessory); 
         
         $accessory = new Accessory(); 
@@ -46,7 +48,8 @@ class AccessoryFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/5044-large_default/plug-creatures.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_2', User::class));            
+            ->setUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Friends"]);            
         $manager->persist($accessory);
         
         $manager->flush(); 

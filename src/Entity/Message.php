@@ -13,6 +13,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Secured resource.
@@ -40,6 +42,7 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`message`')]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message

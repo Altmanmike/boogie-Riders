@@ -30,7 +30,8 @@ class BoardFixtures extends Fixture implements DependentFixtureInterface
             ->setPhotoBack("https://www.ogm-bodyboard-shop.com/5105-large_default/bodyboard-science-mscx-the-warp.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_2', User::class));            
+            ->setUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Friends"]);           
         $manager->persist($board);
         
         $board = new Board(); 
@@ -49,7 +50,8 @@ class BoardFixtures extends Fixture implements DependentFixtureInterface
             ->setPhotoBack("https://www.ogm-bodyboard-shop.com/5151-large_default/bodyboard-qcd-ultra-4x-concaves.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));
+            ->setUser($this->getReference('user_0', User::class))
+            ->setVisibility(["Friends"]);
         $manager->persist($board); 
         
         $board = new Board(); 
@@ -68,7 +70,8 @@ class BoardFixtures extends Fixture implements DependentFixtureInterface
             ->setPhotoBack("https://www.ogm-bodyboard-shop.com/5219-large_default/bodyboard-morey-mach-7-7-pierre-louis-costes.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_1', User::class));           
+            ->setUser($this->getReference('user_1', User::class))
+            ->setVisibility(["Friends"]);           
         $manager->persist($board);
         
         $manager->flush(); 

@@ -33,7 +33,59 @@ const Navbar = ({ onlineUser }) => {
                             <a href="/">Home</a>
                         </li>
                         <li>
-                            <a href="/spot">Spot infos</a>
+                            <a href="/allFeed">News Feed</a>
+                        </li>
+                        <li>
+                            <details>
+                                <summary>Posts Feed</summary>
+                                <ul className="menu-dropdown">
+                                    <li>
+                                        <a href="/articlesFeed">Articles</a>
+                                    </li>
+                                    <li>
+                                        <a href="/sessionsFeed">Sessions</a>
+                                    </li>
+                                    <li>
+                                        <a href="/eventsFeed">Events</a>
+                                    </li>
+                                    <li>
+                                        <a href="/spotsFeed">Spots</a>
+                                    </li>
+                                    <li>
+                                        <a href="/mediasFeed">Medias</a>
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+                        <li>
+                            <details>
+                                <summary>Gears Feed</summary>
+                                <ul className="menu-dropdown">
+                                    <li>
+                                        <a href="/boardsFeed">Boards</a>
+                                    </li>
+                                    <li>
+                                        <a href="/finsFeed">Fins</a>
+                                    </li>
+                                    <li>
+                                        <a href="/leashesFeed">Leashes</a>
+                                    </li>
+                                    <li>
+                                        <a href="/wetsuitsFeed">Wetsuits</a>
+                                    </li>
+                                    <li>
+                                        <a href="/accessoriesFeed">
+                                            Accessories
+                                        </a>
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+                        <li>
+                            <a href="/clubsFeed">Clubs list</a>
+                        </li>
+                        <li>
+                            <a href="/friends">Friends</a>
                         </li>
                         <li>
                             <a href="/links">Links</a>
@@ -127,6 +179,9 @@ const Navbar = ({ onlineUser }) => {
                                         </li>
                                     </ul>
                                 </details>
+                            </li>
+                            <li>
+                                <a href="/friends">Friends</a>
                             </li>
                             <li>
                                 <a href="/settings">Settings</a>

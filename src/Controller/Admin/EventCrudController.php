@@ -51,6 +51,11 @@ class EventCrudController extends AbstractCrudController
             TextField::new('url'),
             AssociationField::new('user'),
             CollectionField::new('users'),
+            CollectionField::new('visibility'),
+            CollectionField::new('visible_to_groups'), 
+            CollectionField::new('comments'),
+            CollectionField::new('likes'),
+            CollectionField::new('medias'),
             DateField::new('created_at'),
             DateField::new('updated_at'),
         ];

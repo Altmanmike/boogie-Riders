@@ -15,6 +15,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Secured resource.
@@ -42,6 +44,7 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`spot`')]
 #[ORM\Entity(repositoryClass: SpotRepository::class)]
 class Spot
@@ -100,7 +103,34 @@ class Spot
      * @var Collection<int, Media>
      */
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'spot')]
-    private Collection $medias;    
+    private Collection $medias;
+
+    /**
+     * @var list<string> visibility
+     */
+    #[ORM\Column]
+    private array $visibility = [];
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'spots')]
+    private Collection $visibleToGroups;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'spot')]
+    private Collection $comments;
+
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'spot')]
+    private Collection $likes;
+
+    #[ORM\ManyToOne(inversedBy: 'createdSpots')]
+    private ?User $user = null;    
 
     public function __construct()
     {
@@ -108,7 +138,10 @@ class Spot
         $this->updatedAt = new \DateTimeImmutable();
         $this->users = new ArrayCollection();
         $this->sessions = new ArrayCollection();
-        $this->medias = new ArrayCollection();       
+        $this->medias = new ArrayCollection();
+        $this->visibleToGroups = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -328,6 +361,121 @@ class Spot
                 $media->setSpot(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVisibility(): array
+    {
+        $visibility = $this->visibility;
+        // guarantee default value Public
+        $visibility[] = 'Public';
+
+        return array_unique($visibility);
+    }
+
+    /**
+     * @param list<string> $visibility
+     */
+    public function setVisibility(array $visibility): static
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getVisibleToGroups(): Collection
+    {
+        return $this->visibleToGroups;
+    }
+
+    public function addVisibleToGroup(Group $visibleToGroup): static
+    {
+        if (!$this->visibleToGroups->contains($visibleToGroup)) {
+            $this->visibleToGroups->add($visibleToGroup);
+        }
+
+        return $this;
+    }
+
+    public function removeVisibleToGroup(Group $visibleToGroup): static
+    {
+        $this->visibleToGroups->removeElement($visibleToGroup);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setSpot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getSpot() === $this) {
+                $comment->setSpot(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setSpot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getSpot() === $this) {
+                $like->setSpot(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }    

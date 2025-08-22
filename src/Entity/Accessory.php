@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AccessoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -13,6 +15,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Secured resource.
@@ -40,6 +44,7 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`accessory`')]
 #[ORM\Entity(repositoryClass: AccessoryRepository::class)]
 class Accessory
@@ -52,7 +57,7 @@ class Accessory
     #[ORM\Column(length: 255)]
     private ?string $kind = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]    
     private ?string $brand = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -77,12 +82,25 @@ class Accessory
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'accessories')]
-    private ?User $user = null;    
+    private ?User $user = null;
+    
+    /**
+     * @var list<string> visibility
+     */
+    #[ORM\Column]
+    private array $visibility = [];
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'accessories')]
+    private Collection $visibleToGroups;    
 
     public function __construct()    {
         
         $this->createdAt = new \DateTimeImmutable();  
-        $this->updatedAt = new \DateTimeImmutable();       
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->visibleToGroups = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -206,6 +224,49 @@ class Accessory
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }    
+
+    public function getVisibility(): array
+    {
+        $visibility = $this->visibility;
+        // guarantee default value Public
+        $visibility[] = 'Public';
+
+        return array_unique($visibility);
+    }
+
+    /**
+     * @param list<string> $visibility
+     */
+    public function setVisibility(array $visibility): static
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+    
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getVisibleToGroups(): Collection
+    {
+        return $this->visibleToGroups;
+    }
+
+    public function addVisibleToGroup(Group $visibleToGroup): static
+    {
+        if (!$this->visibleToGroups->contains($visibleToGroup)) {
+            $this->visibleToGroups->add($visibleToGroup);
+        }
+
+        return $this;
+    }
+
+    public function removeVisibleToGroup(Group $visibleToGroup): static
+    {
+        $this->visibleToGroups->removeElement($visibleToGroup);
 
         return $this;
     }    

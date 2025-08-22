@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\Event;
+use App\Entity\Group;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -27,7 +28,9 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_0', User::class))
             ->addUser($this->getReference('user_0', User::class))            
-            ->addUser($this->getReference('user_1', User::class));           
+            ->addUser($this->getReference('user_1', User::class))
+            ->setVisibility(["Public"]);
+        $this->addReference('event_0', $event);          
         $manager->persist($event);
         
         $event = new Event(); 
@@ -45,7 +48,10 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->setUpdatedAt(new \DatetimeImmutable())
             ->setUser($this->getReference('user_0', User::class))
             ->addUser($this->getReference('user_1', User::class))            
-            ->addUser($this->getReference('user_2', User::class));
+            ->addUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Group"])
+            ->addVisibleToGroup($this->getReference('group_1', Group::class));
+        $this->addReference('event_1', $event);
         $manager->persist($event); 
         
         $event = new Event(); 
@@ -64,7 +70,9 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->setUser($this->getReference('user_0', User::class))
             ->addUser($this->getReference('user_0', User::class))            
             ->addUser($this->getReference('user_1', User::class))            
-            ->addUser($this->getReference('user_2', User::class));            
+            ->addUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Public"]); 
+        $this->addReference('event_2', $event);          
         $manager->persist($event);
 
         $event = new Event(); 
@@ -83,9 +91,33 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->setUser($this->getReference('user_0', User::class))
             ->addUser($this->getReference('user_0', User::class))            
             ->addUser($this->getReference('user_1', User::class))            
-            ->addUser($this->getReference('user_2', User::class));            
+            ->addUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Public"]);  
+        $this->addReference('event_3', $event);          
         $manager->persist($event);
-        
+
+        $event = new Event(); 
+        $event->setName("Friends ccompetitive session in Lacanau")
+            ->setCover("")
+            ->setDescription("Register page for this event. 1000 € to share")
+            ->setDateStart(new \DateTimeImmutable("2025-10-11 09:00:00"))           
+            ->setDateEnd(new \DateTimeImmutable("2025-10-25 17:00:00"))
+            ->setLat(45.00246490275582)
+            ->setLon(-1.202821929082456)   
+            ->setLocation("5 Boulevard de la Plage, 33680 Lacanau, France")
+            ->setUrl("https://www.lacanausurfcamp.fr/")
+            ->setRewards(1000)
+            ->setCreatedAt(new \DatetimeImmutable())
+            ->setUpdatedAt(new \DatetimeImmutable())
+            ->setUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_0', User::class))            
+            ->addUser($this->getReference('user_1', User::class))            
+            ->addUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Group"])
+            ->addVisibleToGroup($this->getReference('group_2', Group::class));
+        $this->addReference('event_4', $event);           
+        $manager->persist($event);
+                       
         $manager->flush(); 
     
     }
@@ -93,7 +125,8 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            UserFixtures::class
+            UserFixtures::class,
+            GroupFixtures::class
         ]; 
     }
 }

@@ -52,6 +52,11 @@ class ClubCrudController extends AbstractCrudController
             TextField::new('phone'),
             AssociationField::new('user'),
             CollectionField::new('members'),
+            CollectionField::new('visibility'),
+            CollectionField::new('visible_to_groups'),            
+            CollectionField::new('comments'),
+            CollectionField::new('likes'),
+            CollectionField::new('medias'),
             DateField::new('created_at'),
             DateField::new('updated_at'),
         ];

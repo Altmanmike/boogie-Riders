@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Entity\Group;
 use App\Entity\Article;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -23,7 +24,8 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             ->setDescription("Fugiat pariatur enim mollit reprehenderit elit eiusmod est qui sit. Id magna consequat officia laborum. Aliqua elit ipsum anim esse mollit consectetur laborum duis velit pariatur consectetur tempor. Reprehenderit proident deserunt sit veniam labore fugiat fugiat. Non magna commodo sit labore nisi veniam ut. Quis Lorem do laboris ipsum ex voluptate non.")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));
+            ->setUser($this->getReference('user_0', User::class))
+            ->setVisibility(["Public"]);
         $this->addReference('article_0', $article);          
         $manager->persist($article);
         
@@ -42,7 +44,8 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             ->setDescription("Voluptate culpa dolor consectetur amet voluptate eu. Dolor eiusmod adipisicing pariatur velit veniam commodo consectetur dolore eu excepteur proident aliqua dolor eiusmod. Exercitation tempor officia eu Lorem non nulla in est reprehenderit aliqua velit.")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_1', User::class));
+            ->setUser($this->getReference('user_1', User::class))
+            ->setVisibility(["Public"]);
         $this->addReference('article_1', $article);
         $manager->persist($article); 
         
@@ -55,7 +58,9 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             ->setDescription("Eu duis mollit voluptate aute qui sint ullamco nisi. Velit dolore cillum est ut amet anim id ad ad. Adipisicing sunt est ad mollit pariatur nulla labore officia. Enim sit aliqua Lorem deserunt mollit deserunt culpa ut magna aliqua anim mollit. Excepteur velit dolor sit nulla sit duis excepteur non ullamco consectetur ad adipisicing in dolor. Quis cillum ad pariatur eu laborum eu. Qui adipisicing aliqua pariatur exercitation.")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_2', User::class)); 
+            ->setUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Group"])
+            ->addVisibleToGroup($this->getReference('group_0', Group::class));
         $this->addReference('article_2', $article);          
         $manager->persist($article);
         
@@ -66,7 +71,8 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            UserFixtures::class
+            UserFixtures::class,
+            GroupFixtures::class
         ]; 
     }
 }

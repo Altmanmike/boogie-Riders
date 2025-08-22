@@ -9,6 +9,7 @@ use App\Entity\Spot;
 use App\Entity\User;
 use App\Entity\Board;
 use App\Entity\Event;
+use App\Entity\Group;
 use App\Entity\Leash;
 use App\Entity\Media;
 use App\Entity\Article;
@@ -17,6 +18,7 @@ use App\Entity\Message;
 use App\Entity\Session;
 use App\Entity\Wetsuit;
 use App\Entity\Accessory;
+use App\Entity\Friendship;
 use App\Controller\Admin\UserCrudController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -43,14 +45,14 @@ class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
-        return Dashboard::new()
-            ->setTitle('Admin Dashboard');
+        return Dashboard::new()            
+            ->setTitle('<div style="text-align:center;"><img src="/assets/logo.png" alt="logo" class="logo-image" style="width:150px;"/><span class="text-small">Dashboard</span></div>');
                       
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', 'user');
+        yield MenuItem::linktoRoute('Back (Website)', 'fas fa-home', 'user');
         yield MenuItem::section('USER & GEARS');
         yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);        
         yield MenuItem::linkToCrud('Board', 'fas fa-water', Board::class);
@@ -66,8 +68,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Spot', 'fas fa-map-marker-alt', Spot::class);
         yield MenuItem::linkToCrud('Event', 'fas fa-calendar-alt', Event::class);
         yield MenuItem::linkToCrud('Club', 'fas fa-users', Club::class);
-        yield MenuItem::section('OTHERS');
+        yield MenuItem::section('SOCIAL');
         yield MenuItem::linkToCrud('Chat', 'fas fa-comments', Chat::class);
         yield MenuItem::linkToCrud('Message', 'fas fa-envelope-open-text', Message::class);
+        yield MenuItem::linkToCrud('Friendship', 'fas fa-address-book', Friendship::class);
+        yield MenuItem::linkToCrud('Group', 'fas fa-handshake', Group::class);
     }
 }

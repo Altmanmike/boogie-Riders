@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Secured resource.
@@ -39,6 +41,7 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`like`')]
 #[ORM\Entity(repositoryClass: LikeRepository::class)]
 class Like
@@ -66,6 +69,15 @@ class Like
     #[ORM\ManyToOne(inversedBy: 'likes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    private ?Spot $spot = null;
+
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    private ?Event $event = null;
+
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    private ?Club $club = null;
 
     public function __construct()
     {
@@ -146,6 +158,42 @@ class Like
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getSpot(): ?Spot
+    {
+        return $this->spot;
+    }
+
+    public function setSpot(?Spot $spot): static
+    {
+        $this->spot = $spot;
+
+        return $this;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): static
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function getClub(): ?Club
+    {
+        return $this->club;
+    }
+
+    public function setClub(?Club $club): static
+    {
+        $this->club = $club;
 
         return $this;
     }

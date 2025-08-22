@@ -2,8 +2,9 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
 use App\Entity\Spot;
+use App\Entity\User;
+use App\Entity\Group;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -24,7 +25,11 @@ class SpotFixtures extends Fixture implements DependentFixtureInterface
             ->setDifficultyLevel(4)
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->addUser($this->getReference('user_0', User::class));            
+            ->setUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_1', User::class))
+            ->addUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Public"]);          
         $this->addReference('spot_0', $spot);           
         $manager->persist($spot);
         
@@ -40,7 +45,11 @@ class SpotFixtures extends Fixture implements DependentFixtureInterface
             ->setDifficultyLevel(4)
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->addUser($this->getReference('user_1', User::class));
+            ->setUser($this->getReference('user_1', User::class))
+            ->addUser($this->getReference('user_0', User::class))            
+            ->addUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Group"])
+            ->addVisibleToGroup($this->getReference('group_1', Group::class));
         $this->addReference('spot_1', $spot);
         $manager->persist($spot); 
         
@@ -56,7 +65,10 @@ class SpotFixtures extends Fixture implements DependentFixtureInterface
             ->setDifficultyLevel(4)
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->addUser($this->getReference('user_2', User::class));
+            ->setUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_1', User::class))            
+            ->setVisibility(["Public"]);
         $this->addReference('spot_2', $spot);            
         $manager->persist($spot);
         
@@ -72,7 +84,12 @@ class SpotFixtures extends Fixture implements DependentFixtureInterface
             ->setDifficultyLevel(4)
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->addUser($this->getReference('user_0', User::class));
+            ->setUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_0', User::class))
+            ->addUser($this->getReference('user_1', User::class))
+            ->addUser($this->getReference('user_2', User::class))
+            ->addUser($this->getReference('user_3', User::class))
+            ->setVisibility(["Public"]);
         $this->addReference('spot_3', $spot);            
         $manager->persist($spot);
         
@@ -84,7 +101,8 @@ class SpotFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            UserFixtures::class
+            UserFixtures::class,
+            GroupFixtures::class
         ]; 
     }
 }

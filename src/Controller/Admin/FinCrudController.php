@@ -46,6 +46,8 @@ class FinCrudController extends AbstractCrudController
             ArrayField::new('colors'),
             IntegerField::new('price'), 
             AssociationField::new('user'),
+            CollectionField::new('visibility'),
+            CollectionField::new('visible_to_groups'), 
             DateField::new('created_at'),
             DateField::new('updated_at'),
         ];

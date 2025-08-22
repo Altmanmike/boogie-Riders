@@ -45,6 +45,8 @@ class ArticleCrudController extends AbstractCrudController
             TextEditorField::new('content'),
             TextEditorField::new('description'),
             AssociationField::new('user'),
+            CollectionField::new('visibility'),
+            CollectionField::new('visible_to_groups'),
             CollectionField::new('comments'),
             CollectionField::new('likes'),
             CollectionField::new('medias'),

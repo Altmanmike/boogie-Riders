@@ -15,6 +15,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Secured resource.
@@ -42,6 +44,7 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`club`')]
 #[ORM\Entity(repositoryClass: ClubRepository::class)]
 class Club
@@ -91,13 +94,47 @@ class Club
      * @var Collection<int, User>
      */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'club')]
-    private Collection $members;    
+    private Collection $members;
+
+    /**
+     * @var list<string> visibility
+     */
+    #[ORM\Column]
+    private array $visibility = [];
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'clubs')]
+    private Collection $visibleToGroups;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'club')]
+    private Collection $comments;
+
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'club')]
+    private Collection $likes;
+
+    /**
+     * @var Collection<int, Media>
+     */
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'club')]
+    private Collection $medias;    
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();  
         $this->updatedAt = new \DateTimeImmutable();
         $this->members = new ArrayCollection();
+        $this->visibleToGroups = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->medias = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -282,6 +319,139 @@ class Club
             // set the owning side to null (unless already changed)
             if ($member->getClub() === $this) {
                 $member->setClub(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getVisibility(): array
+    {
+        $visibility = $this->visibility;
+        // guarantee default value Public
+        $visibility[] = 'Public';
+
+        return array_unique($visibility);
+    }
+
+    /**
+     * @param list<string> $visibility
+     */
+    public function setVisibility(array $visibility): static
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getVisibleToGroups(): Collection
+    {
+        return $this->visibleToGroups;
+    }
+
+    public function addVisibleToGroup(Group $visibleToGroup): static
+    {
+        if (!$this->visibleToGroups->contains($visibleToGroup)) {
+            $this->visibleToGroups->add($visibleToGroup);
+        }
+
+        return $this;
+    }
+
+    public function removeVisibleToGroup(Group $visibleToGroup): static
+    {
+        $this->visibleToGroups->removeElement($visibleToGroup);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getClub() === $this) {
+                $comment->setClub(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getClub() === $this) {
+                $like->setClub(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedias(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function addMedia(Media $media): static
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+            $media->setClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Media $media): static
+    {
+        if ($this->medias->removeElement($media)) {
+            // set the owning side to null (unless already changed)
+            if ($media->getClub() === $this) {
+                $media->setClub(null);
             }
         }
 

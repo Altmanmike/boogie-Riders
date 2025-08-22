@@ -15,6 +15,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Secured resource.
@@ -42,6 +44,7 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`article`')]
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -91,13 +94,26 @@ class Article
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'article')]
     private Collection $medias;
 
+    /**
+     * @var list<string> visibility
+     */
+    #[ORM\Column]
+    private array $visibility = [];
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'articles')]
+    private Collection $visibleToGroups;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();  
         $this->updatedAt = new \DateTimeImmutable();
         $this->comments = new ArrayCollection();
         $this->likes = new ArrayCollection();
-        $this->medias = new ArrayCollection();       
+        $this->medias = new ArrayCollection();
+        $this->visibleToGroups = new ArrayCollection();       
     }
     
     public function getId(): ?int
@@ -275,6 +291,49 @@ class Article
                 $media->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVisibility(): array
+    {
+        $visibility = $this->visibility;
+        // guarantee default value Public
+        $visibility[] = 'Public';
+
+        return array_unique($visibility);
+    }
+
+    /**
+     * @param list<string> $visibility
+     */
+    public function setVisibility(array $visibility): static
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getVisibleToGroups(): Collection
+    {
+        return $this->visibleToGroups;
+    }
+
+    public function addVisibleToGroup(Group $visibleToGroup): static
+    {
+        if (!$this->visibleToGroups->contains($visibleToGroup)) {
+            $this->visibleToGroups->add($visibleToGroup);
+        }
+
+        return $this;
+    }
+
+    public function removeVisibleToGroup(Group $visibleToGroup): static
+    {
+        $this->visibleToGroups->removeElement($visibleToGroup);
 
         return $this;
     }

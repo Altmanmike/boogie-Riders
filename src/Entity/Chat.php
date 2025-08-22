@@ -14,6 +14,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Secured resource.
@@ -41,6 +43,7 @@ use ApiPlatform\Metadata\QueryParameter;
             securityMessage: 'Requires token authentication and being admin')
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`chat`')]
 #[ORM\Entity(repositoryClass: ChatRepository::class)]
 class Chat
@@ -73,7 +76,7 @@ class Chat
         $this->createdAt = new \DateTimeImmutable();  
         $this->updatedAt = new \DateTimeImmutable();
         $this->users = new ArrayCollection();
-        $this->messages = new ArrayCollection();     
+        $this->messages = new ArrayCollection();            
     }
     
     public function getId(): ?int

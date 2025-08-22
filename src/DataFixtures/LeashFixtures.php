@@ -22,7 +22,8 @@ class LeashFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/5274-large_default/leash-biceps-found-kd-.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_0', User::class));            
+            ->setUser($this->getReference('user_0', User::class))
+            ->setVisibility(["Friends"]);          
         $manager->persist($leash);
         
         $leash = new Leash(); 
@@ -35,7 +36,8 @@ class LeashFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/5013-large_default/leash-biceps-ogm-premium.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_1', User::class));
+            ->setUser($this->getReference('user_1', User::class))
+            ->setVisibility(["Friends"]);
         $manager->persist($leash); 
         
         $leash = new Leash(); 
@@ -48,7 +50,8 @@ class LeashFixtures extends Fixture implements DependentFixtureInterface
             ->setPhoto("https://www.ogm-bodyboard-shop.com/3975-large_default/leash-nmd-biceps-noir-blanc.jpg")
             ->setCreatedAt(new \DatetimeImmutable())
             ->setUpdatedAt(new \DatetimeImmutable())
-            ->setUser($this->getReference('user_2', User::class));            
+            ->setUser($this->getReference('user_2', User::class))
+            ->setVisibility(["Friends"]);            
         $manager->persist($leash);
         
         $manager->flush(); 

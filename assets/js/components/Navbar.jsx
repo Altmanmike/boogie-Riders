@@ -85,7 +85,7 @@ const Navbar = ({ onlineUser }) => {
                             <a href="/clubsFeed">Clubs list</a>
                         </li>
                         <li>
-                            <a href="/friends">Friends</a>
+                            <a href="/groupsFeed">Groups list</a>
                         </li>
                         <li>
                             <a href="/links">Links</a>
@@ -182,6 +182,9 @@ const Navbar = ({ onlineUser }) => {
                             </li>
                             <li>
                                 <a href="/friends">Friends</a>
+                            </li>
+                            <li>
+                                <a href="/groups">Groups</a>
                             </li>
                             <li>
                                 <a href="/settings">Settings</a>

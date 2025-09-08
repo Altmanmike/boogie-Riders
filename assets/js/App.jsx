@@ -20,11 +20,13 @@ import Session from "./posts/Session";
 import Spot from "./posts/Spot";
 import Club from "./posts/Club";
 import Friends from "./pages/Friends";
+import Groups from "./posts/Group";
 import AccessoriesFeed from "./pages/feeds/AccessoriesFeed";
 import AllFeed from "./pages/feeds/AllFeed";
 import ArticlesFeed from "./pages/feeds/ArticlesFeed";
 import BoardsFeed from "./pages/feeds/BoardsFeed";
 import ClubsFeed from "./pages/feeds/ClubsFeed";
+import GroupsFeed from "./pages/feeds/GroupsFeed";
 import EventsFeed from "./pages/feeds/EventsFeed";
 import FinsFeed from "./pages/feeds/FinsFeed";
 import LeashesFeed from "./pages/feeds/LeashesFeed";
@@ -36,7 +38,7 @@ import WetsuitsFeed from "./pages/feeds/WetsuitsFeed";
 const components = {
     Home,
     About,
-    Links,    
+    Links,
     Profile,
     User,
     Settings,
@@ -53,18 +55,20 @@ const components = {
     Spot,
     Club,
     Friends,
+    Groups,
     AccessoriesFeed,
     AllFeed,
     ArticlesFeed,
     BoardsFeed,
     ClubsFeed,
+    GroupsFeed,
     EventsFeed,
     FinsFeed,
     LeashesFeed,
     MediasFeed,
     SessionsFeed,
     SpotsFeed,
-    WetsuitsFeed,    
+    WetsuitsFeed,
 };
 
 const App = () => {

@@ -129,7 +129,7 @@ class Spot
     #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'spot')]
     private Collection $likes;
 
-    #[ORM\ManyToOne(inversedBy: 'createdSpots')]
+    #[ORM\ManyToOne(inversedBy: 'spotsCreated')]
     private ?User $user = null;    
 
     public function __construct()

@@ -42,7 +42,9 @@ class GroupCrudController extends AbstractCrudController
             IdField::new('id'),
             TextField::new('name'),
             TextEditorField::new('description'),
+            AssociationField::new('user'),
             CollectionField::new('members'),
+            BooleanField::new('is_joinable'),
             DateField::new('created_at'),
             DateField::new('updated_at'),
             CollectionField::new('accessories'),
@@ -54,7 +56,7 @@ class GroupCrudController extends AbstractCrudController
             CollectionField::new('sessions'),
             CollectionField::new('spots'),
             CollectionField::new('wetsuits'),
-             CollectionField::new('clubs'),
+            CollectionField::new('clubs'),
             CollectionField::new('events'),
         ];
     }    

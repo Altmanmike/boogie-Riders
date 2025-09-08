@@ -8,10 +8,48 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+/**
+ * Secured resource.
+ */
+#[ApiResource(
+    operations: [
+        new Get(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+        new GetCollection(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin',
+            parameters: ['user' => new QueryParameter]),
+        new Post(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin'),
+        new Put(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+        new Patch(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN') or object.user == user", 
+            securityMessage: 'Requires token authentication and being admin')
+    ],
+    normalizationContext: ['groups' => ['group:read']]
+)]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\Table(name: '`group`')]
-#[ApiResource]
+#[Groups(['group:read'])]
 class Group
 {
     #[ORM\Id]
@@ -25,10 +63,14 @@ class Group
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
     
+    #[ORM\ManyToOne(inversedBy: 'groupsCreated')]
+    #[ORM\JoinColumn(nullable: false)]    
+    private ?User $user = null;
+    
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]    
     private Collection $members;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -101,7 +143,10 @@ class Group
      * @var Collection<int, Event>
      */
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'visibleToGroups')]
-    private Collection $events;    
+    private Collection $events;
+
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $isJoinable = null;        
 
     public function __construct()
     {
@@ -149,6 +194,18 @@ class Group
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    } 
     
     /**
      * @return Collection<int, User>
@@ -493,5 +550,17 @@ class Group
         }
 
         return $this;
-    }    
+    }
+
+    public function getIsJoinable(): ?bool
+    {
+        return $this->isJoinable;
+    }
+
+    public function setIsJoinable(bool $isJoinable): static
+    {
+        $this->isJoinable = $isJoinable;
+
+        return $this;
+    }       
 }

@@ -54,7 +54,8 @@ class Friendship
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]    
+    #[ORM\Column]
+    #[Groups(['group:read'])]   
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'friendships')]
@@ -62,7 +63,7 @@ class Friendship
     private ?User $user = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]    
+    #[ORM\JoinColumn(nullable: false)]           
     private ?User $friend = null;
 
     #[ORM\Column(length: 255)]    

@@ -26,7 +26,7 @@ class UserFixtures extends Fixture
         $admin->setFacebook("https://facebook.com/adminmoreyboogie");
         $admin->setIsVerified(false);
         $admin->setCreatedAt(new \DatetimeImmutable());
-        $admin->setUpdatedAt(new \DatetimeImmutable());
+        $admin->setUpdatedAt(new \DatetimeImmutable());        
         $this->addReference('user_0', $admin);
         
         $manager->persist($admin);
@@ -42,7 +42,7 @@ class UserFixtures extends Fixture
         $user->setStyle("prone/dropknee 100/0");
         $user->setIsVerified(true);
         $user->setCreatedAt(new \DatetimeImmutable());
-        $user->setUpdatedAt(new \DatetimeImmutable());
+        $user->setUpdatedAt(new \DatetimeImmutable());        
         $this->addReference('user_1', $user);
         
         $manager->persist($user);
@@ -59,7 +59,7 @@ class UserFixtures extends Fixture
         $user->setYoutube("https://youtube.com/btkbodyboard");
         $user->setIsVerified(true);
         $user->setCreatedAt(new \DatetimeImmutable());
-        $user->setUpdatedAt(new \DatetimeImmutable());
+        $user->setUpdatedAt(new \DatetimeImmutable());        
         $this->addReference('user_2', $user);
         
         $manager->persist($user);
@@ -75,7 +75,7 @@ class UserFixtures extends Fixture
         $user->setStyle("prone/dropknee 80/20");
         $user->setIsVerified(true);
         $user->setCreatedAt(new \DatetimeImmutable());
-        $user->setUpdatedAt(new \DatetimeImmutable());
+        $user->setUpdatedAt(new \DatetimeImmutable());        
         $this->addReference('user_3', $user);
         
         $manager->persist($user);

@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['friendship:read','group:read'])]   
+    #[Groups(['friendship:read','group:read','club:read'])]   
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
@@ -71,11 +71,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Groups(['friendship:read','group:read'])]
+    #[Groups(['friendship:read','group:read','club:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[Groups(['friendship:read','group:read'])]
+    #[Groups(['friendship:read','group:read','club:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
@@ -85,7 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $about = null;
 
-    #[Groups(['friendship:read'])]
+    #[Groups(['friendship:read','group:read','club:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
@@ -122,8 +122,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $postalCode = null;
-
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]    
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]

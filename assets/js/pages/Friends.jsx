@@ -124,7 +124,7 @@ const Friends = () => {
                             </thead>
                             <tbody>
                                 {friendships.map((fs) => (
-                                    <tr>
+                                    <tr key={fs.id}>
                                         <td>
                                             <div className="flex items-center gap-3">
                                                 <div className="avatar">

@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Secured resource.
@@ -39,21 +40,25 @@ use ApiPlatform\Metadata\ApiFilter;
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin')
-    ]
+    ],
+    normalizationContext: ['groups' => ['like:read']]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`like`')]
 #[ORM\Entity(repositoryClass: LikeRepository::class)]
+#[Groups(['like:read'])]
 class Like
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article:read'])]
     private ?int $id = null;
 
+    #[Groups(['article:read'])]
     #[ORM\Column]
     private ?bool $liked = null;
-
+    
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
 

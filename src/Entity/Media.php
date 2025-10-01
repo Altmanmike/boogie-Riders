@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Secured resource.
@@ -42,16 +43,19 @@ use ApiPlatform\Metadata\ApiFilter;
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin')
-    ]
+    ],
+    normalizationContext: ['groups' => ['media:read']]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`media`')]
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[Groups(['media:read'])]
 class Media
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

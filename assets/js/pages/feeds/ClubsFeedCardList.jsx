@@ -19,8 +19,7 @@ const ClubsFeedCardList = ({
     likes,
     medias,
 }) => {
-    const urlTiny = url.split("/");
-
+    
     return (
         <>
             <div className="card bg-base-200 hover:bg-slate-100 shadow-xl w-96 shadow-sm">
@@ -37,7 +36,9 @@ const ClubsFeedCardList = ({
                     <div className="text-justify font-normal mb-4">
                         Website:{" "}
                         <a href={url} target="_blank">
-                            <span className="font-bold">{urlTiny[2]}</span>
+                            <span className="font-bold">
+                                {url.split("/")[2]}
+                            </span>
                         </a>
                     </div>
 

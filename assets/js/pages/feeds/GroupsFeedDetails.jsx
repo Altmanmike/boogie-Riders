@@ -1,4 +1,12 @@
-import { UserGroupIcon } from "@heroicons/react/16/solid";
+import {
+    UserGroupIcon,
+    PencilIcon,
+    HandThumbUpIcon,
+    MapIcon,
+    MapPinIcon,
+    CalendarDaysIcon,
+    PhotoIcon,
+} from "@heroicons/react/16/solid";
 
 const GroupsFeedDetails = ({
     id,
@@ -8,12 +16,17 @@ const GroupsFeedDetails = ({
     updatedAt,
     user,
     members,
+    articles,
+    sessions,
+    spots,
+    events,
+    medias,
     isJoinable,
 }) => {
     return (
         <>
             <div className="container mx-auto p-4 md:p-10 max-w-full lg:max-w-4xl xl:max-w-6xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl mb-10">
-                <div className="hero bg-base-200 rounded-box p-8 mb-8">
+                <div className="hero bg-base-200 rounded-box p-2 md:p-8 mb-4 md:mb-8">
                     <div className="hero-content flex-col lg:flex-row w-full">
                         <div className="flex flex-col flex-grow">
                             <h1 className="text-5xl font-bold">{name}</h1>
@@ -55,7 +68,7 @@ const GroupsFeedDetails = ({
                     </div>
                 </div>
 
-                <div role="tablist" className="tabs tabs-bordered">
+                <div role="tablist" className="tabs tabs-bordered mx-10">
                     <input
                         type="radio"
                         name="group_tabs"
@@ -115,18 +128,80 @@ const GroupsFeedDetails = ({
                         name="group_tabs"
                         role="tab"
                         className="tab"
-                        aria-label="About"
+                        aria-label="Stats"
                     />
 
-                    <div role="tabpanel" className="tab-content p-10">
-                        <div className="stats shadow">
-                            <div className="stat">
-                                <div className="stat-figure text-secondary">
-                                    <UserGroupIcon className="size-7 text-primary self-center justify-self-end" />
+                    <div role="tabpanel" className="tab-content">
+                        <div className="flex flex-wrap gap-3 p-10">
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <UserGroupIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">Members</div>
+                                    <div className="stat-value">
+                                        {members.length}
+                                    </div>
                                 </div>
-                                <div className="stat-title">Members</div>
-                                <div className="stat-value">
-                                    {members.length}
+                            </div>
+
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <PencilIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">Articles</div>
+                                    <div className="stat-value">
+                                        {articles.length}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <MapIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">sessions</div>
+                                    <div className="stat-value">
+                                        {sessions.length}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <MapPinIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">Spots</div>
+                                    <div className="stat-value">
+                                        {spots.length}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <CalendarDaysIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">Events</div>
+                                    <div className="stat-value">
+                                        {events.length}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <PhotoIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">medias</div>
+                                    <div className="stat-value">
+                                        {medias.length}
+                                    </div>
                                 </div>
                             </div>
                         </div>

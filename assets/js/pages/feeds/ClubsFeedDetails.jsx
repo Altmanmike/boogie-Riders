@@ -1,4 +1,10 @@
-import { UserGroupIcon } from "@heroicons/react/16/solid";
+import { useEffect } from 'react';
+import {
+    UserGroupIcon,
+    ChatBubbleOvalLeftIcon,
+    HandThumbUpIcon,
+    PhotoIcon,
+} from "@heroicons/react/16/solid";
 
 const ClubsFeedDetails = ({
     id,
@@ -21,10 +27,37 @@ const ClubsFeedDetails = ({
     likes,
     medias,
 }) => {
+
+    useEffect(() => {
+                let map = null;         
+                const mapElement = document.getElementById("map");               
+                
+                if (mapElement) {                         
+                    map = L.map("map").setView([lat, lon], 10);           
+                    
+                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                        maxZoom: 19,                
+                        attribution:
+                            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    }).addTo(map);
+                    
+                    L.marker([lat, lon])
+                        .addTo(map)
+                        .bindPopup(`<b>${name}</b><br>${location}`)
+                        .openPopup();            
+                }
+                
+                return () => {
+                    if (map) {
+                        map.remove();
+                    }
+                };
+    }, [lat, lon, name, location]);
+    
     return (
         <>
             <div className="container mx-auto p-4 md:p-10 max-w-full lg:max-w-4xl xl:max-w-6xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl mb-10">
-                <div className="hero bg-base-200 rounded-box p-8 mb-8">
+                <div className="hero bg-base-200 rounded-box p-2 md:p-8 mb-4 md:mb-8">
                     <div className="hero-content flex-col lg:flex-row w-full">
                         <div className="flex flex-col flex-grow">
                             <h1 className="text-5xl font-bold">{name}</h1>
@@ -64,7 +97,7 @@ const ClubsFeedDetails = ({
                     </div>
                 </div>
 
-                <div role="tablist" className="tabs tabs-bordered">
+                <div role="tablist" className="tabs tabs-bordered mx-10">
                     <input
                         type="radio"
                         name="group_tabs"
@@ -124,18 +157,102 @@ const ClubsFeedDetails = ({
                         name="group_tabs"
                         role="tab"
                         className="tab"
-                        aria-label="About"
+                        aria-label="Contact"
                     />
 
                     <div role="tabpanel" className="tab-content p-10">
-                        <div className="stats shadow">
-                            <div className="stat">
-                                <div className="stat-figure text-secondary">
-                                    <UserGroupIcon className="size-7 text-primary self-center justify-self-end" />
+                        <div className="flex flex-col flex-grow">
+                            <a
+                                href={`mailto:"${mail}"`}
+                                className="text-md lg:text-lg mb-3"
+                            >
+                                {mail}
+                            </a>
+                            <a
+                                href={`tel:"${phone}"`}
+                                className="text-md lg:text-lg mb-3"
+                            >
+                                {phone}
+                            </a>
+                            <a
+                                href={url}
+                                className="text-md lg:text-lg mb-5"
+                                target="_blank"
+                            >
+                                {url.split("/")[2]}
+                            </a>
+                        </div>
+                    </div>
+
+                    <input
+                        type="radio"
+                        name="group_tabs"
+                        role="tab"
+                        className="tab"
+                        aria-label="Location"
+                    />
+                    <div role="tabpanel" className="tab-content p-10">
+                        <div
+                            id="map"
+                            className="mx-auto max-w-3xs sm:max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl"
+                        ></div>
+                    </div>
+
+                    <input
+                        type="radio"
+                        name="group_tabs"
+                        role="tab"
+                        className="tab"
+                        aria-label="Stats"
+                    />
+
+                    <div role="tabpanel" className="tab-content">
+                        <div className="flex flex-wrap gap-3 p-10">
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <UserGroupIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">Members</div>
+                                    <div className="stat-value">
+                                        {members.length}
+                                    </div>
                                 </div>
-                                <div className="stat-title">Members</div>
-                                <div className="stat-value">
-                                    {members.length}
+                            </div>
+
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <ChatBubbleOvalLeftIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">Comments</div>
+                                    <div className="stat-value">
+                                        {comments.length}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <HandThumbUpIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">Likes</div>
+                                    <div className="stat-value">
+                                        {likes.length}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="stats shadow">
+                                <div className="stat">
+                                    <div className="stat-figure text-secondary">
+                                        <PhotoIcon className="size-7 text-primary self-center justify-self-end" />
+                                    </div>
+                                    <div className="stat-title">Medias</div>
+                                    <div className="stat-value">
+                                        {medias.length}
+                                    </div>
                                 </div>
                             </div>
                         </div>

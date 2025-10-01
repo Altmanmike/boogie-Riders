@@ -63,6 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['article:read'])]
     private array $roles = [];
 
     /**
@@ -71,21 +72,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Groups(['friendship:read','group:read','club:read'])]
+    #[Groups(['friendship:read','group:read','club:read','article:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[Groups(['friendship:read','group:read','club:read'])]
+    #[Groups(['friendship:read','group:read','club:read','article:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
-
+    
+    #[Groups(['article:read'])]
     #[ORM\Column(length: 255, nullable: true)]    
     private ?string $pseudo = null;
 
+    #[Groups(['article:read'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $about = null;
 
-    #[Groups(['friendship:read','group:read','club:read'])]
+    #[Groups(['friendship:read','group:read','club:read','article:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 

@@ -44,9 +44,9 @@ const ClubsFeedCardList = ({
 
                     <div className="card-actions justify-around items-center mt-auto">
                         <span className="text-sm text-gray-500">Added:</span>
-                        <button className="btn btn-outline btn-sm btn-primary transition-colors duration-200 text-xs">
+                        <div className="badge badge-outline badge-sm badge-primary transition-colors duration-200 text-xs">
                             {createdAt.toString().substring(0, 10)}
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>

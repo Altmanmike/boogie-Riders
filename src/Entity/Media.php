@@ -55,16 +55,19 @@ class Media
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','event:read','spot:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[Groups(['article:read','event:read','spot:read'])]
+    #[ORM\Column(length: 255)]    
     private ?string $filePath = null;
 
+    #[Groups(['article:read','event:read','spot:read'])]
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['article:read','event:read','spot:read'])]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]    
     private ?string $description = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]

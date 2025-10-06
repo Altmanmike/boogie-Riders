@@ -31,61 +31,21 @@ const Navbar = ({ onlineUser }) => {
                     >
                         <li>
                             <a href="/">Home</a>
+                        </li>                        
+                        <li>
+                            <a href="/articlesFeed">Articles</a>
+                        </li>                        
+                        <li>
+                            <a href="/eventsFeed">Events</a>
                         </li>
                         <li>
-                            <a href="/allFeed">News Feed</a>
+                            <a href="/spotsFeed">Spots</a>
                         </li>
                         <li>
-                            <details>
-                                <summary>Posts Feed</summary>
-                                <ul className="menu-dropdown">
-                                    <li>
-                                        <a href="/articlesFeed">Articles</a>
-                                    </li>
-                                    <li>
-                                        <a href="/sessionsFeed">Sessions</a>
-                                    </li>
-                                    <li>
-                                        <a href="/eventsFeed">Events</a>
-                                    </li>
-                                    <li>
-                                        <a href="/spotsFeed">Spots</a>
-                                    </li>
-                                    <li>
-                                        <a href="/mediasFeed">Medias</a>
-                                    </li>
-                                </ul>
-                            </details>
+                            <a href="/clubsFeed">Clubs</a>
                         </li>
                         <li>
-                            <details>
-                                <summary>Gears Feed</summary>
-                                <ul className="menu-dropdown">
-                                    <li>
-                                        <a href="/boardsFeed">Boards</a>
-                                    </li>
-                                    <li>
-                                        <a href="/finsFeed">Fins</a>
-                                    </li>
-                                    <li>
-                                        <a href="/leashesFeed">Leashes</a>
-                                    </li>
-                                    <li>
-                                        <a href="/wetsuitsFeed">Wetsuits</a>
-                                    </li>
-                                    <li>
-                                        <a href="/accessoriesFeed">
-                                            Accessories
-                                        </a>
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <a href="/clubsFeed">Clubs list</a>
-                        </li>
-                        <li>
-                            <a href="/groupsFeed">Groups list</a>
+                            <a href="/groupsFeed">Groups</a>
                         </li>
                         <li>
                             <a href="/links">Links</a>

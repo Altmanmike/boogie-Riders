@@ -41,10 +41,6 @@ const GroupsFeedDetails = ({
                                         Private
                                     </div>
                                 )}
-                                <p className="text-sm text-gray-500 mb-2 ">
-                                    Created at :{" "}
-                                    {new Date(createdAt).toLocaleDateString()}
-                                </p>
                                 <a
                                     href={`/groupJoin/${id}`}
                                     className="btn btn-xs sm:btn-sm md:btn-md lg:btn-md xl:btn-lg btn-primary mb-2"
@@ -68,7 +64,16 @@ const GroupsFeedDetails = ({
                     </div>
                 </div>
 
-                <div role="tablist" className="tabs tabs-bordered mx-10">
+                <div className="text-left mx-14 mt-4 md:mt-12">
+                    <p className="text-sm text-gray-500">
+                        Created at : {new Date(createdAt).toLocaleDateString()}
+                    </p>
+                </div>
+
+                <div
+                    role="tablist"
+                    className="tabs tabs-bordered mx-10 mt-8 md:mt-14"
+                >
                     <input
                         type="radio"
                         name="group_tabs"
@@ -77,7 +82,7 @@ const GroupsFeedDetails = ({
                         aria-label="Activity Feed"
                         defaultChecked
                     />
-                    <div role="tabpanel" className="tab-content p-10">
+                    <div role="tabpanel" className="tab-content md:p-10">
                         <p className="text-lg">Lastest publications...</p>
                     </div>
 

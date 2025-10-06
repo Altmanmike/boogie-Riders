@@ -33,7 +33,7 @@ const SessionDetails = ({
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setUpdatedAt(
+        setUpdtdAt(
             new Date().toLocaleDateString("en-EN", {
                 year: "numeric",
                 month: "long",

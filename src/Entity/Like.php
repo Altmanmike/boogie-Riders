@@ -52,10 +52,10 @@ class Like
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','group:read','club:read','event:read','spot:read'])]
     private ?int $id = null;
 
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','group:read','club:read','event:read','spot:read'])]
     #[ORM\Column]
     private ?bool $liked = null;
     
@@ -71,6 +71,7 @@ class Like
     #[ORM\ManyToOne(inversedBy: 'likes')]
     private ?Article $article = null;
 
+    #[Groups(['article:read','group:read','club:read','event:read','spot:read'])]
     #[ORM\ManyToOne(inversedBy: 'likes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;

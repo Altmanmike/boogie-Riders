@@ -21,19 +21,11 @@ import Spot from "./posts/Spot";
 import Club from "./posts/Club";
 import Friends from "./pages/Friends";
 import Groups from "./posts/Group";
-import AccessoriesFeed from "./pages/feeds/AccessoriesFeed";
-import AllFeed from "./pages/feeds/AllFeed";
 import ArticlesFeed from "./pages/feeds/ArticlesFeed";
-import BoardsFeed from "./pages/feeds/BoardsFeed";
 import ClubsFeed from "./pages/feeds/ClubsFeed";
 import GroupsFeed from "./pages/feeds/GroupsFeed";
 import EventsFeed from "./pages/feeds/EventsFeed";
-import FinsFeed from "./pages/feeds/FinsFeed";
-import LeashesFeed from "./pages/feeds/LeashesFeed";
-import MediasFeed from "./pages/feeds/MediasFeed";
-import SessionsFeed from "./pages/feeds/SessionsFeed";
 import SpotsFeed from "./pages/feeds/SpotsFeed";
-import WetsuitsFeed from "./pages/feeds/WetsuitsFeed";
 
 const components = {
     Home,
@@ -56,19 +48,11 @@ const components = {
     Club,
     Friends,
     Groups,
-    AccessoriesFeed,
-    AllFeed,
     ArticlesFeed,
-    BoardsFeed,
     ClubsFeed,
     GroupsFeed,
     EventsFeed,
-    FinsFeed,
-    LeashesFeed,
-    MediasFeed,
-    SessionsFeed,
     SpotsFeed,
-    WetsuitsFeed,
 };
 
 const App = () => {

@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Secured resource.
@@ -42,16 +43,19 @@ use ApiPlatform\Metadata\ApiFilter;
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin')
-    ]
+    ],
+    normalizationContext: ['groups' => ['session:read']]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`session`')]
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
+#[Groups(['session:read'])]
 class Session
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['spot:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]

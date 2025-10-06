@@ -61,7 +61,16 @@ const ArticlesFeedDetails = ({
                     </div>
                 </div>
 
-                <div role="tablist" className="tabs tabs-bordered mx-10">
+                <div className="text-left mx-14 mt-4 md:mt-12">
+                    <p className="text-sm text-gray-500">
+                        Created at : {new Date(createdAt).toLocaleDateString()}
+                    </p>
+                </div>
+                
+                <div
+                    role="tablist"
+                    className="tabs tabs-bordered mx-10 mt-8 md:mt-14"
+                >
                     <input
                         type="radio"
                         name="group_tabs"
@@ -70,11 +79,10 @@ const ArticlesFeedDetails = ({
                         aria-label="Comments Feed"
                         defaultChecked
                     />
-                    <div role="tabpanel" className="tab-content p-10">
-                        <p className="text-lg mb-5">Lastest comments...</p>
+                    <div role="tabpanel" className="tab-content md:p-10">
                         {cmmnts.map((c) => (
                             <div key={c.id} className="chat chat-start mb-2">
-                                <div className="chat-image avatar">
+                                <div className="chat-image avatar self-center">
                                     <div className="w-10 rounded-full">
                                         <img
                                             alt="Tailwind CSS chat bubble component"

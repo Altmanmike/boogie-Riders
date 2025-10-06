@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['friendship:read','group:read','club:read'])]   
+    #[Groups(['friendship:read','article:read','group:read','club:read','event:read','like:read','spot:read'])]   
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
@@ -72,15 +72,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Groups(['friendship:read','group:read','club:read','article:read'])]
+    #[Groups(['friendship:read','group:read','club:read','article:read','event:read','spot:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[Groups(['friendship:read','group:read','club:read','article:read'])]
+    #[Groups(['friendship:read','group:read','club:read','article:read','event:read','spot:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
     
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','event:read','spot:read'])]
     #[ORM\Column(length: 255, nullable: true)]    
     private ?string $pseudo = null;
 
@@ -88,7 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $about = null;
 
-    #[Groups(['friendship:read','group:read','club:read','article:read'])]
+    #[Groups(['friendship:read','group:read','club:read','article:read','event:read','spot:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 

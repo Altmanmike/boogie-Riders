@@ -44,10 +44,10 @@ final class AppController extends AbstractController
       
     private const COMPONENTS_LIST = [
         'home', 'about', 'links', 'profile', 'user', 'settings', 'board', 'boardNew', 'fin', 
-        'leash', 'wetsuit', 'accessory', 'article', 'session', 'event', 'spot', 'media', 'club', 'friends', 'groups', 'accessoriesFeed', 'allFeed', 'articlesFeed', 'boardsFeed', 'clubsFeed', 'groupsFeed', 'eventsFeed', 'finsFeed', 'leashesFeed', 'mediasFeed', 'sessionsFeed', 'spotsFeed', 'wetsuitsFeed'
+        'leash', 'wetsuit', 'accessory', 'article', 'session', 'event', 'spot', 'media', 'club', 'friends', 'groups', 'articlesFeed', 'clubsFeed', 'groupsFeed', 'eventsFeed', 'spotsFeed'
     ];
     
-    #[Route('/{name}', name: 'app_dynamic_page', requirements: ['name' => 'home|about|links|profile|user|settings|board|boardNew|fin|leash|wetsuit|accessory|article|session|event|spot|media|club|friends|groups|accessoriesFeed|allFeed|articlesFeed|boardsFeed|clubsFeed|groupsFeed|eventsFeed|finsFeed|leashesFeed|mediasFeed|sessionsFeed|spotsFeed|wetsuitsFeed'])]
+    #[Route('/{name}', name: 'app_dynamic_page', requirements: ['name' => 'home|about|links|profile|user|settings|board|boardNew|fin|leash|wetsuit|accessory|article|session|event|spot|media|club|friends|groups|articlesFeed|clubsFeed|groupsFeed|eventsFeed|spotsFeed'])]
     public function dynamicPage(string $name): Response
     {
         $userRolesId = null;

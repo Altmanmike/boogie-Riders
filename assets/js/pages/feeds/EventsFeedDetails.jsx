@@ -1,59 +1,63 @@
-import { useEffect } from 'react';
-import {
+import { useState, useEffect } from "react";
+import {    
     UserGroupIcon,
     ChatBubbleOvalLeftIcon,
     HandThumbUpIcon,
     PhotoIcon,
-} from "@heroicons/react/16/solid";
+} from "@heroicons/react/24/solid";
 
-const ClubsFeedDetails = ({
+const EventsFeedDetails = ({
     id,
     name,
     cover,
     description,
+    dateStart,
+    dateEnd,
     lat,
     lon,
     location,
     url,
-    mail,
-    phone,
+    rewards,
     createdAt,
     updatedAt,
     user,
-    members,
-    visibility,
-    visibleToGroups,
+    users,
     comments,
     likes,
     medias,
-}) => {
+    visibility,
+    visibleToGroups,
+}) => {   
+
+    const [cmmnts, setCmmnts] = useState(comments); 
 
     useEffect(() => {
-                let map = null;         
-                const mapElement = document.getElementById("map");               
-                
-                if (mapElement) {                         
-                    map = L.map("map").setView([lat, lon], 10);           
-                    
-                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                        maxZoom: 19,                
-                        attribution:
-                            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                    }).addTo(map);
-                    
-                    L.marker([lat, lon])
-                        .addTo(map)
-                        .bindPopup(`<b>${name}</b><br>${location}`)
-                        .openPopup();            
-                }
-                
-                return () => {
-                    if (map) {
-                        map.remove();
-                    }
-                };
+        setCmmnts([...cmmnts].reverse());
+        let map = null;
+        const mapElement = document.getElementById("map");
+
+        if (mapElement) {
+            map = L.map("map").setView([lat, lon], 10);
+
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution:
+                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
+
+            L.marker([lat, lon])
+                .addTo(map)
+                .bindPopup(`<b>${name}</b><br>${location}`)
+                .openPopup();
+        }
+
+        return () => {
+            if (map) {
+                map.remove();
+            }
+        };
     }, [lat, lon, name, location]);
-    
+
     return (
         <>
             <div className="container mx-auto p-4 md:p-10 max-w-full lg:max-w-4xl xl:max-w-6xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl mb-10">
@@ -62,12 +66,15 @@ const ClubsFeedDetails = ({
                         <div className="flex flex-col flex-grow">
                             <h1 className="text-5xl font-bold">{name}</h1>
                             <p className="text-justify py-6">{description}</p>
-                            <div className="flex items-center space-x-4">                                
+                            <div className="flex items-center space-x-4">
+                                <p className="text-sm text-gray-500">
+                                    Live url :
+                                </p>
                                 <a
-                                    href={`/clubJoin/${id}`}
+                                    href={`${url}/live`}
                                     className="btn btn-xs sm:btn-sm md:btn-md lg:btn-md xl:btn-lg btn-primary"
                                 >
-                                    Join the club
+                                    Live
                                 </a>
                             </div>
                         </div>
@@ -80,13 +87,14 @@ const ClubsFeedDetails = ({
                         className="max-w-3xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-3xl h-auto object-cover"
                         alt=""
                     />
+
                     <div className="text-center">
                         <div className="avatar">
                             <div className="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                <img src={user.photo} alt="Creator" />
+                                <img src={user.photo} alt="Admin" />
                             </div>
                         </div>
-                        <p className="font-bold text-sm mt-1">Creator</p>
+                        <p className="font-bold text-sm mt-1">Admin</p>
                         <p className="text-sm mt-1">
                             {user.firstname} {user.lastname}
                         </p>
@@ -108,11 +116,31 @@ const ClubsFeedDetails = ({
                         name="group_tabs"
                         role="tab"
                         className="tab"
-                        aria-label="Activity Feed"
+                        aria-label="Comments Feed"
                         defaultChecked
                     />
                     <div role="tabpanel" className="tab-content md:p-10">
-                        <p className="text-lg">Lastest publications...</p>
+                        {cmmnts.map((c) => (
+                            <div key={c.id} className="chat chat-start mb-2">
+                                <div className="chat-image avatar self-center">
+                                    <div className="w-10 rounded-full">
+                                        <img
+                                            alt="Tailwind CSS chat bubble component"
+                                            src={c.user.photo}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="chat-header">
+                                    {c.user.pseudo}
+                                    <time className="text-xs opacity-50">
+                                        {c.createdAt
+                                            .toString()
+                                            .substring(11, 16)}
+                                    </time>
+                                </div>
+                                <div className="chat-bubble">{c.content}</div>
+                            </div>
+                        ))}
                     </div>
 
                     <input
@@ -120,33 +148,33 @@ const ClubsFeedDetails = ({
                         name="group_tabs"
                         role="tab"
                         className="tab"
-                        aria-label={`Members (${members.length})`}
+                        aria-label={`Members (${users.length})`}
                     />
 
                     <div role="tabpanel" className="tab-content p-10">
                         <table className="table mx-auto">
                             <thead>
                                 <tr>
-                                    <th colSpan={2}>Friends</th>
+                                    <th colSpan={2}>Followers</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {members.map((m) => (
-                                    <tr key={m.id}>
+                                {users.map((u) => (
+                                    <tr key={u.id}>
                                         <td>
                                             <div className="flex items-center gap-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle h-12 w-12">
                                                         <img
-                                                            src={`${m.photo}`}
+                                                            src={`${u.photo}`}
                                                             alt="Avatar Tailwind CSS Component"
                                                         />
                                                     </div>
                                                 </div>
                                                 <div className="gap-3">
                                                     <div className="font-bold">
-                                                        {m.firstname}{" "}
-                                                        {m.lastname}
+                                                        {u.firstname}{" "}
+                                                        {u.lastname}
                                                     </div>
                                                 </div>
                                             </div>
@@ -167,18 +195,6 @@ const ClubsFeedDetails = ({
 
                     <div role="tabpanel" className="tab-content p-10">
                         <div className="flex flex-col flex-grow">
-                            <a
-                                href={`mailto:"${mail}"`}
-                                className="text-md lg:text-lg mb-3"
-                            >
-                                {mail}
-                            </a>
-                            <a
-                                href={`tel:"${phone}"`}
-                                className="text-md lg:text-lg mb-3"
-                            >
-                                {phone}
-                            </a>
                             <a
                                 href={url}
                                 className="text-md lg:text-lg mb-5"
@@ -218,9 +234,9 @@ const ClubsFeedDetails = ({
                                     <div className="stat-figure text-secondary">
                                         <UserGroupIcon className="size-7 text-primary self-center justify-self-end" />
                                     </div>
-                                    <div className="stat-title">Members</div>
+                                    <div className="stat-title">Followers</div>
                                     <div className="stat-value">
-                                        {members.length}
+                                        {users.length}
                                     </div>
                                 </div>
                             </div>
@@ -267,4 +283,4 @@ const ClubsFeedDetails = ({
         </>
     );
 };
-export default ClubsFeedDetails;
+export default EventsFeedDetails;

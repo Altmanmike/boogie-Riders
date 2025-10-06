@@ -31,9 +31,9 @@ const ArticlesFeedCardList = ({
                         {description.substring(0, 200)} [...]
                     </p>
 
-                    <div className="card-actions justify-end items-center mt-auto">                        
+                    <div className="card-actions justify-around items-center mt-auto">
+                        by {user.pseudo} at
                         <div className="badge badge-outline badge-sm badge-primary transition-colors duration-200 text-xs">
-                            by {user.pseudo} at{" "}
                             {createdAt.toString().substring(0, 10)}
                         </div>
                     </div>

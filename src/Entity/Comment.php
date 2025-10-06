@@ -53,18 +53,18 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','event:read','spot:read'])]
     private ?int $id = null;
     
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','event:read','spot:read'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','event:read','spot:read'])]
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','event:read','spot:read'])]
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
@@ -74,7 +74,7 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Article $article = null;
 
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','event:read','spot:read'])]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;

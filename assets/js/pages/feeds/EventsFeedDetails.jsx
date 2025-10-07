@@ -66,6 +66,22 @@ const EventsFeedDetails = ({
                         <div className="flex flex-col flex-grow">
                             <h1 className="text-5xl font-bold">{name}</h1>
                             <p className="text-justify py-6">{description}</p>
+                            <div className="flex items-center space-x-4 mb-2">
+                                <p className="text-sm text-gray-500">
+                                    Total cash price:
+                                </p>
+                                <div className="text-justify badge badge-xs sm:badge-sm md:badge-md lg:badge-md xl:badge-lg badge-primary font-bold text-white p-4 mt-3 mb-4 shadow-md">
+                                    ${rewards} USD
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-4 mb-5">
+                                <p className="text-sm text-gray-500">Time:</p>
+                                <div className="badge badge-outline badge-primary transition-colors duration-200 text-xs">
+                                    {dateStart.toString().substring(0, 10)}
+                                    {" to "}
+                                    {dateEnd.toString().substring(0, 10)}
+                                </div>
+                            </div>
                             <div className="flex items-center space-x-4">
                                 <p className="text-sm text-gray-500">
                                     Live url :

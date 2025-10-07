@@ -213,7 +213,7 @@ const ArticlesFeed = () => {
                     <div className="flex flex-wrap justify-center items-center gap-5 my-5">
                         {articlesFeed.map((article) => (
                             <div
-                                className=""
+                                className="card bg-base-200 hover:bg-slate-100 shadow-xl w-96 shadow-sm mb-3"
                                 key={article.id}
                                 onClick={() => {
                                     onHandleClick(article);

@@ -131,15 +131,12 @@ const Event = () => {
                     </a>
                 </div>
                 {selectedItem ? (
-                    <EventDetails
-                        {...selectedItem}
-                        onBack={handleBack}                        
-                    />
+                    <EventDetails {...selectedItem} onBack={handleBack} />
                 ) : (
                     <div className="flex flex-wrap justify-center items-center gap-5 my-5">
                         {events.map((event) => (
                             <div
-                                className=""
+                                className="card bg-base-200 hover:bg-slate-100 shadow-xl w-96 shadow-sm mb-3"
                                 key={event.id}
                                 onClick={() => {
                                     onHandleClick(event);

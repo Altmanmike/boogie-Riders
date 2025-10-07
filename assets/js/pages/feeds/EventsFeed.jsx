@@ -358,7 +358,7 @@ const EventsFeed = () => {
                     "@id": "/api/events/5",
                     "@type": "Event",
                     id: 5,
-                    name: "Friends ccompetitive session in Lacanau",
+                    name: "Friends competitive session in Lacanau",
                     cover: "",
                     description:
                         "Register page for this event. 1000 € to share",
@@ -501,7 +501,7 @@ const EventsFeed = () => {
                     <div className="flex flex-wrap justify-center items-center gap-5 my-5">
                         {eventsFeed.map((event) => (
                             <div
-                                className=""
+                                className="card bg-base-200 hover:bg-slate-100 shadow-xl w-96 shadow-sm mb-3"
                                 key={event.id}
                                 onClick={() => {
                                     onHandleClick(event);

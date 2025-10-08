@@ -1,8 +1,8 @@
 const Links = () => {
     return (
         <>
-            <div className="container mx-auto h-full">
-                <h1 className="mt-15 text-3xl text-center font-bold normal-case underline decoration-current-500">
+            <div className="container mx-auto h-full mb-100">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mt-15 mb-5">
                     Some links for riders
                 </h1>
                 <div className="flex flex-wrap mt-10 justify-center items-center mb-100 gap-5">
@@ -19,7 +19,7 @@ const Links = () => {
                             <div className="justify-end card-actions">
                                 <a
                                     href="https://sniperbodyboards.com/"
-                                    className="btn btn-primary"
+                                    className="btn btn-xs sm:btn-sm md:btn-sm lg:btn-md btn-primary"
                                 >
                                     Visit
                                 </a>
@@ -41,7 +41,7 @@ const Links = () => {
                             <div className="justify-end card-actions">
                                 <a
                                     href="https://www.moreyboogie.eu"
-                                    className="btn btn-primary"
+                                    className="btn btn-xs sm:btn-sm md:btn-sm lg:btn-md btn-primary"
                                 >
                                     Visit
                                 </a>
@@ -61,7 +61,7 @@ const Links = () => {
                             <div className="justify-end card-actions">
                                 <a
                                     href="https://sciencebodyboards.net/"
-                                    className="btn btn-primary"
+                                    className="btn btn-xs sm:btn-sm md:btn-sm lg:btn-md btn-primary"
                                 >
                                     Visit
                                 </a>
@@ -84,7 +84,7 @@ const Links = () => {
                             <div className="justify-end card-actions">
                                 <a
                                     href="https://www.pridebodyboards.com/"
-                                    className="btn btn-primary"
+                                    className="btn btn-xs sm:btn-sm md:btn-sm lg:btn-md btn-primary"
                                 >
                                     Visit
                                 </a>
@@ -111,7 +111,7 @@ const Links = () => {
                             <div className="justify-end card-actions">
                                 <a
                                     href="https://hubboards.com/"
-                                    className="btn btn-primary"
+                                    className="btn btn-xs sm:btn-sm md:btn-sm lg:btn-md btn-primary"
                                 >
                                     Visit
                                 </a>

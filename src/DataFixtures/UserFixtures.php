@@ -39,6 +39,7 @@ class UserFixtures extends Fixture
         $user->setPseudo("jck");
         $admin->setPhoto("https://img.daisyui.com/images/profile/demo/2@94.webp");
         $user->setPassword($this->passwordEncoder->hashPassword($user, "yT_hjJ9"));
+        $user->setCountry("England");
         $user->setStyle("prone/dropknee 100/0");
         $user->setIsVerified(true);
         $user->setCreatedAt(new \DatetimeImmutable());

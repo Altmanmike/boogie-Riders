@@ -114,9 +114,12 @@ const Group = () => {
             <div className="container mx-auto h-full mb-100">
                 <div className="flex justify-center items-center gap-5 mt-10">
                     <h1 className="text-4xl font-bold text-center my-5">
-                        Group
+                        My groups
                     </h1>
-                    <a className="btn btn-sm btn-neutral" href="/groupNew">
+                    <a
+                        className="btn btn-xs sm:btn-sm btn-neutral"
+                        href="/groupNew"
+                    >
                         Add new
                     </a>
                 </div>

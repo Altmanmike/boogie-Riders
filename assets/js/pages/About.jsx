@@ -3,7 +3,7 @@ const About = () => {
         <>
             <div className="container mx-auto h-full mb-100">
                 <div>
-                    <h1 className="mt-20 text-3xl text-center font-bold normal-case underline decoration-current-500">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mt-15 mb-5">
                         History of the application
                     </h1>
                     <div className="flex justify-center items-center h-50">
@@ -116,7 +116,7 @@ const About = () => {
                 </div>
 
                 <div>
-                    <h1 className="mt-10 text-3xl text-center font-bold normal-case underline decoration-current-500">
+                    <h1 className="mt-10 text-2xl sm:text-3xl md:text-4xl font-bold text-center my-5">
                         Stats
                     </h1>
                     <div className="flex justify-center items-center h-60">
@@ -190,7 +190,7 @@ const About = () => {
                 </div>
 
                 <div>
-                    <h1 className="mt-10 text-3xl text-center font-bold normal-case underline decoration-current-500">
+                    <h1 className="mt-10 text-2xl sm:text-3xl md:text-4xl font-bold text-center my-5">
                         F.A.Q
                     </h1>
                     <div className="flex justify-center items-center h-80">

@@ -197,10 +197,13 @@ const ArticlesFeed = () => {
         <>
             <div className="container mx-auto h-full mb-100">
                 <div className="flex justify-center items-center gap-5 mt-10">
-                    <h1 className="text-4xl font-bold text-center my-5">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center my-5">
                         Article
                     </h1>
-                    <a className="btn btn-sm btn-neutral" href="/articleNew">
+                    <a
+                        className="btn btn-xs sm:btn-sm btn-neutral"
+                        href="/articleNew"
+                    >
                         Add new
                     </a>
                 </div>

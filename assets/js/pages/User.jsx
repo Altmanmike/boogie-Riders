@@ -1,6 +1,8 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { useEffect } from "react";
+import axios from "axios";
 
-const User = ({ User = {} }) => {    
+const User = ({ User = {} }) => {
     const {
         pseudo = "BobbyBoogie",
         about = "Passionate bodyboarder always chasing the next barrel. Love to explore new spots and connect with fellow riders.",
@@ -24,6 +26,30 @@ const User = ({ User = {} }) => {
         coverPhoto = "https://www.sports.gouv.fr/sites/default/files/2022-08/bodyboard-ffsurf-wecreative-jpg-490.jpg",
         avatarPhoto = "https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp",
     } = User;
+
+    async function fetchToken(ApiUrl) {
+        try {
+            const response = await axios.post(
+                `${ApiUrl}/token/get`,
+                {},
+                {                    
+                    withCredentials: true,
+                }
+            );
+            const bearerToken = response.data.token;
+            localStorage.setItem("authBearerToken", bearerToken);
+            return bearerToken;
+        } catch (error) {
+            console.error("Error when get token:", error);
+            throw error;
+        }
+    }   
+
+    const JWT_URL = "https://127.0.0.1:8000";
+
+    useEffect(() => {
+        fetchToken(JWT_URL);
+    }, [])    
 
     return (
         <>

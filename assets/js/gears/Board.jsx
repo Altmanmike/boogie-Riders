@@ -1,94 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BoardDetails from "./BoardDetails";
 import BoardCardList from "./BoardCardList";
+import instance from "../axiosConfig";
 
-const Board = () => {
-    const boardList = [
-        {
-            "@context": "/api/contexts/Board",
-            "@id": "/api/boards",
-            "@type": "Collection",
-            totalItems: 3,
-            member: [
-                {
-                    "@id": "/api/boards/1",
-                    "@type": "Board",
-                    id: 1,
-                    brand: "SCIENCE",
-                    model: "MSCX- The Warp",
-                    size: '41.5"',
-                    description:
-                        "The concept: A board that maintains maximum speed through turns.\r\nExperience full-throttle speed during long arcing turns or rail-to-rail transitions. The outer and inner rails work together, or as we call it, the Dual Delta tail, combined with the Deep Quad Vent channel system to provide maximum hold and control. This new tail allows for the smoothest turn transitions.\r\nDiscover it now!",
-                    colors: ["Dark green", "Blue marine", "Black"],
-                    core: "1.9PP Kinetic Polypro Core (PP)",
-                    tail: "Dual Delta",
-                    stringer: "1x Stringer",
-                    mesh: "Wavecushion Air 8lb PE Deck",
-                    slick: "Surlyn Slick Skin",
-                    price: 419,
-                    photoFront:
-                        "https://www.ogm-bodyboard-shop.com/5109-large_default/bodyboard-science-mscx-the-warp.jpg",
-                    photoBack:
-                        "https://www.ogm-bodyboard-shop.com/5105-large_default/bodyboard-science-mscx-the-warp.jpg",
-                    createdAt: "2025-08-11T16:45:55+02:00",
-                    updatedAt: "2025-08-11T16:45:55+02:00",
-                    user: "/api/users/3",
-                },
-                {
-                    "@id": "/api/boards/2",
-                    "@type": "Board",
-                    id: 2,
-                    brand: "QCD",
-                    model: "Ultra 4X Concaves",
-                    size: '41.5"',
-                    description:
-                        "The brand's highest-end model with its concave for optimal grip in hollow waves",
-                    colors: ["Cyan", "Blue azur", "White"],
-                    core: "PP",
-                    tail: "Dual Delta",
-                    stringer: "1x Carbonfibre",
-                    mesh: "NXLPE",
-                    slick: "SURLYN",
-                    price: 329,
-                    photoFront:
-                        "https://www.ogm-bodyboard-shop.com/5149-large_default/bodyboard-qcd-ultra-4x-concaves.jpg",
-                    photoBack:
-                        "https://www.ogm-bodyboard-shop.com/5151-large_default/bodyboard-qcd-ultra-4x-concaves.jpg",
-                    createdAt: "2025-08-11T16:45:55+02:00",
-                    updatedAt: "2025-08-11T16:45:55+02:00",
-                    user: "/api/users/1",
-                },
-                {
-                    "@id": "/api/boards/3",
-                    "@type": "Board",
-                    id: 3,
-                    brand: "MOREY",
-                    model: "Mach 7-7 Pierre Louis Costes",
-                    size: '41"',
-                    description:
-                        "Two-time World Champion and native Pierre Louis Costes unveils his Morey Mach 7-7 model. It features the champion's fast and taut shape for maximum speed and projection!",
-                    colors: ["Black", "Yellow"],
-                    core: "PP",
-                    tail: "Crescent Tail",
-                    stringer: "1x Carbonfibre",
-                    mesh: "MESH",
-                    slick: "Surlyn Slick Skin",
-                    price: 379,
-                    photoFront:
-                        "https://www.ogm-bodyboard-shop.com/5139-large_default/bodyboard-morey-mach-7-7-pierre-louis-costes.jpg",
-                    photoBack:
-                        "https://www.ogm-bodyboard-shop.com/5219-large_default/bodyboard-morey-mach-7-7-pierre-louis-costes.jpg",
-                    createdAt: "2025-08-11T16:45:55+02:00",
-                    updatedAt: "2025-08-11T16:45:55+02:00",
-                    user: "/api/users/2",
-                },
-            ],
-        },
-    ];
-    //console.log("boardList :", boardList[0].member);
-    const boards = boardList[0].member;
-
+const Board = ({ onlineUser }) => {
     const [selectedItem, setSelectedItem] = useState(null);
+    const [boardsUserList, setBoardsUserList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(boardsUserEndPoint);
+            const boardsData = response.data.member;
+            setBoardsUserList(boardsData);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const userId = parseInt(onlineUser.substring(1, 2));
+
+    const boardsUserEndPoint = "/boards?page=1&user=" + userId;
+
+    useEffect(() => {
+        fetchData(boardsUserEndPoint);
+    }, []);
+
+    //console.log("boardsUserList :", boardsUserList);
+
+    const boards = boardsUserList;
 
     const onHandleClick = (board) => {
         setSelectedItem(board);
@@ -97,7 +43,16 @@ const Board = () => {
     const handleBack = () => {
         setSelectedItem(null);
     };
-    
+
+    const skeletons = [1, 2, 3].map((i) => (
+        <div key={i} className="flex items-center w-80 flex-col gap-10">
+            <div className="skeleton h-64 w-64"></div>
+            <div className="skeleton h-4 w-28"></div>
+            <div className="skeleton h-4 w-28"></div>
+            <div className="skeleton h-4 w-28"></div>
+        </div>
+    )); 
+
     return (
         <>
             <div className="container mx-auto h-full mb-100">
@@ -112,6 +67,32 @@ const Board = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <BoardDetails {...selectedItem} onBack={handleBack} />
                 ) : (

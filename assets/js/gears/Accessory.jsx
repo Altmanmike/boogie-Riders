@@ -1,65 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AccessoryDetails from "./AccessoryDetails";
 import AccessoryCardList from "./AccessoryCardList";
+import instance from "../axiosConfig";
 
-const Accessory = () => {
-    const accessoryList = [
-        {
-            "@context": "/api/contexts/Accessory",
-            "@id": "/api/accessories",
-            "@type": "Collection",
-            totalItems: 3,
-            member: [
-                {
-                    "@id": "/api/accessories/1",
-                    "@type": "Accessory",
-                    id: 1,
-                    kind: "Fins stuff",
-                    brand: "GYROLL",
-                    size: "L",
-                    description: "Neoprene Fins socks.",
-                    colors: ["Black", "Yellow"],
-                    price: 16,
-                    photo: "https://www.ogm-bodyboard-shop.com/5308-large_default/gyroll-fins-socks-chaussons-neoprene.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/1",
-                },
-                {
-                    "@id": "/api/accessories/2",
-                    "@type": "Accessory",
-                    id: 2,
-                    kind: "Wear",
-                    brand: "SCIENCE",
-                    size: "XL",
-                    description: "Fuse Hooded Sweatshirt.",
-                    colors: ["Black"],
-                    price: 75,
-                    photo: "https://www.ogm-bodyboard-shop.com/5233-large_default/sweatshirt-science-fuse-hooded-.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/2",
-                },
-                {
-                    "@id": "/api/accessories/3",
-                    "@type": "Accessory",
-                    id: 3,
-                    kind: "Plug",
-                    brand: "PLUG",
-                    colors: ["Black"],
-                    price: 3,
-                    photo: "https://www.ogm-bodyboard-shop.com/5044-large_default/plug-creatures.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/3",
-                },
-            ],
-        },
-    ];
-    //console.log("accessoryList :", accessoryList[0].member);
-    const accessories = accessoryList[0].member;
-
+const Accessory = ({ onlineUser }) => {
+    
     const [selectedItem, setSelectedItem] = useState(null);
+    const [accessoriesUserList, setAccessoriesUserList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(accessoriesUserEndPoint);
+            const accessoriesData = response.data.member;
+            setAccessoriesUserList(accessoriesData);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const userId = parseInt(onlineUser.substring(1, 2));
+
+    const accessoriesUserEndPoint = "/accessories?page=1&user="+userId;
+
+    useEffect(() => {
+        fetchData(accessoriesUserEndPoint);
+    }, []);
+
+    //console.log("accessoriesUserList :", accessoriesUserList);
+
+    const accessories = accessoriesUserList;
 
     const onHandleClick = (accessory) => {
         setSelectedItem(accessory);
@@ -68,6 +44,15 @@ const Accessory = () => {
     const handleBack = () => {
         setSelectedItem(null);
     };
+
+    const skeletons = [1, 2, 3].map((i) => (
+        <div key={i} className="flex items-center w-80 flex-col gap-10">
+            <div className="skeleton h-64 w-48"></div>
+            <div className="skeleton h-4 w-28"></div>
+            <div className="skeleton h-4 w-28"></div>
+            <div className="skeleton h-4 w-28"></div>           
+        </div>
+    )); 
 
     return (
         <>
@@ -80,6 +65,32 @@ const Accessory = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <AccessoryDetails {...selectedItem} onBack={handleBack} />
                 ) : (

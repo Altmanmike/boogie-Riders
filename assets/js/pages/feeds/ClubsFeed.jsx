@@ -1,102 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ClubsFeedDetails from "./ClubsFeedDetails";
 import ClubsFeedCardList from "./ClubsFeedCardList";
+import instance from "../../axiosConfig";
 
 const ClubsFeed = () => {
-    const clubsFeedList = [
-        {
-            "@context": "/api/contexts/Club",
-            "@id": "/api/clubs",
-            "@type": "Collection",
-            totalItems: 1,
-            member: [
-                {
-                    "@id": "/api/clubs/1",
-                    "@type": "Club",
-                    id: 1,
-                    name: "HCL OCEAN CLUB Ecole de surf et bodyboard",
-                    cover: "https://www.lacanausurfcamp.fr/wp-content/uploads/2021/03/Hcl-ECOLE-Club-blanc-ombre-web.png",
-                    description:
-                        "Venez surfer, dans une ambiance familiale, pour les kids, les ados, les adultes ! Créée en 2000 par Cédric Grèze, l’école HCL est un état d’esprit, une ambiance, une famille. C’est la HCL Family ! Nous offrons des cours adaptés à chacun, en fonction de sa personnalité, de son rythme, de son évolution. Initiation ou perfectionnement, en surf ou en bodyboard, Cédric et son équipe vous encadrent au plus près, dans les vagues, dans la recherche du plaisir, de la convivialité, sans oublier la sécurité. L’école et le surf camp sont ouverts à l’année (sauf fêtes de Noël). Nous organisons également plusieurs Surf Trips dans l’année, avec suivi vidéo et debriefs.",
-                    lat: 45.003735838938,
-                    lon: -1.2008878417874,
-                    location: "1 Av. Pierre Loti, 33680 Lacanau",
-                    url: "https://www.lacanausurfcamp.fr/",
-                    mail: "hcl.ecolesurf@gmail.com",
-                    phone: "0687579528",
-                    createdAt: "2025-09-04T21:56:56+02:00",
-                    updatedAt: "2025-09-04T21:56:56+02:00",
-                    user: {
-                        "@id": "/api/users/1",
-                        "@type": "User",
-                        id: 1,
-                        lastname: "ADMIN",
-                        firstname: "admin",
-                        photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                    },
-                    members: [
-                        {
-                            "@id": "/api/users/1",
-                            "@type": "User",
-                            id: 1,
-                            lastname: "ADMIN",
-                            firstname: "admin",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                        },
-                        {
-                            "@id": "/api/users/2",
-                            "@type": "User",
-                            id: 2,
-                            lastname: "Sparrow",
-                            firstname: "Jack",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                        },
-                        {
-                            "@id": "/api/users/3",
-                            "@type": "User",
-                            id: 3,
-                            lastname: "TheKid",
-                            firstname: "Billy",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                        },
-                    ],
-                    visibility: ["Public"],
-                    visibleToGroups: [],
-                    comments: ["/api/comments/14"],
-                    likes: ["/api/likes/8"],
-                    medias: ["/api/media/8"],
-                },
-            ],
-            search: {
-                "@type": "IriTemplate",
-                template: "/api/clubs{?user,user[],user}",
-                variableRepresentation: "BasicRepresentation",
-                mapping: [
-                    {
-                        "@type": "IriTemplateMapping",
-                        variable: "user",
-                        property: "user",
-                        required: false,
-                    },
-                    {
-                        "@type": "IriTemplateMapping",
-                        variable: "user[]",
-                        property: "user",
-                        required: false,
-                    },
-                    {
-                        "@type": "IriTemplateMapping",
-                        variable: "user",
-                        property: "user",
-                    },
-                ],
-            },
-        },
-    ];
-    //console.log("clubsFeedList :", clubList[0].member);
-    const clubs = clubsFeedList[0].member;
 
     const [selectedItem, setSelectedItem] = useState(null);
+    const [clubsFeedList, setClubsFeedList] = useState([]);    
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(clubsEndPoint);
+            const clubsData = response.data.member;
+            setClubsFeedList(clubsData);            
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    const clubsEndPoint = "/clubs?page=1";    
+
+    useEffect(() => {              
+        fetchData(clubsEndPoint);        
+    }, []);
+
+    //console.log("clubsFeedList :", clubList[0].member);
+    const clubsFeed = clubsFeedList;   
 
     const onHandleClick = (club) => {
         setSelectedItem(club);
@@ -106,6 +42,33 @@ const ClubsFeed = () => {
         setSelectedItem(null);
     };
 
+    const skeletons = [1, 2, 3].map((i) => (
+        <div key={i} className="flex w-80 flex-col gap-10">
+            <div className="skeleton h-4 w-full"></div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-16 w-16"></div>
+            </div>
+            <div className="flex flex-col gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-full"></div>
+                <div className="skeleton h-4 w-full"></div>                
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-64"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-64"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-48"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+        </div>
+    )); 
+    
     return (
         <>
             <div className="container mx-auto h-full mb-100">
@@ -120,11 +83,37 @@ const ClubsFeed = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <ClubsFeedDetails {...selectedItem} onBack={handleBack} />
                 ) : (
                     <div className="flex flex-wrap justify-center items-center gap-5 my-5">
-                        {clubs.map((club) => (
+                        {clubsFeed.map((club) => (
                             <div
                                 className="card bg-base-200 hover:bg-slate-100 shadow-xl w-96 shadow-sm mb-3"
                                 key={club.id}

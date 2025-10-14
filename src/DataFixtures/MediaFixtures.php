@@ -72,7 +72,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($media);
 
         $media = new Media(); 
-        $media->setFilePath("https://youtu.be/lBxcXqRujog")
+        $media->setFilePath("https://www.youtube.com/embed/lBxcXqRujog")
             ->setType("Video")
             ->setDescription("IBC 2025 trailer")        
             ->setCreatedAt(new \DatetimeImmutable())
@@ -86,7 +86,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
         
         // EVENT
         $media = new Media(); 
-        $media->setFilePath("https://youtu.be/2l92OP0Zgxg")
+        $media->setFilePath("https://www.youtube.com/embed/2l92OP0Zgxg")
             ->setType("Video")
             ->setDescription("IBC MEDHYA 2025 DAY 2 trailer")        
             ->setCreatedAt(new \DatetimeImmutable())
@@ -99,7 +99,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($media);
         
         $media = new Media(); 
-        $media->setFilePath("https://youtu.be/fx64Rz7jlvw")
+        $media->setFilePath("https://www.youtube.com/embed/fx64Rz7jlvw")
             ->setType("Video")
             ->setDescription("Wave conditions the 20 august 2025 at Lacanau, France")        
             ->setCreatedAt(new \DatetimeImmutable())
@@ -113,7 +113,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
         
         // CLUB
         $media = new Media(); 
-        $media->setFilePath("https://youtu.be/CH3eIv3jiV8")
+        $media->setFilePath("https://www.youtube.com/embed/CH3eIv3jiV8")
             ->setType("Video")
             ->setDescription("HCL trailer")        
             ->setCreatedAt(new \DatetimeImmutable())

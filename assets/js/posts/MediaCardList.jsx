@@ -20,9 +20,11 @@ const MediaCardList = ({
                 <iframe
                     src={filePath}
                     title={id}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    className="rounded-t-lg"
+                    allowfullscreen
                 ></iframe>
             )}
             <div className="card-body">

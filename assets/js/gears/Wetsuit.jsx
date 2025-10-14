@@ -1,77 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import WetsuitDetails from "./WetsuitDetails";
 import WetsuitCardList from "./WetsuitCardList";
+import instance from "../axiosConfig";
 
-const Wetsuit = () => {
-    const wetsuitList = [
-        {
-            "@context": "/api/contexts/Wetsuit",
-            "@id": "/api/wetsuits",
-            "@type": "Collection",
-            totalItems: 3,
-            member: [
-                {
-                    "@id": "/api/wetsuits/1",
-                    "@type": "Wetsuit",
-                    id: 1,
-                    brand: "GYROLL",
-                    model: "SHIELD 4/3 ZIPPERLESS",
-                    type: "Integral",
-                    size: "M",
-                    description:
-                        "100% Super Stretch Eco Friendly Limestone Neoprene, Ultimate Flexibility and Form Fitting Comfort",
-                    colors: ["Black", "Red", "Grey"],
-                    gender: "man",
-                    thickness: "4/3",
-                    price: 319,
-                    photo: "https://www.ogm-bodyboard-shop.com/4594-large_default/combinaison-gyroll-shield-43-zipperless-black-grey.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/1",
-                },
-                {
-                    "@id": "/api/wetsuits/2",
-                    "@type": "Wetsuit",
-                    id: 2,
-                    brand: "MDNS",
-                    model: "MADNESS Superstretch Serie",
-                    size: "S",
-                    description:
-                        "The PRIME top is my state-of-the-art Superstretch series.",
-                    colors: ["Black"],
-                    gender: "man and woman",
-                    thickness: "2/2",
-                    price: 45,
-                    photo: "https://www.ogm-bodyboard-shop.com/5204-large_default/top-neoprene-madness.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/2",
-                },
-                {
-                    "@id": "/api/wetsuits/3",
-                    "@type": "Wetsuit",
-                    id: 3,
-                    brand: "WEST",
-                    model: "ENFORCER-S SHORTY 2/2MM BACK ZIP",
-                    size: "M",
-                    description:
-                        "The WEST Enforcer-S Flatlock Spring Suit 2/2 back zip wetsuit is specially designed for summer sessions.",
-                    colors: ["White", "Black"],
-                    gender: "man",
-                    thickness: "2/2",
-                    price: 75.9,
-                    photo: "https://www.ogm-bodyboard-shop.com/5063-large_default/combinaison-west-enforcer-s-shorty-22mm-back-zip.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/3",
-                },
-            ],
-        },
-    ];
-    //console.log("wetsuitList :", wetsuitList[0].member);
-    const wetsuits = wetsuitList[0].member;
-
+const Wetsuit = ({ onlineUser }) => {
     const [selectedItem, setSelectedItem] = useState(null);
+    const [wetsuitsUserList, setWetsuitsUserList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(wetsuitsUserEndPoint);
+            const wetsuitsData = response.data.member;
+            setWetsuitsUserList(wetsuitsData);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const userId = parseInt(onlineUser.substring(1, 2));
+
+    const wetsuitsUserEndPoint = "/wetsuits?page=1&user=" + userId;
+
+    useEffect(() => {
+        fetchData(wetsuitsUserEndPoint);
+    }, []);
+
+    //console.log("wetsuitsUserList :", wetsuitsUserList);
+
+    const wetsuits = wetsuitsUserList;
 
     const onHandleClick = (wetsuit) => {
         setSelectedItem(wetsuit);
@@ -80,6 +43,15 @@ const Wetsuit = () => {
     const handleBack = () => {
         setSelectedItem(null);
     };
+
+    const skeletons = [1, 2, 3].map((i) => (
+        <div key={i} className="flex items-center w-80 flex-col gap-10">
+            <div className="skeleton h-80 w-64"></div>
+            <div className="skeleton h-4 w-28"></div>
+            <div className="skeleton h-4 w-28"></div>
+            <div className="skeleton h-4 w-28"></div>
+        </div>
+    )); 
 
     return (
         <>
@@ -95,6 +67,32 @@ const Wetsuit = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <WetsuitDetails {...selectedItem} onBack={handleBack} />
                 ) : (

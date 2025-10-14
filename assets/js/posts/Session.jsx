@@ -1,56 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SessionDetails from "./SessionDetails";
 import SessionCardList from "./SessionCardList";
+import instance from "../axiosConfig";
 
-const Session = () => {
-    const sessionList = [
-        {
-            "@context": "/api/contexts/Session",
-            "@id": "/api/sessions",
-            "@type": "Collection",
-            totalItems: 1,
-            member: [
-                {
-                    "@id": "/api/sessions/1",
-                    "@type": "Session",
-                    id: 1,
-                    cover: "https://ibcworldtour.com/wp-content/uploads/2025/08/02.jpg",
-                    date: "2025-09-01T07:00:00+02:00",
-                    description:
-                        "Photo of the session during the event in Marocco",
-                    duration: 4,
-                    conditions: "Sun all the day and clean conditions",
-                    personalRating: 3,
-                    lat: 34.259499338972,
-                    lon: -6.6812514111815,
-                    location: "Mehdya Beach, Kenitra, Morocco",
-                    createdAt: "2025-08-14T15:55:47+02:00",
-                    updatedAt: "2025-08-14T15:55:47+02:00",
-                    spot: "/api/spots/1",
-                    user: "/api/users/2",
-                    comments: ["/api/comments/3"],
-                    likes: ["/api/likes/2"],
-                    medias: ["/api/media/4", "/api/media/5"],
-                },
-            ],
-            search: {
-                "@type": "IriTemplate",
-                template: "/api/sessions{?user}",
-                variableRepresentation: "BasicRepresentation",
-                mapping: [
-                    {
-                        "@type": "IriTemplateMapping",
-                        variable: "user",
-                        property: "user",
-                    },
-                ],
-            },
-        },
-    ];
-    //console.log("sessionList :", sessionList[0].member);
-    const sessions = sessionList[0].member;
-
+const Session = ({ onlineUser }) => {
     const [selectedItem, setSelectedItem] = useState(null);
+    const [sessionsUserList, setSessionsUserList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(sessionsUserEndPoint);
+            const sessionsData = response.data.member;
+            setSessionsUserList(sessionsData);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const userId = parseInt(onlineUser.substring(1, 2));
+
+    const sessionsUserEndPoint = "/sessions?page=1&user=" + userId;
+
+    useEffect(() => {
+        fetchData(sessionsUserEndPoint);
+    }, []);
+
+    //console.log("sessionsUserList :", sessionsUserList);
+
+    const sessions = sessionsUserList;
 
     const onHandleClick = (session) => {
         setSelectedItem(session);
@@ -59,6 +43,30 @@ const Session = () => {
     const handleBack = () => {
         setSelectedItem(null);
     };
+
+    const skeletons = [1, 2, 3].map((i) => (
+        <div key={i} className="flex w-80 flex-col gap-10">
+            <div className="skeleton h-48 w-full"></div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+            <div className="flex flex-col gap-4">
+                <div className="skeleton h-4 w-full"></div>
+            </div>
+            <div className="flex flex-row justify-between gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+            <div className="flex flex-row justify-between gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+        </div>
+    )); 
 
     return (
         <>
@@ -74,6 +82,32 @@ const Session = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <SessionDetails {...selectedItem} onBack={handleBack} />
                 ) : (

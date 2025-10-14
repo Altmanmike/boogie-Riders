@@ -1,47 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ClubDetails from "./ClubDetails";
 import ClubCardList from "./ClubCardList";
+import instance from "../axiosConfig";
 
-const Club = () => {
-    const clubList = [
-        {
-            "@context": "/api/contexts/Club",
-            "@id": "/api/clubs",
-            "@type": "Collection",
-            totalItems: 1,
-            member: [
-                {
-                    "@id": "/api/clubs/1",
-                    "@type": "Club",
-                    id: 1,
-                    name: "HCL OCEAN CLUB Ecole de surf et bodyboard",
-                    cover: "https://www.lacanausurfcamp.fr/wp-content/uploads/2021/03/Hcl-ECOLE-Club-blanc-ombre-web.png",
-                    description:
-                        "Venez surfer, dans une ambiance familiale, pour les kids, les ados, les adultes ! Créée en 2000 par Cédric Grèze, l’école HCL est un état d’esprit, une ambiance, une famille. C’est la HCL Family ! Nous offrons des cours adaptés à chacun, en fonction de sa personnalité, de son rythme, de son évolution. Initiation ou perfectionnement, en surf ou en bodyboard, Cédric et son équipe vous encadrent au plus près, dans les vagues, dans la recherche du plaisir, de la convivialité, sans oublier la sécurité. L’école et le surf camp sont ouverts à l’année (sauf fêtes de Noël). Nous organisons également plusieurs Surf Trips dans l’année, avec suivi vidéo et debriefs.",
-                    lat: 45.003735838938,
-                    lon: -1.2008878417874,
-                    location: "1 Av. Pierre Loti, 33680 Lacanau",
-                    url: "https://www.lacanausurfcamp.fr/",
-                    mail: "hcl.ecolesurf@gmail.com",
-                    phone: "0687579528",
-                    createdAt: "2025-08-15T16:06:25+02:00",
-                    updatedAt: "2025-08-15T16:06:25+02:00",
-                    user: "/api/users/1",
-                    members: ["/api/users/1", "/api/users/2", "/api/users/3"],
-                },
-            ],
-            search: {
-                "@type": "IriTemplate",
-                template: "/api/clubs{?}",
-                variableRepresentation: "BasicRepresentation",
-                mapping: [],
-            },
-        },
-    ];
-    //console.log("clubList :", clubList[0].member);
-    const clubs = clubList[0].member;
+const Club = ({ onlineUser }) => {    
 
     const [selectedItem, setSelectedItem] = useState(null);
+    const [clubsUserList, setClubsUserList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(clubsUserEndPoint);
+            const clubsData = response.data.member;
+            setClubsUserList(clubsData);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const userId = parseInt(onlineUser.substring(1, 2));
+
+    const clubsUserEndPoint = "/clubs?page=1&user=" + userId;
+
+    useEffect(() => {
+        fetchData(clubsUserEndPoint);
+    }, []);
+
+    //console.log("clubsUserList :", clubsUserList);
+
+    const clubs = clubsUserList;
 
     const onHandleClick = (club) => {
         setSelectedItem(club);
@@ -50,6 +44,30 @@ const Club = () => {
     const handleBack = () => {
         setSelectedItem(null);
     };
+
+    const skeletons = [1, 2, 3].map((i) => (
+        <div key={i} className="flex w-80 flex-col gap-10">
+            <div className="skeleton h-48 w-full"></div>            
+            <div className="flex flex-col gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-full"></div>
+                <div className="skeleton h-4 w-full"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-64"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-64"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-48"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+        </div>
+    )); 
 
     return (
         <>
@@ -65,6 +83,32 @@ const Club = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <ClubDetails {...selectedItem} onBack={handleBack} />
                 ) : (

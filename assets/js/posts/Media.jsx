@@ -1,97 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MediaDetails from "./MediaDetails";
 import MediaCardList from "./MediaCardList";
+import instance from "../axiosConfig";
 
-const Media = () => {
-    const mediaList = [
-        {
-            "@context": "/api/contexts/Media",
-            "@id": "/api/media",
-            "@type": "Collection",
-            totalItems: 5,
-            member: [
-                {
-                    "@id": "/api/media/1",
-                    "@type": "Media",
-                    id: 1,
-                    filePath:
-                        "https://ibcworldtour.com/wp-content/uploads/2024/09/armide-pierreA.jpg",
-                    type: "Image",
-                    description: "Two contenders for the world title",
-                    createdAt: "2025-08-14T15:55:47+02:00",
-                    updatedAt: "2025-08-14T15:55:47+02:00",
-                    user: "/api/users/1",
-                    article: "/api/articles/1",
-                },
-                {
-                    "@id": "/api/media/2",
-                    "@type": "Media",
-                    id: 2,
-                    filePath:
-                        "https://ibcworldtour.com/wp-content/uploads/2025/08/05.jpg",
-                    type: "Image",
-                    description: "from Morocco again takes the win",
-                    createdAt: "2025-08-14T15:55:47+02:00",
-                    updatedAt: "2025-08-14T15:55:47+02:00",
-                    user: "/api/users/2",
-                    spot: "/api/spots/2",
-                },
-                {
-                    "@id": "/api/media/3",
-                    "@type": "Media",
-                    id: 3,
-                    filePath:
-                        "https://ibcworldtour.com/wp-content/uploads/2024/09/armide-pierreA.jpg",
-                    type: "Image",
-                    description: "Image test3",
-                    createdAt: "2025-08-14T15:55:47+02:00",
-                    updatedAt: "2025-08-14T15:55:47+02:00",
-                    user: "/api/users/3",
-                    article: "/api/articles/1",
-                },
-                {
-                    "@id": "/api/media/4",
-                    "@type": "Media",
-                    id: 4,
-                    filePath: "../../public/build/img/test4.jpg",
-                    type: "Image",
-                    description: "Image test4",
-                    createdAt: "2025-08-14T15:55:47+02:00",
-                    updatedAt: "2025-08-14T15:55:47+02:00",
-                    user: "/api/users/1",
-                    session: "/api/sessions/1",
-                },
-                {
-                    "@id": "/api/media/5",
-                    "@type": "Media",
-                    id: 5,
-                    filePath: "https://youtube.com/embed/lBxcXqRujog",
-                    type: "Video",
-                    description: "IBC 2025 trailer",
-                    createdAt: "2025-08-14T15:55:47+02:00",
-                    updatedAt: "2025-08-14T15:55:47+02:00",
-                    user: "/api/users/1",
-                    session: "/api/sessions/1",
-                },
-            ],
-            search: {
-                "@type": "IriTemplate",
-                template: "/api/media{?user}",
-                variableRepresentation: "BasicRepresentation",
-                mapping: [
-                    {
-                        "@type": "IriTemplateMapping",
-                        variable: "user",
-                        property: "user",
-                    },
-                ],
-            },
-        },
-    ];
-    //console.log("mediaList :", mediaList[0].member);
-    const medias = mediaList[0].member;
-
+const Media = ({ onlineUser }) => {
+    
     const [selectedItem, setSelectedItem] = useState(null);
+    const [mediasUserList, setMediasUserList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(mediasUserEndPoint);
+            const mediasData = response.data.member;
+            setMediasUserList(mediasData);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const userId = parseInt(onlineUser.substring(1, 2));
+
+    const mediasUserEndPoint = "/media?page=1&user="+userId;
+
+    useEffect(() => {
+        fetchData(mediasUserEndPoint);
+    }, []);
+
+    //console.log("mediasUserList :", mediasUserList);
+
+    const medias = mediasUserList;        
 
     const onHandleClick = (media) => {
         setSelectedItem(media);
@@ -100,6 +44,28 @@ const Media = () => {
     const handleBack = () => {
         setSelectedItem(null);
     };
+
+    const skeletons = [1, 2, 3].map((i) => (
+        <div key={i} className="flex w-80 flex-col gap-10">
+            <div className="skeleton h-48 w-full"></div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+            <div className="flex flex-col gap-4">                
+                <div className="skeleton h-4 w-full"></div>                
+            </div>
+            <div className="flex flex-col gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-full"></div>
+                <div className="skeleton h-4 w-full"></div>
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+            <div className="flex flex-row justify-center gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-28"></div>
+            </div>
+        </div>
+    )); 
 
     return (
         <>
@@ -115,6 +81,32 @@ const Media = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <MediaDetails {...selectedItem} onBack={handleBack} />
                 ) : (

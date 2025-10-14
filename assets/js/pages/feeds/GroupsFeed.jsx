@@ -1,219 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GroupsFeedDetails from "./GroupsFeedDetails";
 import GroupsFeedCardList from "./GroupsFeedCardList";
+import instance from "../../axiosConfig";
 
 const GroupsFeed = () => {
-    const groupsFeedList = [
-        {
-            "@context": "/api/contexts/Group",
-            "@id": "/api/groups",
-            "@type": "Collection",
-            totalItems: 3,
-            member: [
-                {
-                    "@id": "/api/groups/1",
-                    "@type": "Group",
-                    id: 1,
-                    name: "Old friends",
-                    description: "A group started by some friends ...",
-                    user: {
-                        "@id": "/api/users/1",
-                        "@type": "User",
-                        id: 1,
-                        lastname: "ADMIN",
-                        firstname: "admin",
-                        photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                        friends: [2, 3],
-                    },
-                    members: [
-                        {
-                            "@id": "/api/users/2",
-                            "@type": "User",
-                            id: 2,
-                            lastname: "Sparrow",
-                            firstname: "Jack",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                            friends: [1, 4],
-                        },
-                        {
-                            "@id": "/api/users/3",
-                            "@type": "User",
-                            id: 3,
-                            lastname: "TheKid",
-                            firstname: "Billy",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                            friends: [1],
-                        },
-                    ],
-                    createdAt: "2025-09-04T21:56:56+02:00",
-                    updatedAt: "2025-09-04T21:56:56+02:00",
-                    accessories: [],
-                    articles: ["/api/articles/3"],
-                    boards: [],
-                    fins: [],
-                    leashes: [],
-                    medias: [],
-                    sessions: [],
-                    spots: [],
-                    wetsuits: [],
-                    clubs: [],
-                    events: [],
-                    isJoinable: true,
-                },
-                {
-                    "@id": "/api/groups/2",
-                    "@type": "Group",
-                    id: 2,
-                    name: "Medhya Maroc admins team",
-                    description: "People from the event and locals",
-                    user: {
-                        "@id": "/api/users/2",
-                        "@type": "User",
-                        id: 2,
-                        lastname: "Sparrow",
-                        firstname: "Jack",
-                        photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                        friends: [1, 4],
-                    },
-                    members: [
-                        {
-                            "@id": "/api/users/1",
-                            "@type": "User",
-                            id: 1,
-                            lastname: "ADMIN",
-                            firstname: "admin",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                            friends: [2, 3],
-                        },
-                        {
-                            "@id": "/api/users/2",
-                            "@type": "User",
-                            id: 2,
-                            lastname: "Sparrow",
-                            firstname: "Jack",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                            friends: [1, 4],
-                        },
-                        {
-                            "@id": "/api/users/3",
-                            "@type": "User",
-                            id: 3,
-                            lastname: "TheKid",
-                            firstname: "Billy",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                            friends: [1],
-                        },
-                    ],
-                    createdAt: "2025-09-04T21:56:56+02:00",
-                    updatedAt: "2025-09-04T21:56:56+02:00",
-                    accessories: [],
-                    articles: [],
-                    boards: [],
-                    fins: [],
-                    leashes: [],
-                    medias: [
-                        "/api/media/3",
-                        "/api/media/4",
-                        "/api/media/5",
-                        "/api/media/6",
-                    ],
-                    sessions: ["/api/sessions/1"],
-                    spots: ["/api/spots/2"],
-                    wetsuits: [],
-                    clubs: [],
-                    events: ["/api/events/2"],
-                    isJoinable: false,
-                },
-                {
-                    "@id": "/api/groups/3",
-                    "@type": "Group",
-                    id: 3,
-                    name: "Club lambda",
-                    description: "Group from club members",
-                    user: {
-                        "@id": "/api/users/4",
-                        "@type": "User",
-                        id: 4,
-                        lastname: "Doe",
-                        firstname: "John",
-                        photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                        friends: [2],
-                    },
-                    members: [
-                        {
-                            "@id": "/api/users/2",
-                            "@type": "User",
-                            id: 2,
-                            lastname: "Sparrow",
-                            firstname: "Jack",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                            friends: [1, 4],
-                        },
-                        {
-                            "@id": "/api/users/3",
-                            "@type": "User",
-                            id: 3,
-                            lastname: "TheKid",
-                            firstname: "Billy",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                            friends: [1],
-                        },
-                        {
-                            "@id": "/api/users/4",
-                            "@type": "User",
-                            id: 4,
-                            lastname: "Doe",
-                            firstname: "John",
-                            photo: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-                            friends: [2],
-                        },
-                    ],
-                    createdAt: "2025-09-04T21:56:56+02:00",
-                    updatedAt: "2025-09-04T21:56:56+02:00",
-                    accessories: [],
-                    articles: [],
-                    boards: [],
-                    fins: [],
-                    leashes: [],
-                    medias: ["/api/media/7", "/api/media/8"],
-                    sessions: [],
-                    spots: [],
-                    wetsuits: [],
-                    clubs: [],
-                    events: ["/api/events/5"],
-                    isJoinable: true,
-                },
-            ],
-            search: {
-                "@type": "IriTemplate",
-                template: "/api/groups{?user,user[],user}",
-                variableRepresentation: "BasicRepresentation",
-                mapping: [
-                    {
-                        "@type": "IriTemplateMapping",
-                        variable: "user",
-                        property: "user",
-                        required: false,
-                    },
-                    {
-                        "@type": "IriTemplateMapping",
-                        variable: "user[]",
-                        property: "user",
-                        required: false,
-                    },
-                    {
-                        "@type": "IriTemplateMapping",
-                        variable: "user",
-                        property: "user",
-                    },
-                ],
-            },
-        },
-    ];
-    //console.log("groupsFeedList :", groupList[0].member);
-    const groups = groupsFeedList[0].member;
 
     const [selectedItem, setSelectedItem] = useState(null);
+    const [groupsFeedList, setGroupsFeedList] = useState([]);    
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(groupsEndPoint);
+            const groupsData = response.data.member;
+            setGroupsFeedList(groupsData);            
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    const groupsEndPoint = "/groups?page=1";    
+
+    useEffect(() => {              
+        fetchData(groupsEndPoint);        
+    }, []);
+    
+    //console.log("groupsFeedList :", groupList[0].member);
+    const groups = groupsFeedList;   
 
     const onHandleClick = (group) => {
         setSelectedItem(group);
@@ -223,6 +42,21 @@ const GroupsFeed = () => {
         setSelectedItem(null);
     };
 
+    const skeletons = [1, 2, 3].map((i) => (
+            <div key={i} className="flex w-80 flex-col gap-10">                
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-full"></div>
+                <div className="flex flex-row justify-center gap-4">
+                    <div className="skeleton h-4 w-48"></div>
+                    <div className="skeleton h-4 w-28"></div>
+                </div>
+                <div className="flex flex-row justify-center gap-4">
+                    <div className="skeleton h-4 w-28"></div>
+                    <div className="skeleton h-4 w-28"></div>
+                </div>
+            </div>
+    )); 
+    
     return (
         <>
             <div className="container mx-auto h-full mb-100">
@@ -237,6 +71,32 @@ const GroupsFeed = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <GroupsFeedDetails {...selectedItem} onBack={handleBack} />
                 ) : (

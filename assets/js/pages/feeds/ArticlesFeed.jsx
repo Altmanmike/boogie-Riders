@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import ArticlesFeedDetails from "./ArticlesFeedDetails";
 import ArticlesFeedCardList from "./ArticlesFeedCardList";
 import instance from "../../axiosConfig";
@@ -6,7 +6,6 @@ import instance from "../../axiosConfig";
 const ArticlesFeed = () => {
 
     const [selectedItem, setSelectedItem] = useState(null);
-
     const [articlesFeedList, setArticlesFeedList] = useState([]);    
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -45,11 +44,16 @@ const ArticlesFeed = () => {
     };
 
     const skeletons = [1, 2, 3].map((i) => (
-        <div key={i} className="flex w-80 flex-col gap-10">
-            <div className="skeleton h-32 w-full"></div>
-            <div className="skeleton h-4 w-28"></div>
+        <div key={i} className="flex items-center w-80 flex-col gap-10">
             <div className="skeleton h-4 w-full"></div>
             <div className="skeleton h-4 w-full"></div>
+            <div className="skeleton h-16 w-16"></div>
+            <div className="skeleton h-4 w-full"></div>
+            <div className="skeleton h-4 w-full"></div>
+            <div className="flex flex-row gap-4">
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-28"></div>
+            </div>
         </div>
     ));    
     

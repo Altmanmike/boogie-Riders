@@ -1,67 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FinDetails from "./FinDetails";
 import FinCardList from "./FinCardList";
+import instance from "../axiosConfig";
 
-const Fin = () => {
-    const finList = [
-        {
-            "@context": "/api/contexts/Fin",
-            "@id": "/api/fins",
-            "@type": "Collection",
-            totalItems: 3,
-            member: [
-                {
-                    "@id": "/api/fins/1",
-                    "@type": "Fin",
-                    id: 1,
-                    brand: "GYROLL",
-                    size: "M",
-                    description:
-                        "Maximize your propulsion with Gyroll fins. Made in Malaysia from 100% Malaysian rubber (yes, that's important... no fuss), these fins feature a soft pocket and a stiffer blade for the perfect balance of comfort and power. A true blast from the past!",
-                    colors: ["Yellow", "Blue"],
-                    price: 59,
-                    photo: "https://www.ogm-bodyboard-shop.com/5310-large_default/palmes-gyroll-.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/2",
-                },
-                {
-                    "@id": "/api/fins/2",
-                    "@type": "Fin",
-                    id: 2,
-                    brand: "MS VIPER",
-                    size: "ML",
-                    description:
-                        "This model is more flexible than the MS Viper Classic for optimal comfort. Fins are 100% natural rubber, so they float!\r\n            Shorter and wider for optimal acceleration.\r\n            Drainage holes allow sand and stones to escape.",
-                    colors: ["Red", "Blue"],
-                    price: 75.5,
-                    photo: "https://www.ogm-bodyboard-shop.com/4690-large_default/palmes-ms-viper-blue-red.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/1",
-                },
-                {
-                    "@id": "/api/fins/3",
-                    "@type": "Fin",
-                    id: 3,
-                    brand: "POD 2",
-                    size: "M",
-                    description:
-                        "These fins are comfortable and more powerful than the POD 1 thanks to their more pronounced edges. Sand and stone evacuation is very functional. Short and aggressive, they will delight drop knee riders as well as prone riders!",
-                    colors: ["White", "Black"],
-                    price: 75,
-                    photo: "https://www.ogm-bodyboard-shop.com/4914-large_default/palmes-pod-2.jpg",
-                    createdAt: "2025-08-13T12:03:36+02:00",
-                    updatedAt: "2025-08-13T12:03:36+02:00",
-                    user: "/api/users/3",
-                },
-            ],
-        },
-    ];
-    //console.log("finList :", finList[0].member);
-    const fins = finList[0].member;
-
+const Fin = ({ onlineUser }) => {
     const [selectedItem, setSelectedItem] = useState(null);
+    const [finsUserList, setFinsUserList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(finsUserEndPoint);
+            const finsData = response.data.member;
+            setFinsUserList(finsData);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const userId = parseInt(onlineUser.substring(1, 2));
+
+    const finsUserEndPoint = "/fins?page=1&user=" + userId;
+
+    useEffect(() => {
+        fetchData(finsUserEndPoint);
+    }, []);
+
+    //console.log("finsUserList :", finsUserList);
+
+    const fins = finsUserList;
 
     const onHandleClick = (fin) => {
         setSelectedItem(fin);
@@ -70,6 +43,15 @@ const Fin = () => {
     const handleBack = () => {
         setSelectedItem(null);
     };
+
+    const skeletons = [1, 2, 3].map((i) => (
+        <div key={i} className="flex items-center w-80 flex-col gap-10">
+            <div className="skeleton h-64 w-64"></div>
+            <div className="skeleton h-4 w-28"></div>
+            <div className="skeleton h-4 w-28"></div>
+            <div className="skeleton h-4 w-28"></div>
+        </div>
+    )); 
 
     return (
         <>
@@ -85,6 +67,32 @@ const Fin = () => {
                         Add new
                     </a>
                 </div>
+                {loading && (
+                    <div className="flex justify-center items-center gap-5 mt-10 my-5">
+                        {skeletons}
+                    </div>
+                )}
+                {error && (
+                    <div
+                        role="alert"
+                        className="alert alert-error alert-soft mx-auto w-96 mt-10 my-5"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span>{error}</span>
+                    </div>
+                )}
                 {selectedItem ? (
                     <FinDetails {...selectedItem} onBack={handleBack} />
                 ) : (

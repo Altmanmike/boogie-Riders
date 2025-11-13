@@ -26,6 +26,11 @@ import ClubsFeed from "./pages/feeds/ClubsFeed";
 import GroupsFeed from "./pages/feeds/GroupsFeed";
 import EventsFeed from "./pages/feeds/EventsFeed";
 import SpotsFeed from "./pages/feeds/SpotsFeed";
+import ArticleNew from "./posts/ArticleNew";
+import ClubNew from "./posts/ClubNew";
+import EventNew from "./posts/EventNew";
+import GroupNew from "./posts/GroupNew";
+import MediaNew from "./posts/MediaNew";
 
 const components = {
     Home,
@@ -53,6 +58,11 @@ const components = {
     GroupsFeed,
     EventsFeed,
     SpotsFeed,
+    ArticleNew,
+    ClubNew,
+    EventNew,
+    GroupNew,
+    MediaNew,
 };
 
 const App = () => {

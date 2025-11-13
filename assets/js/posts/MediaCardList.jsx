@@ -9,6 +9,8 @@ const MediaCardList = ({
     article,
     session,
     spot,
+    event,
+    club
 }) => {
     return (
         <>

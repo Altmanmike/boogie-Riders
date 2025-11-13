@@ -9,7 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class ChatCrudController extends AbstractCrudController
@@ -32,9 +32,13 @@ class ChatCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            CollectionField::new('users'),
-            CollectionField::new('messages'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]), 
+            CollectionField::new('users'),                           
+            AssociationField::new('users')
+                ->onlyOnForms()               
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('expanded', true),
+            AssociationField::new('messages'),
             DateField::new('created_at'),
             DateField::new('updated_at'),
         ];

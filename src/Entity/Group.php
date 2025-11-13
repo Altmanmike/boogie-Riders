@@ -26,25 +26,28 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+            securityMessage: 'Requires token authentication and being admin or the person concerned',
+            normalizationContext: ['groups' => ['group:read']]),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin',
+            normalizationContext: ['groups' => ['group:read']],
             parameters: ['user' => new QueryParameter]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
-        new Put(
+            securityMessage: 'Requires token authentication and being admin',
+            denormalizationContext: ['groups' => ['group:write']]),
+        new Put(            
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+            securityMessage: 'Requires token authentication and being admin or the person concerned',
+            denormalizationContext: ['groups' => ['group:write']]),
         new Patch(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin')
-    ],
-    normalizationContext: ['groups' => ['group:read']]
+    ]    
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
@@ -58,19 +61,23 @@ class Group
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['group:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['group:write'])]
     private ?string $description = null;
     
     #[ORM\ManyToOne(inversedBy: 'groupsCreated')]
-    #[ORM\JoinColumn(nullable: false)]    
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['group:write'])]    
     private ?User $user = null;
     
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]    
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]
+    #[Groups(['group:write'])]    
     private Collection $members;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -146,6 +153,7 @@ class Group
     private Collection $events;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['group:write'])]
     private ?bool $isJoinable = null;        
 
     public function __construct()

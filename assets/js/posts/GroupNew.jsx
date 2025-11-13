@@ -1,40 +1,44 @@
 import { useEffect, useState } from "react";
 import instance from "../axiosConfig";
 
-const GroupDetails = (
-    {
-        onlineUser,
-        id,
-        name,
-        description,
-        createdAt,
-        updatedAt,
-        user,
-        members,
-        isJoinable
-    }   
-) => {    
-    const [membersUserList, setMembersUserList] = useState(members);
-    const [selectedMembers, setSelectedMembers] = useState([]);
+const GroupNew = ({ onlineUser }) => {
+
+    const [membersUserList, setMembersUserList] = useState([]);
+    const [selectedMembers, setSelectedMembers] = useState([]);    
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const [nm, setNm] = useState(name);
-    const [desc, setDesc] = useState(description);
-    const [crtdAt, setCrtdAt] = useState(createdAt);
-    const [updtdAt, setUpdtdAt] = useState(updatedAt);
-    const [usr, setUsr] = useState(user);
+    const [nm, setNm] = useState("");
+    const [desc, setDesc] = useState("");
+    const [crtdAt, setCrtdAt] = useState("");
+    const [updtdAt, setUpdtdAt] = useState("");
+    const [usr, setUsr] = useState();
     //const [mmbrs, setMmbrs] = useState(members);
-    const [sJnbl, setSJnbl] = useState(isJoinable);
-    
+    const [sJnbl, setSJnbl] = useState(true);
+
+    const fetchData = async (fct, endPoint) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(endPoint);
+            const data = response.data.member;
+            fct(data);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const userId = parseInt(onlineUser.substring(1, 2));
 
-    const putData = async (endPoint) => {
+    const postData = async (endPoint) => {
         setLoading(true);
         setError(null);
         try {
             await instance
-                .put(endPoint, {
+                .post(endPoint, {
                     name: nm,
                     description: desc,
                     user: `/api/users/${userId}`,
@@ -54,18 +58,15 @@ const GroupDetails = (
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setUpdtdAt(new Date().toISOString());
         const formData = {
-            id,
             nm,
-            desc,
-            updtdAt,
+            desc,            
             usr,
             selectedMembers,
             sJnbl,
         };
-        //console.log("Formulaire group soumis :", formData);
-        putData(groupDetailsEndPoint);
+        console.log("Formulaire group soumis :", formData);
+        postData(groupNewEndPoint);
     };
 
     const handleMultiSelectChangeBis = (e, setterFunction, sourceList = []) => {
@@ -77,8 +78,16 @@ const GroupDetails = (
         );
         setterFunction(selectedObjects);
     };
-    
-    const groupDetailsEndPoint = `/groups/${id}`;    
+   
+    const membersUserEndPoint = "/users?page=1&user=" + userId; // on cherche les friends
+    const groupNewEndPoint = "/groups";
+
+    useEffect(() => {
+        setUsr(`/api/users/${userId}`);
+        fetchData(setMembersUserList, membersUserEndPoint);        
+    }, []);
+
+    const members = membersUserList;
 
     return (
         <>
@@ -100,11 +109,10 @@ const GroupDetails = (
                                         id="nm"
                                         name="nm"
                                         type="text"
-                                        placeholder="Event name"
-                                        value={nm}
+                                        placeholder="Group name"
                                         onChange={(e) => setNm(e.target.value)}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the event name"
+                                        title="Insert the group name"
                                     />
                                 </div>
                             </div>
@@ -121,7 +129,6 @@ const GroupDetails = (
                                         id="desc"
                                         name="desc"
                                         rows={3}
-                                        value={desc}
                                         onChange={(e) =>
                                             setDesc(e.target.value)
                                         }
@@ -144,8 +151,7 @@ const GroupDetails = (
                                 <div className="mt-2">
                                     <input
                                         id="sJnbl"
-                                        name="sJnbl"
-                                        value={sJnbl}
+                                        name="sJnbl"                                        
                                         onChange={() => setSJnbl(!sJnbl)}
                                         defaultChecked={sJnbl ? true : false}
                                         type="checkbox"
@@ -201,10 +207,6 @@ const GroupDetails = (
                                     </div>
                                 )}
                             </div>
-
-                            <div className="col-span-full">
-                                <div id="map" className="mx-auto"></div>
-                            </div>
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">
@@ -227,4 +229,4 @@ const GroupDetails = (
         </>
     );
 };
-export default GroupDetails;
+export default GroupNew;

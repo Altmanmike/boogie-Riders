@@ -40,7 +40,7 @@ class EventCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             TextField::new('name'),           
             TextEditorField::new('description'),
             DateField::new('date_start'),
@@ -49,6 +49,7 @@ class EventCrudController extends AbstractCrudController
             NumberField::new('lon'),
             TextField::new('location'),
             TextField::new('url'),
+            IntegerField::new('rewards'),
             AssociationField::new('user'),
             CollectionField::new('users'),
             CollectionField::new('visibility'),

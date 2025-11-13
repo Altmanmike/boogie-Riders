@@ -40,7 +40,7 @@ class MessageCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             TextEditorField::new('content'),
             BooleanField::new('is_read'),
             AssociationField::new('chat'),

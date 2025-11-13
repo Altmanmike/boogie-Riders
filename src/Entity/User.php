@@ -26,13 +26,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+            securityMessage: 'Requires token authentication and being admin or the person concerned',
+            normalizationContext: ['groups' => ['user:read']]),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN')", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            normalizationContext: ['groups' => ['user:read']]),
         new Post(
             security: "is_granted('ROLE_ADMIN')", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            denormalizationContext: ['groups' => ['user:write']]),
         new Put(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
@@ -53,10 +56,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['friendship:read','article:read','group:read','club:read','event:read','like:read','spot:read'])]   
+    #[Groups(['user:read','friendship:read','article:read','group:read','club:read','event:read','like:read','spot:read','media:read'])]   
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180)]    
     private ?string $email = null;
 
     /**
@@ -168,19 +171,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Spot>
      */
-    #[ORM\ManyToMany(targetEntity: Spot::class, mappedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Spot::class, mappedBy: 'users')]    
     private Collection $spots;
 
     /**
      * @var Collection<int, Session>
      */
-    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'user')]    
     private Collection $sessions;
 
     /**
      * @var Collection<int, Article>
      */
-    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'user')]    
     private Collection $articles;
 
     /**
@@ -216,19 +219,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Message>
      */
-    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'user')]    
     private Collection $eventsCreated;
     
     /**
      * @var Collection<int, Event>
      */
-    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'users')]    
     private Collection $events;
 
-    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]    
     private ?Club $clubCreated = null;
 
-    #[ORM\ManyToOne(inversedBy: 'members')]
+    #[ORM\ManyToOne(inversedBy: 'members')]    
     private ?Club $club = null;
 
     /**
@@ -240,9 +243,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user friends
      */
-    #[ORM\Column]
-    #[Groups(['group:read'])]    
-    private array $friends;
+    #[ORM\Column(nullable: true)]       
+    private ?array $friends = null;
     
     /**
      * @var Collection<int, Group>
@@ -1098,7 +1100,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return array<int, string>
      */
-    public function getFriends(): array
+    public function getFriends(): ?array
     {        
         return $this->friends;
     }
@@ -1195,5 +1197,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
-    }  
+    }
+    
+    public function __toString(): string
+    {
+        if ($this->email) {
+            return (string) $this->getEmail();
+        }
+
+        return '';        
+    }
 }

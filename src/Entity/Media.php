@@ -26,25 +26,28 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+            securityMessage: 'Requires token authentication and being admin or the person concerned',
+            normalizationContext: ['groups' => ['media:read']]),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin',
-            parameters: ['user' => new QueryParameter]),
+            parameters: ['user' => new QueryParameter],
+            normalizationContext: ['groups' => ['media:read']]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            denormalizationContext: ['groups' => ['media:write']]),
         new Put(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+            securityMessage: 'Requires token authentication and being admin or the person concerned',
+            denormalizationContext: ['groups' => ['media:write']]),
         new Patch(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin')
-    ],
-    normalizationContext: ['groups' => ['media:read']]
+    ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`media`')]
@@ -54,20 +57,19 @@ class Media
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['article:read','event:read','spot:read'])]
+    #[ORM\Column]    
     private ?int $id = null;
-
-    #[Groups(['article:read','event:read','spot:read'])]
-    #[ORM\Column(length: 255)]    
-    private ?string $filePath = null;
-
-    #[Groups(['article:read','event:read','spot:read'])]
+    
     #[ORM\Column(length: 255)]
+    #[Groups(['media:write'])]    
+    private ?string $filePath = null;
+    
+    #[ORM\Column(length: 255)]
+    #[Groups(['media:write'])]
     private ?string $type = null;
-
-    #[Groups(['article:read','event:read','spot:read'])]
-    #[ORM\Column(type: Types::TEXT, nullable: true)]    
+    
+    #[ORM\Column(type: Types::TEXT, nullable: true)] 
+    #[Groups(['media:write'])]   
     private ?string $description = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -76,35 +78,38 @@ class Media
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\ManyToOne(inversedBy: 'medias')]    
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['media:write'])] 
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\ManyToOne(inversedBy: 'medias')]    
     private ?Article $article = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\ManyToOne(inversedBy: 'medias')]    
     private ?Session $session = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\ManyToOne(inversedBy: 'medias')]    
     private ?Spot $spot = null;
 
     /**
      * @var list<string> visibility
      */
     #[ORM\Column]
+    #[Groups(['media:write'])]
     private array $visibility = [];
 
     /**
      * @var Collection<int, Group>
      */
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'medias')]
+    #[Groups(['media:write'])]
     private Collection $visibleToGroups;
 
-    #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\ManyToOne(inversedBy: 'medias')]    
     private ?Event $event = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\ManyToOne(inversedBy: 'medias')]    
     private ?Club $club = null;
 
     public function __construct()
@@ -292,5 +297,14 @@ class Media
         $this->club = $club;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        if ($this->filePath) {
+            return (string) $this->getFilePath();
+        }
+
+        return '';        
     }
 }

@@ -26,14 +26,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+            securityMessage: 'Requires token authentication and being admin or the person concerned',
+            normalizationContext: ['groups' => ['article:read']]),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin',
+            normalizationContext: ['groups' => ['article:read']],
             parameters: ['user' => new QueryParameter]),
         new Post(
-            security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')", 
+            securityMessage: 'Requires token authentication',
+            denormalizationContext: ['groups' => ['article:write']]),
         new Put(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
@@ -43,8 +46,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin')
-        ],
-        normalizationContext: ['groups' => ['article:read']]
+        ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`article`')]
@@ -54,59 +56,67 @@ class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column]    
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['article:write'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['article:write'])]
     private ?string $cover = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['article:write'])]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['article:write'])]
     private ?string $description = null;
 
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]    
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]    
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['article:write'])]      
     private ?User $user = null;
 
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'article')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'article')]         
     private Collection $comments;
 
     /**
      * @var Collection<int, Like>
      */
-    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'article')]
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'article')]        
     private Collection $likes;
 
     /**
      * @var Collection<int, Media>
      */
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'article')]
+    #[Groups(['article:write'])]     
     private Collection $medias;
 
     /**
      * @var list<string> visibility
      */
     #[ORM\Column]
+    #[Groups(['article:write'])]  
     private array $visibility = [];
 
     /**
      * @var Collection<int, Group>
      */
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'articles')]
+    #[Groups(['article:write'])]     
     private Collection $visibleToGroups;
 
     public function __construct()
@@ -339,5 +349,14 @@ class Article
         $this->visibleToGroups->removeElement($visibleToGroup);
 
         return $this;
+    }
+    
+    public function __toString(): string
+    {
+        if ($this->title) {
+            return (string) $this->getTitle();
+        }
+        
+        return '';        
     }
 }

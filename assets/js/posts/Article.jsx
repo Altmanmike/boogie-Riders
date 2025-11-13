@@ -108,7 +108,10 @@ const Article = ({ onlineUser }) => {
                     </div>
                 )}
                 {selectedItem ? (
-                    <ArticleDetails {...selectedItem} onBack={handleBack} />
+                    <ArticleDetails                        
+                        {...selectedItem}
+                        onBack={handleBack}
+                    />
                 ) : (
                     <div className="flex flex-wrap justify-center items-center gap-5 my-5">
                         {articles.map((article) => (

@@ -78,7 +78,7 @@ class Spot
     #[ORM\Column(length: 255)]
     private ?string $waveType = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bestConditions = null;
 
     #[ORM\Column]
@@ -241,7 +241,7 @@ class Spot
         return $this->bestConditions;
     }
 
-    public function setBestConditions(string $bestConditions): static
+    public function setBestConditions(?string $bestConditions): static
     {
         $this->bestConditions = $bestConditions;
 
@@ -481,5 +481,14 @@ class Spot
         $this->user = $user;
 
         return $this;
-    }    
+    }
+    
+    public function __toString(): string
+    {
+        if ($this->name) {
+            return (string) $this->getName();
+        }
+
+        return '';        
+    }
 }

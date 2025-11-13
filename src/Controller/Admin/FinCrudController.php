@@ -39,7 +39,7 @@ class FinCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             TextField::new('brand'),
             TextField::new('size'),
             TextEditorField::new('description'),

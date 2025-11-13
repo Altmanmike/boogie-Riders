@@ -203,4 +203,13 @@ class Like
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        if ($this->id) {
+            return (string) $this->getId();
+        }
+
+        return '';        
+    }
 }

@@ -46,7 +46,7 @@ const Profile = () => {
             instagram,
             youtube,
         };
-        //console.log("Formulaire soumis :", formData);
+        console.log("Formulaire soumis :", formData);
     };
 
     // Fonction générique pour gérer les changements des selects multiples

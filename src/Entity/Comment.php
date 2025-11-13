@@ -206,4 +206,13 @@ class Comment
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        if ($this->content) {
+            return (string) $this->getContent();
+        }
+
+        return '';        
+    }
 }

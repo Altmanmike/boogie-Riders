@@ -1,58 +1,90 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
+import instance from "../axiosConfig";
 
-const ArticleDetails = ({
-    id,
-    title,
-    cover,
-    content,
-    description,
-    createdAt,
-    updatedAt,
-    user,
-    comments,
-    likes,
-    medias,
-    visibility,
-    visibleToGroups,
-}) => {
-    const [ttl, setTtl] = useState(title);
-    const [cvr, setCvr] = useState(cover);
-    const [cntent, setCntent] = useState(content);
-    const [desc, setDesc] = useState(description);
-    const [crtdAt, setCrtdAt] = useState(createdAt);
-    const [updtdAt, setUpdtdAt] = useState(updatedAt);
-    const [usr, setUsr] = useState(user);
-    const [cmmnts, setCmmnts] = useState(comments);
-    const [lks, setLks] = useState(likes);
-    const [mds, setMds] = useState(medias);
-    const [vsblt, setVsblt] = useState(visibility);
-    const [vsbltTGrps, setVsblTGrps] = useState(visibleToGroups);
+const ArticleNew = ({ onlineUser }) => {
+
+    const [mediasUserList, setMediasUserList] = useState([]);
+    const [selectedMedias, setSelectedMedias] = useState([]);
+    const [groupsUserList, setGroupsUserList] = useState([]);
+    const [selectedGroups, setSelectedGroups] = useState([]); 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const [ttl, setTtl] = useState("");
+    const [cvr, setCvr] = useState("");
+    const [cntent, setCntent] = useState("");
+    const [desc, setDesc] = useState("");
+    const [crtdAt, setCrtdAt] = useState("");
+    const [updtdAt, setUpdtdAt] = useState("");
+    const [usr, setUsr] = useState(null);
+    const [cmmnts, setCmmnts] = useState([]);
+    const [lks, setLks] = useState([]);
+    //const [mds, setMds] = useState([]);
+    const [vsblt, setVsblt] = useState([]);
+    //const [vsbltTGrps, setVsblTGrps] = useState([]);
+
+    const fetchData = async (fct, endPoint) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance.get(endPoint);
+            const data = response.data.member;            
+            fct(data);
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const userId = parseInt(onlineUser.substring(1, 2));
+
+    const postData = async (endPoint) => {
+        setLoading(true);
+        setError(null);
+        try {
+            await instance
+                .post(endPoint, {
+                    title: ttl,
+                    cover: cvr,
+                    content: cntent,
+                    description: desc,
+                    user: `/api/users/${userId}`,
+                    comments: cmmnts,
+                    likes: lks,
+                    medias: selectedMedias.map((m) => `/api/media/${m.id}`),
+                    visibility: vsblt,
+                    visibleToGroups: selectedGroups,
+                })
+                .then(function (response) {
+                    console.log(response);
+                });
+        } catch (error) {
+            console.error(error);
+            setError(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    }; 
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        setUpdatedAt(
-            new Date().toLocaleDateString("en-EN", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            })
-        );
         const formData = {
-            title,
-            cover,
-            content,
-            description,
-            createdAt,
-            updatedAt,
-            user,
-            comments,
-            likes,
-            medias,
-            visibility,
-            visibleToGroups,
+            ttl,
+            cvr,
+            cntent,
+            desc,
+            usr,
+            cmmnts,
+            lks,
+            selectedMedias,
+            vsblt,
+            selectedGroups,
         };
-        console.log("Formulaire article soumis :", formData);
+        //console.log("Formulaire article soumis :", formData);
+        postData(articleNewEndPoint);
     };
 
     const handleMultiSelectChange = (e, setterFunction) => {
@@ -60,8 +92,31 @@ const ArticleDetails = ({
             .filter((option) => option.selected)
             .map((option) => option.value);
         setterFunction(selectedOptions);
+    };  
+    
+    const handleMultiSelectChangeBis = (e, setterFunction, sourceList = []) => {
+        const selectedValues = Array.from(e.target.selectedOptions).map((option) =>
+            parseInt(option.value)
+        );
+        const selectedObjects = sourceList.filter((item) =>
+            selectedValues.includes(item.id)
+        );
+        setterFunction(selectedObjects);
     };
 
+    const groupsUserEndPoint = "/groups?page=1&user="+userId;
+    const mediasUserEndPoint = "/media?page=1&user="+userId;
+    const articleNewEndPoint = "/articles";
+
+    useEffect(() => { 
+        setUsr(`/api/users/${userId}`);
+        fetchData(setGroupsUserList, groupsUserEndPoint);
+        fetchData(setMediasUserList, mediasUserEndPoint);        
+    }, []);    
+
+    const groups = groupsUserList; 
+    const medias = mediasUserList;     
+    //console.log("groups :", groups);
     return (
         <>
             <div className="container mx-auto m-10 w-2xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl h-full mb-100">
@@ -78,7 +133,7 @@ const ArticleDetails = ({
                                     Cover
                                 </label>
                                 <img
-                                    src={cvr}
+                                    src=""
                                     alt="cover"
                                     className="photo-gear"
                                 />
@@ -126,8 +181,7 @@ const ArticleDetails = ({
                                         id="ttl"
                                         name="ttl"
                                         type="text"
-                                        placeholder="Model name"
-                                        value={ttl}
+                                        placeholder="Title of your article."
                                         onChange={(e) => setTtl(e.target.value)}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                         title="Insert the title name"
@@ -146,7 +200,7 @@ const ArticleDetails = ({
                                         id="cntent"
                                         name="cntent"
                                         rows={3}
-                                        value={cntent}
+                                        placeholder="Content of your article."
                                         onChange={(e) =>
                                             setCntent(e.target.value)
                                         }
@@ -170,7 +224,7 @@ const ArticleDetails = ({
                                         id="desc"
                                         name="desc"
                                         rows={3}
-                                        value={desc}
+                                        placeholder="Description of your article."
                                         onChange={(e) =>
                                             setDesc(e.target.value)
                                         }
@@ -194,7 +248,6 @@ const ArticleDetails = ({
                                     <select
                                         id="vsblt"
                                         name="vsblt"
-                                        value={vsblt}
                                         onChange={(e) =>
                                             handleMultiSelectChange(e, setVsblt)
                                         }
@@ -213,33 +266,34 @@ const ArticleDetails = ({
                             {vsblt.includes("Group") && (
                                 <div className="sm:col-span-3">
                                     <label
-                                        htmlFor="vsbltTGrps"
+                                        htmlFor="groupsUserList"
                                         className="label block text-sm/6 font-medium"
                                     >
                                         Group(s) visibility
                                     </label>
                                     <div className="mt-2 grid grid-cols-1">
                                         <select
-                                            id="vsbltTGrps"
-                                            name="vsbltTGrps"
-                                            value={vsbltTGrps}
+                                            id="groupsUserList"
+                                            name="groupsUserList"
+                                            value={selectedGroups.map(
+                                                (m) => m.id
+                                            )}
                                             onChange={(e) =>
-                                                handleMultiSelectChange(
+                                                handleMultiSelectChangeBis(
                                                     e,
-                                                    setVsbltTGrps
+                                                    setSelectedGroups,
+                                                    groups
                                                 )
                                             }
                                             multiple
                                             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             title="Select the article group(s) visiblity"
                                         >
-                                            {                                                
-                                                visibleToGroups.map((v) => (
-                                                    <option value={v.name}>
-                                                        {v.name}
-                                                    </option>
-                                                ))
-                                            }
+                                            {groups.map((g, key) => (
+                                                <option key={key} value={g.id}>
+                                                    {g.id}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                 </div>
@@ -248,26 +302,30 @@ const ArticleDetails = ({
                             {medias.length >= 1 && (
                                 <div className="sm:col-span-3">
                                     <label
-                                        htmlFor="medias"
+                                        htmlFor="mediasUserList"
                                         className="label block text-sm/6 font-medium"
                                     >
                                         Medias
                                     </label>
                                     <div className="mt-2 grid grid-cols-1">
                                         <select
-                                            id="medias"
-                                            name="medias"                                            
+                                            id="mediasUserList"
+                                            name="mediasUserList"
+                                            value={selectedMedias.map(
+                                                (m) => m.id
+                                            )}
                                             onChange={(e) =>
-                                                handleMultiSelectChange(
+                                                handleMultiSelectChangeBis(
                                                     e,
-                                                    setMds
+                                                    setSelectedMedias,
+                                                    medias
                                                 )
                                             }
                                             multiple
                                             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             title="Select the medias for the article"
                                         >
-                                            {mds.map((md, key) => (
+                                            {medias.map((md, key) => (
                                                 <option key={key} value={md.id}>
                                                     {md.id}
                                                 </option>
@@ -276,7 +334,6 @@ const ArticleDetails = ({
                                     </div>
                                 </div>
                             )}
-                            
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">
@@ -299,4 +356,4 @@ const ArticleDetails = ({
         </>
     );
 };
-export default ArticleDetails;
+export default ArticleNew;

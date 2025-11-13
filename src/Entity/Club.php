@@ -26,14 +26,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+            securityMessage: 'Requires token authentication and being admin or the person concerned',
+            normalizationContext: ['groups' => ['club:read']]),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin',
-            parameters: ['user' => new QueryParameter]),
+            parameters: ['user' => new QueryParameter],
+            normalizationContext: ['groups' => ['club:read']]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            denormalizationContext: ['groups' => ['club:write']]),
         new Put(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
@@ -43,8 +46,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin')
-    ],
-    normalizationContext: ['groups' => ['club:read']]
+    ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`club`')]
@@ -58,30 +60,39 @@ class Club
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['club:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['club:write'])]
     private ?string $cover = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['club:write'])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['club:write'])]
     private ?float $lat = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['club:write'])]
     private ?float $lon = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['club:write'])]
     private ?string $location = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['club:write'])]
     private ?string $url = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['club:write'])]
     private ?string $mail = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['club:write'])]
     private ?string $phone = null;
     
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -91,24 +102,27 @@ class Club
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(mappedBy: 'clubCreated', cascade: ['persist', 'remove'])]
+    #[Groups(['club:write'])]
     private ?User $user = null;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'club')]
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'club')]    
     private Collection $members;
 
     /**
      * @var list<string> visibility
      */
     #[ORM\Column]
+    #[Groups(['club:write'])]
     private array $visibility = [];
 
     /**
      * @var Collection<int, Group>
      */
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'clubs')]
+    #[Groups(['club:write'])]
     private Collection $visibleToGroups;
 
     /**
@@ -127,6 +141,7 @@ class Club
      * @var Collection<int, Media>
      */
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'club')]
+    #[Groups(['club:write'])]
     private Collection $medias;    
 
     public function __construct()
@@ -459,5 +474,14 @@ class Club
         }
 
         return $this;
-    }     
+    }
+    
+    public function __toString(): string
+    {
+        if ($this->name) {
+            return (string) $this->getName();
+        }
+        return '';
+        
+    }
 }

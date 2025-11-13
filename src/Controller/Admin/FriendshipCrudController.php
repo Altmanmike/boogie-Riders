@@ -39,7 +39,7 @@ class FriendshipCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             AssociationField::new('user'),
             AssociationField::new('friend'),
             TextField::new('status'),

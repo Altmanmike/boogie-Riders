@@ -430,5 +430,14 @@ class Session
         $this->visibleToGroups->removeElement($visibleToGroup);
 
         return $this;
-    }          
+    }
+    
+    public function __toString(): string
+    {
+        if ($this->id) {
+            return (string) $this->getId();
+        }
+
+        return '';        
+    }
 }

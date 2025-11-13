@@ -39,7 +39,7 @@ class BoardCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             TextField::new('brand'),
             TextField::new('model'),
             TextField::new('size'),
@@ -51,6 +51,8 @@ class BoardCrudController extends AbstractCrudController
             TextField::new('mesh'),
             TextField::new('slick'),
             IntegerField::new('price'), 
+            TextField::new('photo_front'),
+            TextField::new('photo_back'),
             AssociationField::new('user'),
             CollectionField::new('visibility'),
             CollectionField::new('visible_to_groups'),

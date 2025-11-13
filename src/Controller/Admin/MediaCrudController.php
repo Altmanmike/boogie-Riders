@@ -39,7 +39,7 @@ class MediaCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             TextField::new('file_path'),            
             TextField::new('type'),
             TextEditorField::new('description'),

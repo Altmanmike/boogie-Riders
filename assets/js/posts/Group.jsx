@@ -101,7 +101,7 @@ const Group = ({ onlineUser }) => {
                     </div>
                 )}
                 {selectedItem ? (
-                    <GroupDetails {...selectedItem} onBack={handleBack} />
+                    <GroupDetails onlineUser={onlineUser} {...selectedItem} onBack={handleBack} />
                 ) : (
                     <div className="flex flex-wrap justify-center items-center gap-5 my-5">
                         {groups.map((group) => (

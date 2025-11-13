@@ -26,14 +26,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin or the person concerned'),
+            securityMessage: 'Requires token authentication and being admin or the person concerned',
+            normalizationContext: ['groups' => ['event:read']]),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin',
+            normalizationContext: ['groups' => ['event:read']],
             parameters: ['user' => new QueryParameter]),
         new Post(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
-            securityMessage: 'Requires token authentication and being admin'),
+            securityMessage: 'Requires token authentication and being admin',
+            denormalizationContext: ['groups' => ['event:write']]),
         new Put(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin or the person concerned'),
@@ -43,8 +46,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.user == user", 
             securityMessage: 'Requires token authentication and being admin')
-    ],
-    normalizationContext: ['groups' => ['event:read']]
+    ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: '`event`')]
@@ -58,33 +60,43 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['event:write'])]
     private ?string $name = null;
     
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['event:write'])]
     private ?string $cover = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['event:write'])]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['event:write'])]
     private ?\DateTimeImmutable $dateStart = null;
 
     #[ORM\Column]
+    #[Groups(['event:write'])]
     private ?\DateTimeImmutable $dateEnd = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['event:write'])]
     private ?float $lat = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['event:write'])]
     private ?float $lon = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['event:write'])]
     private ?string $location = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['event:write'])]
     private ?string $url = null;
     
     #[ORM\Column]
+    #[Groups(['event:write'])]
     private ?int $rewards = null;
     
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -95,6 +107,7 @@ class Event
 
     #[ORM\ManyToOne(inversedBy: 'eventsCreated')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['event:write'])]
     private ?User $user = null;
 
     /**
@@ -107,12 +120,14 @@ class Event
      * @var list<string> visibility
      */
     #[ORM\Column]
+    #[Groups(['event:write'])]
     private array $visibility = [];
 
     /**
      * @var Collection<int, Group>
      */
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'events')]
+    #[Groups(['event:write'])]
     private Collection $visibleToGroups;
 
     /**
@@ -131,6 +146,7 @@ class Event
      * @var Collection<int, Media>
      */
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'event')]
+    #[Groups(['event:write'])]
     private Collection $medias;    
     
     public function __construct()
@@ -460,5 +476,14 @@ class Event
         }
 
         return $this;
-    }    
+    }
+    
+    public function __toString(): string
+    {
+        if ($this->name) {
+            return (string) $this->getName();
+        }
+
+        return '';        
+    }
 }

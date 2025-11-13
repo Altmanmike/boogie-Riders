@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -39,11 +40,14 @@ class SessionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             DateField::new('date'),
             IntegerField::new('duration'),          
             TextEditorField::new('conditions'),
             IntegerField::new('personal_rating'),
+            NumberField::new('lat'),
+            NumberField::new('lon'),
+            TextField::new('location'),
             AssociationField::new('user'),
             AssociationField::new('spot'),
             CollectionField::new('visibility'),

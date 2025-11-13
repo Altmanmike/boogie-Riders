@@ -39,25 +39,29 @@ class GroupCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             TextField::new('name'),
             TextEditorField::new('description'),
-            AssociationField::new('user'),
-            CollectionField::new('members'),
+            AssociationField::new('user'),            
+            CollectionField::new('members'),                           
+            AssociationField::new('members')
+                ->onlyOnForms()               
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('expanded', true),
             BooleanField::new('is_joinable'),
             DateField::new('created_at'),
             DateField::new('updated_at'),
-            CollectionField::new('accessories'),
-            CollectionField::new('articles'),
-            CollectionField::new('boards'),
-            CollectionField::new('fins'),
-            CollectionField::new('leashes'),
-            CollectionField::new('medias'),
-            CollectionField::new('sessions'),
-            CollectionField::new('spots'),
-            CollectionField::new('wetsuits'),
-            CollectionField::new('clubs'),
-            CollectionField::new('events'),
+            AssociationField::new('accessories')->onlyOnIndex()->setFormTypeOption('disabled', true),           
+            AssociationField::new('articles')->onlyOnIndex()->setFormTypeOption('disabled', true),
+            AssociationField::new('boards')->onlyOnIndex()->setFormTypeOption('disabled', true),
+            AssociationField::new('fins')->onlyOnIndex()->setFormTypeOption('disabled', true),
+            AssociationField::new('leashes')->onlyOnIndex()->setFormTypeOption('disabled', true),
+            AssociationField::new('medias')->onlyOnIndex()->setFormTypeOption('disabled', true),
+            AssociationField::new('sessions')->onlyOnIndex()->setFormTypeOption('disabled', true),
+            AssociationField::new('spots')->onlyOnIndex()->setFormTypeOption('disabled', true),
+            AssociationField::new('wetsuits')->onlyOnIndex()->setFormTypeOption('disabled', true),
+            AssociationField::new('clubs')->onlyOnIndex()->setFormTypeOption('disabled', true),            
+            AssociationField::new('events')->onlyOnIndex()->setFormTypeOption('disabled', true),
         ];
     }    
 }

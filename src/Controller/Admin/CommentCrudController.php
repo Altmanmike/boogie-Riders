@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Comment;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -21,6 +22,41 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class CommentCrudController extends AbstractCrudController
 {
+    private function validateSingleAssociation(Comment $comment): void
+    {
+        $associations = [
+            $comment->getArticle(),
+            $comment->getSession(),
+            $comment->getSpot(),
+            $comment->getEvent(),
+            $comment->getClub(),
+        ];        
+        
+        $count = array_filter($associations, fn($assoc) => $assoc !== null);
+
+        if (count($count) > 1) {            
+            throw new \Exception('Un commentaire ne peut être lié qu\'à un seul Article, Session, Spot, Event ou Club.');
+        }
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof Comment) {
+            $this->validateSingleAssociation($entityInstance);
+        }
+
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof Comment) {
+            $this->validateSingleAssociation($entityInstance);
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+    
     public static function getEntityFqcn(): string
     {
         return Comment::class;
@@ -39,11 +75,14 @@ class CommentCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyOnIndex()->setFormTypeOption('attr', ['readonly' => true]),
             TextEditorField::new('content'),
             AssociationField::new('user'),
             AssociationField::new('article'),
             AssociationField::new('session'),
+            AssociationField::new('spot'),
+            AssociationField::new('event'),
+            AssociationField::new('club'),
             DateField::new('created_at'),
             DateField::new('updated_at'),
         ];

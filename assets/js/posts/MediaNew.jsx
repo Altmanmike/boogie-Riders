@@ -57,7 +57,9 @@ const MediaNew = ({ onlineUser }) => {
                     event: vnt,
                     club: clb,
                     visibility: vsblt,
-                    visibleToGroups: selectedGroups,
+                    visibleToGroups: selectedGroups.map(
+                        (g) => `/api/groups/${g.id}`
+                    ),
                 })
                 .then(function (response) {
                     console.log(response);

@@ -6,7 +6,6 @@ const LeashDetails = ({
     id,
     brand,
     type,
-    size,
     description,
     colors,
     price,
@@ -17,7 +16,6 @@ const LeashDetails = ({
 }) => {
     const [brnd, setBrnd] = useState(brand);
     const [tp, setTp] = useState(type);
-    const [sz, setSz] = useState(size);
     const [desc, setDesc] = useState(description);
     const [clrs, setClrs] = useState(colors);
     const [prc, setPrc] = useState(price);
@@ -38,7 +36,6 @@ const LeashDetails = ({
         const formData = {
             brand,
             type,
-            size,
             description,
             colors,
             price,
@@ -130,51 +127,20 @@ const LeashDetails = ({
                                     Type
                                 </label>
                                 <div className="mt-2">
-                                    <input
+                                    <select
                                         id="tp"
                                         name="tp"
                                         type="text"
-                                        placeholder="Model name"
+                                        placeholder="Type leash"
                                         value={tp}
                                         onChange={(e) => setTp(e.target.value)}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                         title="Insert the type name"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="sz"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Size
-                                </label>
-                                <div className="mt-2 grid grid-cols-1">
-                                    <select
-                                        id="sz"
-                                        name="sz"
-                                        value={sz}
-                                        type="text"
-                                        placeholder="Select your size"
-                                        onChange={(e) => setSz(e.target.value)}
-                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Select your size"
                                     >
-                                        <option value="38">38</option>
-                                        <option value="39">39</option>
-                                        <option value="40">40</option>
-                                        <option value="40.5">40.5</option>
-                                        <option value="41">41</option>
-                                        <option value="41.5">41.5</option>
-                                        <option value="42">42</option>
-                                        <option value="42.5">42.5</option>
-                                        <option value="43">43</option>
+                                        <option value="Hand">Hand</option>
+                                        <option value="Biceps">Biceps</option>
+                                        <option value="Fin">Fin</option>
                                     </select>
-                                    <ChevronDownIcon
-                                        aria-hidden="true"
-                                        className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                                    />
                                 </div>
                             </div>
 

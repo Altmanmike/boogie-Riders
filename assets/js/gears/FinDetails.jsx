@@ -138,15 +138,15 @@ const FinDetails = ({
                                         className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                         title="Select your size"
                                     >
-                                        <option value="38">38</option>
-                                        <option value="39">39</option>
-                                        <option value="40">40</option>
-                                        <option value="40.5">40.5</option>
-                                        <option value="41">41</option>
-                                        <option value="41.5">41.5</option>
-                                        <option value="42">42</option>
-                                        <option value="42.5">42.5</option>
-                                        <option value="43">43</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="SM">SM</option>
+                                        <option value="MS">MS</option>
+                                        <option value="M">M</option>
+                                        <option value="ML">ML</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
                                     </select>
                                     <ChevronDownIcon
                                         aria-hidden="true"

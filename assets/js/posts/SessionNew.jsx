@@ -2,22 +2,31 @@ import { useState, useEffect } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import instance from "../axiosConfig";
 
-const ArticleNew = ({ onlineUser }) => {
+const SessionNew = ({ onlineUser }) => {
 
+    const [spotsUserList, setSpotsUserList] = useState([]);
+    const [selectedSpot, setSelectedSpot] = useState("");
     const [mediasUserList, setMediasUserList] = useState([]);
     const [selectedMedias, setSelectedMedias] = useState([]);
     const [groupsUserList, setGroupsUserList] = useState([]);
-    const [selectedGroups, setSelectedGroups] = useState([]); 
+    const [selectedGroups, setSelectedGroups] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const [ttl, setTtl] = useState("");
     const [cvr, setCvr] = useState("");
-    const [cntent, setCntent] = useState("");
+    const [dt, setDt] = useState("");
     const [desc, setDesc] = useState("");
+    const [drtn, setDrtn] = useState(0.0);
+    const [cndtns, setCndtns] = useState("");
+    const [prsnlrtng, setPrsnlrtng] = useState(0);
+    const [lt, setLt] = useState(0.0);
+    const [ln, setLn] = useState(0.0);
+    const [lctn, setLctn] = useState("");
     const [crtdAt, setCrtdAt] = useState("");
     const [updtdAt, setUpdtdAt] = useState("");
+    //const [spt, setSpt] = useState(null);
     const [usr, setUsr] = useState(null);
+    const [mmbrs, setMmbrs] = useState([]);
     const [cmmnts, setCmmnts] = useState([]);
     const [lks, setLks] = useState([]);
     //const [mds, setMds] = useState([]);
@@ -29,7 +38,7 @@ const ArticleNew = ({ onlineUser }) => {
         setError(null);
         try {
             const response = await instance.get(endPoint);
-            const data = response.data.member;            
+            const data = response.data.member;
             fct(data);
         } catch (error) {
             console.error(error);
@@ -39,7 +48,7 @@ const ArticleNew = ({ onlineUser }) => {
         }
     };
 
-    const userId = parseInt(onlineUser.substring(1, 2));
+    const userId = parseInt(onlineUser.substring(1, 2));    
 
     const postData = async (endPoint) => {
         setLoading(true);
@@ -47,11 +56,18 @@ const ArticleNew = ({ onlineUser }) => {
         try {
             await instance
                 .post(endPoint, {
-                    title: ttl,
                     cover: cvr,
-                    content: cntent,
+                    date: dt,
                     description: desc,
+                    duration: parseFloat(drtn),
+                    conditions: cndtns,
+                    personalRating: parseInt(prsnlrtng),
+                    lat: parseFloat(lt),
+                    lon: parseFloat(ln),
+                    location: lctn,
+                    spot: `/api/spots/${selectedSpot}`,
                     user: `/api/users/${userId}`,
+                    members: mmbrs,
                     comments: cmmnts,
                     likes: lks,
                     medias: selectedMedias.map((m) => `/api/media/${m.id}`),
@@ -69,24 +85,33 @@ const ArticleNew = ({ onlineUser }) => {
         } finally {
             setLoading(false);
         }
-    }; 
+    };
+
+    const spt = `/api/spots/${selectedSpot}`;
     
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = {
-            ttl,
             cvr,
-            cntent,
+            dt,
             desc,
+            drtn,
+            cndtns,
+            prsnlrtng,
+            lt,
+            ln,
+            lctn,
+            spt,
             usr,
+            mmbrs,
             cmmnts,
             lks,
             selectedMedias,
             vsblt,
             selectedGroups,
         };
-        //console.log("Formulaire article soumis :", formData);
-        postData(articleNewEndPoint);
+        //console.log("Formulaire session soumis :", formData);
+        postData(sessionNewEndPoint);
     };
 
     const handleMultiSelectChange = (e, setterFunction) => {
@@ -94,11 +119,11 @@ const ArticleNew = ({ onlineUser }) => {
             .filter((option) => option.selected)
             .map((option) => option.value);
         setterFunction(selectedOptions);
-    };  
-    
+    };
+
     const handleMultiSelectChangeBis = (e, setterFunction, sourceList = []) => {
-        const selectedValues = Array.from(e.target.selectedOptions).map((option) =>
-            parseInt(option.value)
+        const selectedValues = Array.from(e.target.selectedOptions).map(
+            (option) => parseInt(option.value)
         );
         const selectedObjects = sourceList.filter((item) =>
             selectedValues.includes(item.id)
@@ -106,25 +131,52 @@ const ArticleNew = ({ onlineUser }) => {
         setterFunction(selectedObjects);
     };
 
-    const groupsUserEndPoint = "/groups?page=1&user="+userId;
-    const mediasUserEndPoint = "/media?page=1&user="+userId;
-    const articleNewEndPoint = "/articles";
+    const groupsUserEndPoint = "/groups?page=1&user=" + userId;
+    const spotsUserEndPoint = "/spots?page=1&user=" + userId;
+    const mediasUserEndPoint = "/media?page=1&user=" + userId;    
+    const sessionNewEndPoint = "/sessions";
 
-    useEffect(() => { 
-        setUsr(`/api/users/${userId}`);
+    useEffect(() => {
+        setUsr(`/api/users/${userId}`);        
         fetchData(setGroupsUserList, groupsUserEndPoint);
+        fetchData(setSpotsUserList, spotsUserEndPoint);
         fetchData(setMediasUserList, mediasUserEndPoint);        
-    }, []);    
 
-    const groups = groupsUserList; 
-    const medias = mediasUserList;     
-    //console.log("groups :", groups);
+        let map = null;
+        const mapElement = document.getElementById("map");
+
+        if (mapElement) {
+            map = L.map("map").setView([lt, ln], 17);
+
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution:
+                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
+
+            L.marker([lt, ln])
+                .addTo(map)
+                .bindPopup(`${lctn}`)
+                .openPopup();
+        }
+
+        return () => {
+            if (map) {
+                map.remove();
+            }
+        };
+    }, [lt, ln, lctn]);
+
+    const groups = groupsUserList;
+    const spots = spotsUserList;
+    const medias = mediasUserList;
+
     return (
         <>
             <div className="container mx-auto m-10 w-2xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl h-full mb-100">
                 <form className="mt-20 mx-10" onSubmit={handleSubmit}>
                     <div className="border-b border-gray-900/10 pt-1 pb-12">
-                        <h2 className="card-title mt-10">Article profile</h2>
+                        <h2 className="card-title mt-10">Session profile</h2>
 
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="col-span-full">
@@ -135,9 +187,9 @@ const ArticleNew = ({ onlineUser }) => {
                                     Cover
                                 </label>
                                 <img
-                                    src=""
+                                    src={cvr}
                                     alt="cover"
-                                    className="photo-gear"
+                                    className="photo-post"
                                 />
                                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                                     <div className="text-center">
@@ -173,46 +225,22 @@ const ArticleNew = ({ onlineUser }) => {
                             </div>
                             <div className="col-span-full">
                                 <label
-                                    htmlFor="ttl"
+                                    htmlFor="dt"
                                     className="label block text-sm/6 font-medium"
                                 >
-                                    Title
+                                    Date
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                        id="ttl"
-                                        name="ttl"
-                                        type="text"
-                                        placeholder="Title of your article."
-                                        onChange={(e) => setTtl(e.target.value)}
+                                        id="dt"
+                                        name="dt"
+                                        type="datetime-local"
+                                        placeholder="Event date start"
+                                        onChange={(e) => setDt(e.target.value)}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the title name"
+                                        title="Insert the event date start"
                                     />
                                 </div>
-                            </div>
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="cntent"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Content
-                                </label>
-                                <div className="mt-2">
-                                    <textarea
-                                        id="cntent"
-                                        name="cntent"
-                                        rows={3}
-                                        placeholder="Content of your article."
-                                        onChange={(e) =>
-                                            setCntent(e.target.value)
-                                        }
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Write the main content of the article."
-                                    />
-                                </div>
-                                <p className="mt-3 text-sm/6">
-                                    Write the main content of the article.
-                                </p>
                             </div>
                             <div className="col-span-full">
                                 <label
@@ -226,18 +254,204 @@ const ArticleNew = ({ onlineUser }) => {
                                         id="desc"
                                         name="desc"
                                         rows={3}
-                                        placeholder="Description of your article."
                                         onChange={(e) =>
                                             setDesc(e.target.value)
                                         }
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Write a few sentences about this Fin."
+                                        title="Write the main content of the article."
                                     />
                                 </div>
                                 <p className="mt-3 text-sm/6">
-                                    Write a few sentences about this Fin.
+                                    Write the main content of the session.
                                 </p>
                             </div>
+
+                            <div className="col-span-full">
+                                <label
+                                    htmlFor="cndtns"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Conditions
+                                </label>
+                                <div className="mt-2">
+                                    <textarea
+                                        id="cndtns"
+                                        name="cndtns"
+                                        rows={3}
+                                        placeholder="Conditions of the session."
+                                        onChange={(e) =>
+                                            setCndtns(e.target.value)
+                                        }
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Write the conditions of the session."
+                                    />
+                                </div>
+                                <p className="mt-3 text-sm/6">
+                                    Write the conditions of the session.
+                                </p>
+                            </div>
+
+                            <div className="sm:col-span-3">
+                                <label
+                                    htmlFor="drtn"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Duration
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="drtn"
+                                        name="drtn"
+                                        type="number"
+                                        placeholder="Session total time"
+                                        onChange={(e) =>
+                                            setDrtn(e.target.value)
+                                        }
+                                        step="0.5"
+                                        min="0"
+                                        max="100"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Insert the session time"
+                                    />
+                                    <p className="validator-hint">
+                                        Must be a valid number
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-3">
+                                <label
+                                    htmlFor="prsnlrtng"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Personal rating
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="prsnlrtng"
+                                        name="prsnlrtng"
+                                        type="number"
+                                        placeholder="Personal rating of the session"
+                                        onChange={(e) =>
+                                            setPrsnlrtng(e.target.value)
+                                        }
+                                        step="1"
+                                        min="0"
+                                        max="5"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Insert a personal rating"
+                                    />
+                                    <p className="validator-hint">
+                                        Must be a valid number
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="sm:col-span-3">
+                                <label
+                                    htmlFor="lt"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Latitude
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="lt"
+                                        name="lt"
+                                        type="number"
+                                        placeholder="Ex: 48.8566"
+                                        value={lt}
+                                        onChange={(e) => setLt(e.target.value)}
+                                        step="any"
+                                        min="-90"
+                                        max="90"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Insert the event latitude"
+                                    />
+                                    <p className="validator-hint">
+                                        Must be a valid number, decimal
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="sm:col-span-3">
+                                <label
+                                    htmlFor="ln"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Longitude
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="ln"
+                                        name="ln"
+                                        type="number"
+                                        placeholder="Ex: 48.8566"
+                                        value={ln}
+                                        onChange={(e) => setLn(e.target.value)}
+                                        step="any"
+                                        min="-180"
+                                        max="180"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Insert the event longitude"
+                                    />
+                                    <p className="validator-hint">
+                                        Must be a valid number, decimal
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="col-span-full">
+                                <label
+                                    htmlFor="lctn"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Location
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="lctn"
+                                        name="lctn"
+                                        type="text"
+                                        placeholder="Event location"
+                                        value={lctn}
+                                        onChange={(e) =>
+                                            setLctn(e.target.value)
+                                        }
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Insert the event location"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-span-full">
+                                <div id="map" className="mx-auto"></div>
+                            </div>
+
+                            {spots.length >= 1 && (
+                                <div className="sm:col-span-3">
+                                    <label
+                                        htmlFor="spotsUserList"
+                                        className="label block text-sm/6 font-medium"
+                                    >
+                                        Spot
+                                    </label>
+                                    <div className="mt-2 grid grid-cols-1">
+                                        <select
+                                            id="spotsUserList"
+                                            name="spotsUserList"
+                                            onChange={(e) =>
+                                                setSelectedSpot(e.target.value)
+                                            }
+                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Select the medias for the club"
+                                        >
+                                            {spots.map((st, key) => (
+                                                <option key={key} value={st.id}>
+                                                    {st.id}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="sm:col-span-3">
                                 <label
@@ -255,7 +469,7 @@ const ArticleNew = ({ onlineUser }) => {
                                         }
                                         multiple
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Select the article visiblity"
+                                        title="Select the club visiblity"
                                     >
                                         <option value="Public">Public</option>
                                         <option value="Friends">Friends</option>
@@ -325,7 +539,7 @@ const ArticleNew = ({ onlineUser }) => {
                                             }
                                             multiple
                                             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            title="Select the medias for the article"
+                                            title="Select the medias for the club"
                                         >
                                             {medias.map((md, key) => (
                                                 <option key={key} value={md.id}>
@@ -358,4 +572,4 @@ const ArticleNew = ({ onlineUser }) => {
         </>
     );
 };
-export default ArticleNew;
+export default SessionNew;

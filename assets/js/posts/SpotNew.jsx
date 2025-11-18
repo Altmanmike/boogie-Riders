@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import instance from "../axiosConfig";
 
-const EventNew = ({ onlineUser }) => {
-
+const SpotDetails = ({ onlineUser }) => {
+    const [sessionsUserList, setSessionsUserList] = useState([]);
+    const [selectedSessions, setSelectedSessions] = useState([]);
     const [mediasUserList, setMediasUserList] = useState([]);
     const [selectedMedias, setSelectedMedias] = useState([]);
     const [groupsUserList, setGroupsUserList] = useState([]);
@@ -13,20 +15,20 @@ const EventNew = ({ onlineUser }) => {
 
     const [nm, setNm] = useState("");
     const [cvr, setCvr] = useState("");
-    const [desc, setDesc] = useState("");
-    const [dtstrt, setDtStrt] = useState("");
-    const [dtnd, setDtNd] = useState("");
     const [lt, setLt] = useState(0.0);
     const [ln, setLn] = useState(0.0);
     const [lctn, setLctn] = useState("");
-    const [rl, setRl] = useState("");
-    const [rwds, setRwds] = useState("");
+    const [desc, setDesc] = useState("");
+    const [wvTp, setWvTp] = useState("");
+    const [bstCndtns, setBstCndtns] = useState("");
+    const [dffcltLvl, setDffcltLvl] = useState(0);
     const [crtdAt, setCrtdAt] = useState("");
     const [updtdAt, setUpdtdAt] = useState("");
-    const [usr, setUsr] = useState("");
+    const [usr, setUsr] = useState(null);
     const [mmbrs, setMmbrs] = useState([]);
     const [cmmnts, setCmmnts] = useState([]);
     const [lks, setLks] = useState([]);
+    //const [ssns, setSsns] = useState([]);
     //const [mds, setMds] = useState([]);
     const [vsblt, setVsblt] = useState([]);
     //const [vsbltTGrps, setVsblTGrps] = useState([]);
@@ -56,16 +58,18 @@ const EventNew = ({ onlineUser }) => {
                 .post(endPoint, {
                     name: nm,
                     cover: cvr,
-                    description: desc,
-                    dateStart: dtstrt,
-                    dateEnd: dtnd,
                     lat: parseFloat(lt),
                     lon: parseFloat(ln),
                     location: lctn,
-                    url: rl,
-                    rewards: parseInt(rwds),
+                    description: desc,
+                    waveType: wvTp,
+                    bestConditions: bstCndtns,
+                    difficultyLevel: parseInt(dffcltLvl),
+                    sessions: selectedSessions.map(
+                        (s) => `/api/sessions/${s.id}`
+                    ),
                     user: `/api/users/${userId}`,
-                    members: mmbrs,
+                    users: mmbrs,
                     comments: cmmnts,
                     likes: lks,
                     medias: selectedMedias.map((m) => `/api/media/${m.id}`),
@@ -83,21 +87,20 @@ const EventNew = ({ onlineUser }) => {
         } finally {
             setLoading(false);
         }
-    };
+    };    
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault();        
         const formData = {
             nm,
             cvr,
-            desc,
-            dtstrt,
-            dtnd,
             lt,
             ln,
             lctn,
-            rl,
-            rwds,
+            desc,
+            wvTp,
+            bstCndtns,
+            dffcltLvl,
             usr,
             mmbrs,
             cmmnts,
@@ -106,8 +109,8 @@ const EventNew = ({ onlineUser }) => {
             vsblt,
             selectedGroups,
         };
-        //console.log("Formulaire event soumis :", formData);
-        postData(eventNewEndPoint);
+        //console.log("Formulaire spot soumis :", formData);
+        postData(spotNewEndPoint);
     };
 
     const handleMultiSelectChange = (e, setterFunction) => {
@@ -128,19 +131,21 @@ const EventNew = ({ onlineUser }) => {
     };
 
     const groupsUserEndPoint = "/groups?page=1&user=" + userId;
+    const sessionsUserEndPoint = "/sessions?page=1&user=" + userId;
     const mediasUserEndPoint = "/media?page=1&user=" + userId;
-    const eventNewEndPoint = "/events";
+    const spotNewEndPoint = "/spots";
 
     useEffect(() => {
         setUsr(`/api/users/${userId}`);
         fetchData(setGroupsUserList, groupsUserEndPoint);
-        fetchData(setMediasUserList, mediasUserEndPoint);
+        fetchData(setSessionsUserList, sessionsUserEndPoint);
+        fetchData(setMediasUserList, mediasUserEndPoint);  
 
         let map = null;
         const mapElement = document.getElementById("map");
 
         if (mapElement) {
-            map = L.map("map").setView([lt, ln], 17);
+            map = L.map("map").setView([lt, ln], 10);
 
             L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 maxZoom: 19,
@@ -161,15 +166,16 @@ const EventNew = ({ onlineUser }) => {
         };
     }, [lt, ln, nm, lctn]);
 
+    const sessions = sessionsUserList;
     const groups = groupsUserList;
-    const medias = mediasUserList;
+    const medias = mediasUserList; 
 
     return (
         <>
             <div className="container mx-auto m-10 w-2xl rounded-lg bg-base-200 hover:bg-slate-100 shadow-xl h-full mb-100">
                 <form className="mt-20 mx-10" onSubmit={handleSubmit}>
                     <div className="border-b border-gray-900/10 pt-1 pb-12">
-                        <h2 className="card-title mt-10">Event profile</h2>
+                        <h2 className="card-title mt-10">Spot profile</h2>
 
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="col-span-full">
@@ -185,12 +191,14 @@ const EventNew = ({ onlineUser }) => {
                                         name="nm"
                                         type="text"
                                         placeholder="Event name"
+                                        value={nm}
                                         onChange={(e) => setNm(e.target.value)}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the event name"
+                                        title="Insert the spot name"
                                     />
                                 </div>
                             </div>
+
                             <div className="col-span-full">
                                 <label
                                     htmlFor="photo"
@@ -235,6 +243,7 @@ const EventNew = ({ onlineUser }) => {
                                     </div>
                                 </div>
                             </div>
+
                             <div className="col-span-full">
                                 <label
                                     htmlFor="desc"
@@ -247,110 +256,127 @@ const EventNew = ({ onlineUser }) => {
                                         id="desc"
                                         name="desc"
                                         rows={3}
+                                        placeholder="Description of the spot."
                                         onChange={(e) =>
                                             setDesc(e.target.value)
                                         }
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Write the main content of the article."
+                                        title="Write the description of the spot."
                                     />
                                 </div>
                                 <p className="mt-3 text-sm/6">
-                                    Write the main content of the article.
+                                    Write the few sentences about the spot.
                                 </p>
                             </div>
+
                             <div className="sm:col-span-3">
                                 <label
-                                    htmlFor="dtstrt"
+                                    htmlFor="wvTp"
                                     className="label block text-sm/6 font-medium"
                                 >
-                                    Start date
+                                    Wave type
                                 </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="dtstrt"
-                                        name="dtstrt"
-                                        type="datetime-local"
-                                        placeholder="Event date start"
+                                <div className="mt-2 grid grid-cols-1">
+                                    <select
+                                        id="wvTp"
+                                        name="wvTp"
+                                        type="text"
+                                        placeholder="Spot wave type"
+                                        value={wvTp}
                                         onChange={(e) =>
-                                            setDtStrt(e.target.value)
+                                            setWvTp(e.target.value)
                                         }
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the event date start"
+                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Select the wave type"
+                                    >
+                                        <optgroup label="Background type">
+                                            <option value="Beach break">
+                                                Beach break
+                                            </option>
+                                            <option value="Reef break">
+                                                Reef break
+                                            </option>
+                                            <option value="Shallow reef">
+                                                Shallow reef
+                                            </option>
+                                            <option value="Point break">
+                                                Point break
+                                            </option>
+                                            <option value="Rivermouth">
+                                                Rivermouth
+                                            </option>
+                                            <option value="Jetty">Jetty</option>
+                                            <option value="Artificial reef">
+                                                Artificial reef
+                                            </option>
+                                        </optgroup>
+                                        <optgroup label="Wave direction">
+                                            <option value="Right">Right</option>
+                                            <option value="Left">Left</option>
+                                            <option value="A-frame">
+                                                A-frame
+                                            </option>
+                                            <option value="Closeout">
+                                                Closeout
+                                            </option>
+                                        </optgroup>
+                                    </select>
+                                    <ChevronDownIcon
+                                        aria-hidden="true"
+                                        className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
                                     />
                                 </div>
                             </div>
+
                             <div className="sm:col-span-3">
                                 <label
-                                    htmlFor="dtnd"
+                                    htmlFor="dffcltLvl"
                                     className="label block text-sm/6 font-medium"
                                 >
-                                    Start end
+                                    Difficulty level (Ex: 2/5)
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                        id="dtnd"
-                                        name="dtnd"
-                                        type="datetime-local"
-                                        placeholder="Event date end"
-                                        onChange={(e) =>
-                                            setDtNd(e.target.value)
-                                        }
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the event date end"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="rl"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Website URL
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="rl"
-                                        name="rl"
-                                        type="url"
-                                        required
-                                        placeholder="https://www.website.com"
-                                        onChange={(e) => setRl(e.target.value)}
-                                        pattern="^(https?://)?(www\.)?[a-zA-Z0-9\-]+?\.[a-zA-Z]{2,4}\/$"
-                                        className="input validator block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Must be valid URL"
-                                    />
-                                    <p className="validator-hint">
-                                        Must be valid URL
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="rwds"
-                                    className="label block text-sm/6 font-medium"
-                                >
-                                    Rewards in $USD
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="rwds"
-                                        name="rwds"
+                                        id="dffcltLvl"
+                                        name="dffcltLvl"
                                         type="number"
-                                        placeholder="Event total cash price"
+                                        placeholder="Spot difficulty"
+                                        value={dffcltLvl}
                                         onChange={(e) =>
-                                            setRwds(e.target.value)
+                                            setDffcltLvl(e.target.value)
                                         }
-                                        step="500"
+                                        step="1"
                                         min="0"
-                                        max="100000"
+                                        max="5"
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the event rewards"
+                                        title="Insert the spot difficulty"
                                     />
-                                    <p className="validator-hint">
-                                        Must be a valid number
-                                    </p>
                                 </div>
                             </div>
+
+                            <div className="col-span-full">
+                                <label
+                                    htmlFor="bstCndtns"
+                                    className="label block text-sm/6 font-medium"
+                                >
+                                    Best conditions
+                                </label>
+                                <div className="mt-2">
+                                    <textarea
+                                        id="bstCndtns"
+                                        name="bstCndtns"
+                                        rows={3}
+                                        placeholder="Best conditions"
+                                        value={bstCndtns}
+                                        onChange={(e) =>
+                                            setBstCndtns(e.target.value)
+                                        }
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                        title="Describe the spot best conditions"
+                                    />
+                                </div>
+                            </div>
+
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="lt"
@@ -377,6 +403,7 @@ const EventNew = ({ onlineUser }) => {
                                     </p>
                                 </div>
                             </div>
+
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="ln"
@@ -403,6 +430,7 @@ const EventNew = ({ onlineUser }) => {
                                     </p>
                                 </div>
                             </div>
+
                             <div className="col-span-full">
                                 <label
                                     htmlFor="lctn"
@@ -426,9 +454,41 @@ const EventNew = ({ onlineUser }) => {
                                 </div>
                             </div>
 
-                            <div className="col-span-full">
-                                <div id="map" className="mx-auto"></div>
-                            </div>
+                            {sessions.length >= 1 && (
+                                <div className="sm:col-span-3">
+                                    <label
+                                        htmlFor="sessionsUserList"
+                                        className="label block text-sm/6 font-medium"
+                                    >
+                                        Sessions
+                                    </label>
+                                    <div className="mt-2 grid grid-cols-1">
+                                        <select
+                                            id="sessionsUserList"
+                                            name="sessionsUserList"
+                                            value={selectedSessions.map(
+                                                (s) => s.id
+                                            )}
+                                            onChange={(e) =>
+                                                handleMultiSelectChangeBis(
+                                                    e,
+                                                    setSelectedSessions,
+                                                    sessions
+                                                )
+                                            }
+                                            multiple
+                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            title="Select the sessions from the spot"
+                                        >
+                                            {sessions.map((ss, key) => (
+                                                <option key={key} value={ss.id}>
+                                                    {ss.id}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="sm:col-span-3">
                                 <label
@@ -446,7 +506,7 @@ const EventNew = ({ onlineUser }) => {
                                         }
                                         multiple
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Select the club visiblity"
+                                        title="Select the spot visiblity"
                                     >
                                         <option value="Public">Public</option>
                                         <option value="Friends">Friends</option>
@@ -528,6 +588,9 @@ const EventNew = ({ onlineUser }) => {
                                 </div>
                             )}
 
+                            <div className="col-span-full">
+                                <div id="map" className="mx-auto"></div>
+                            </div>
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">
@@ -550,4 +613,4 @@ const EventNew = ({ onlineUser }) => {
         </>
     );
 };
-export default EventNew;
+export default SpotDetails;

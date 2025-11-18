@@ -68,7 +68,7 @@ class Session
     private ?string $description = null;
     
     #[ORM\Column(nullable: true)]
-    private ?int $duration = null;
+    private ?float $duration = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $conditions = null;
@@ -179,12 +179,12 @@ class Session
         return $this;
     }
      
-    public function getDuration(): ?int
+    public function getDuration(): ?float
     {
         return $this->duration;
     }
 
-    public function setDuration(?int $duration): static
+    public function setDuration(?float $duration): static
     {
         $this->duration = $duration;
 

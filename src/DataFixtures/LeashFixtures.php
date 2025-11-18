@@ -14,8 +14,7 @@ class LeashFixtures extends Fixture implements DependentFixtureInterface
     {     
         $leash = new Leash(); 
         $leash->setBrand("FOUND")            
-            ->setType("Biceps")            
-            ->setSize('L')
+            ->setType("Biceps")
             ->setDescription("LEASH Biceps FOUND KD.")
             ->setColors(["Black"])            
             ->setPrice(40)
@@ -28,8 +27,7 @@ class LeashFixtures extends Fixture implements DependentFixtureInterface
         
         $leash = new Leash(); 
         $leash->setBrand("OGM")
-            ->setType("Biceps")           
-            ->setSize('L')
+            ->setType("Biceps")
             ->setDescription("Leash Biceps OGM Premium.")
             ->setColors(["Green fluo"]) 
             ->setPrice(45)
@@ -42,8 +40,7 @@ class LeashFixtures extends Fixture implements DependentFixtureInterface
         
         $leash = new Leash(); 
         $leash->setBrand("NMD")   
-            ->setType("Biceps")         
-            ->setSize('L')
+            ->setType("Biceps")
             ->setDescription("Leash Biceps NMD.")
             ->setColors(["White","Black"]) 
             ->setPrice(39)

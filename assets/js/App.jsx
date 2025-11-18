@@ -9,7 +9,6 @@ import Footer from "./components/Footer";
 import Messenger from "./components/Messenger";
 import Accessory from "./gears/Accessory";
 import Board from "./gears/Board";
-import BoardNew from "./gears/BoardNew";
 import Fin from "./gears/Fin";
 import Leash from "./gears/Leash";
 import Wetsuit from "./gears/Wetsuit";
@@ -31,6 +30,13 @@ import ClubNew from "./posts/ClubNew";
 import EventNew from "./posts/EventNew";
 import GroupNew from "./posts/GroupNew";
 import MediaNew from "./posts/MediaNew";
+import SessionNew from "./posts/SessionNew";
+import SpotNew from "./posts/SpotNew";
+import AccessoryNew from "./gears/AccessoryNew";
+import BoardNew from "./gears/BoardNew";
+import FinNew from "./gears/FinNew";
+import LeashNew from "./gears/LeashNew";
+import WetsuitNew from "./gears/WetsuitNew";
 
 const components = {
     Home,
@@ -41,7 +47,6 @@ const components = {
     Settings,
     Accessory,
     Board,
-    BoardNew,
     Fin,
     Leash,
     Wetsuit,
@@ -63,6 +68,13 @@ const components = {
     EventNew,
     GroupNew,
     MediaNew,
+    SessionNew,
+    SpotNew,
+    AccessoryNew,
+    BoardNew,
+    FinNew,
+    LeashNew,
+    WetsuitNew,
 };
 
 const App = () => {

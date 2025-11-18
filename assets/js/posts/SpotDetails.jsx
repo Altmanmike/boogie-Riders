@@ -270,20 +270,21 @@ const SpotDetails = ({
                                     Best conditions
                                 </label>
                                 <div className="mt-2">
-                                    <input
+                                    <texarea
                                         id="bstCndtns"
                                         name="bstCndtns"
-                                        type="text"
+                                        rows={3}
                                         placeholder="Best conditions"
                                         value={bstCndtns}
                                         onChange={(e) =>
                                             setBstCndtns(e.target.value)
                                         }
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                        title="Insert the spot best conditions"
+                                        title="Describe the spot best conditions"
                                     />
                                 </div>
                             </div>
+
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="lt"
@@ -364,7 +365,6 @@ const SpotDetails = ({
                             <div className="col-span-full">
                                 <div id="map" className="mx-auto"></div>
                             </div>
-                            
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6 pb-10">

@@ -60,9 +60,6 @@ class Leash
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $size = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -130,19 +127,7 @@ class Leash
         $this->type = $type;
 
         return $this;
-    }
-
-    public function getSize(): ?string
-    {
-        return $this->size;
-    }
-
-    public function setSize(?string $size): static
-    {
-        $this->size = $size;
-
-        return $this;
-    }
+    }    
 
     public function getDescription(): ?string
     {

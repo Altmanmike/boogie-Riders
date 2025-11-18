@@ -68,7 +68,9 @@ const ClubNew = ({ onlineUser }) => {
                     likes: lks,
                     medias: selectedMedias.map((m) => `/api/media/${m.id}`),
                     visibility: vsblt,
-                    visibleToGroups: selectedGroups,
+                    visibleToGroups: selectedGroups.map(
+                        (g) => `/api/groups/${g.id}`
+                    ),
                 })
                 .then(function (response) {
                     console.log(response);

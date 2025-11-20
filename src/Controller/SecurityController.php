@@ -14,7 +14,7 @@ class SecurityController extends AbstractController
     {
         $dataUser = null;
         if ($this->getUser()) {
-            $dataUser = $this->getUser();
+            $dataUser = $this->getUser();            
             $this->addFlash('success', 'Your are already connected');
             return $this->redirectToRoute('user', [
                 'dataUser' => $dataUser

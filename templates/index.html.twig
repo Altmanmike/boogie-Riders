@@ -23,12 +23,13 @@
 	{% endfor %}
 {% endfor %}
 
-
 <div id="root"></div>
 
 	<script>
 		window.REACT_COMPONENT_NAME = "{{ react_component | default('Home') }}";
-		window.APP_USER_DATA = "{{ userRolesId | json_encode | raw | default(null)}}";		
+		window.APP_USER_DATA = "{{ userRolesId | json_encode | raw | default(null)}}";	
+		window.API_URL = '{{ api_url }}';
+		window.JWT_URL = '{{ jwt_url }}';
 	</script>
 
 {% endblock %}

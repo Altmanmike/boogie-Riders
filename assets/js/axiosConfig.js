@@ -1,15 +1,14 @@
 import axios from "axios";
 
-const API_URL = "https://127.0.0.1:8000/api";
+const API_URL = window.API_URL;
 
 const instance = axios.create({
     baseURL: `${API_URL}`,
     headers: {
         Accept: "application/ld+json",
-        "Content-Type": "application/ld+json",
+        "Content-Type": "application/ld+json"        
     },
 });
-
 
 instance.interceptors.request.use(
     (config) => {

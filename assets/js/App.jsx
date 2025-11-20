@@ -80,7 +80,7 @@ const components = {
 const App = () => {
     const ComponentName = window.REACT_COMPONENT_NAME || "Home";
     const SpecificComponent = components[ComponentName] || components.Home;    
-    const onlineUser = window.APP_USER_DATA || null;
+    const onlineUser = window.APP_USER_DATA || null;    
     
     return (
         <>

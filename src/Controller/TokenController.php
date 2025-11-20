@@ -10,7 +10,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class TokenController extends AbstractController
 {
-    #[Route('/token/get', name: 'api_token_get' , methods: ['POST'])]
+    #[Route(path: '/token/get', name: 'api_token_get' , methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function getToken(JWTTokenManagerInterface $JWTManager): JsonResponse
     {

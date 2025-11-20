@@ -1,6 +1,7 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
-import { useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+//import axios from "axios";
+import { fetchToken } from "../axiosToken";
 
 const User = ({ User = {} }) => {
     const {
@@ -27,28 +28,19 @@ const User = ({ User = {} }) => {
         avatarPhoto = "https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp",
     } = User;
 
-    async function fetchToken(ApiUrl) {
-        try {
-            const response = await axios.post(
-                `${ApiUrl}/token/get`,
-                {},
-                {                    
-                    withCredentials: true,
-                }
-            );
-            const bearerToken = response.data.token;
-            localStorage.setItem("authBearerToken", bearerToken);
-            return bearerToken;
-        } catch (error) {
-            console.error("Error when get token:", error);
-            throw error;
-        }
-    }   
-
-    const JWT_URL = "https://127.0.0.1:8000";
+    const [tokenBearer, setTokenBearer] = useState(null);    
 
     useEffect(() => {
-        fetchToken(JWT_URL);
+        const getToken = async () => {
+            try {                
+                const responseToken = await fetchToken();
+                setTokenBearer(responseToken);
+            } catch (error) {
+                console.error("Error when get token:", error);
+                throw error;
+            }
+        };
+        getToken();        
     }, [])    
 
     return (

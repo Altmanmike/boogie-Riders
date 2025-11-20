@@ -1,10 +1,11 @@
+# config/packages/nelmio_cors.yaml
 nelmio_cors:
     defaults:
         origin_regex: true
         allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
-        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
-        allow_headers: ['Content-Type', 'Authorization']
+        allow_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+        allow_headers: ['Content-Type', 'Authorization', 'Accept', 'Origin']
         expose_headers: ['Link']
         max_age: 3600
     paths:
-        '^/': null
+        '^/': ~
